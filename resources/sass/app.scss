@@ -1,3 +1,7 @@
+// Vuetify
+@import '~vuetify/dist/vuetify.min.css';
+@import '~@mdi/font/css/materialdesignicons.min.css';
+
 // Fonts
 $font-dir: "/fonts/";
 @font-face {
@@ -15,6 +19,3 @@ $font-dir: "/fonts/";
     url('#{$font-dir}/Roboto/Roboto-Thin.ttf') format("truetype")
     url('#{$font-dir}/Roboto/Roboto-ThinItalic.ttf') format("truetype");
 }
-
-// Variables
-@import 'variables';
