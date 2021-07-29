@@ -1,8 +1,20 @@
 // Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+$font-dir: "/fonts/";
+@font-face {
+    font-family: "Roboto";
+    src: url('#{$font-dir}/Roboto/Roboto-Black.ttf') format("truetype"),
+    url('#{$font-dir}/Roboto/Roboto-BlackItalic.ttf') format("truetype")
+    url('#{$font-dir}/Roboto/Roboto-Bold.ttf') format("truetype")
+    url('#{$font-dir}/Roboto/Roboto-BoldItalic.ttf') format("truetype")
+    url('#{$font-dir}/Roboto/Roboto-Italic.ttf') format("truetype")
+    url('#{$font-dir}/Roboto/Roboto-Light.ttf') format("truetype")
+    url('#{$font-dir}/Roboto/Roboto-LightItalic.ttf') format("truetype")
+    url('#{$font-dir}/Roboto/Roboto-Medium.ttf') format("truetype")
+    url('#{$font-dir}/Roboto/Roboto-MediumItalic.ttf') format("truetype")
+    url('#{$font-dir}/Roboto/Roboto-Regular.ttf') format("truetype")
+    url('#{$font-dir}/Roboto/Roboto-Thin.ttf') format("truetype")
+    url('#{$font-dir}/Roboto/Roboto-ThinItalic.ttf') format("truetype");
+}
 
 // Variables
 @import 'variables';
-
-// Bootstrap
-@import '~bootstrap/scss/bootstrap';
