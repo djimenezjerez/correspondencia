@@ -37,7 +37,7 @@ class UserController extends Controller
      */
     public function show(User $user, Request $request)
     {
-        if ($request->user()->id == $user->id || $request->user()->username == 'admin') {
+        if (auth()->user()->id == $user->id || $request->user()->hasRole('Super Admin')) {
             return [
                 'message' => 'User data',
                 'data' => [
@@ -45,7 +45,7 @@ class UserController extends Controller
                 ]
             ];
         }
-        abort(403, '');
+        abort(403, 'Not allowed');
     }
 
     /**
