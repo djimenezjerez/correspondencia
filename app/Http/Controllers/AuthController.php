@@ -43,7 +43,6 @@ class AuthController extends Controller
         }
         return [
             'message' => 'Invalid credentials',
-            'data' => null,
         ];
     }
 
@@ -59,7 +58,6 @@ class AuthController extends Controller
 
         return [
             'message' => 'Logged out',
-            'data' => null,
         ];
     }
 }

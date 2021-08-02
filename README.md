@@ -26,3 +26,8 @@ $ docker-compose exec --user laradock workspace yarn prod
 $ docker-compose exec --user laradock workspace php artisan migrate:install
 $ docker-compose exec --user laradock workspace php artisan migrate
 ```
+
+* Datos iniciales
+```sh
+$ docker-compose exec --user laradock workspace php artisan db:seed --class=SuperAdminSeeder
+```

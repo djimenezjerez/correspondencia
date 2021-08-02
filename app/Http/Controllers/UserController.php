@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -13,9 +14,13 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $data = User::where('username', '!=', 'admin')->orderBy($request->order_by ?? 'name');
+        return response()->json([
+            'message' => 'Users list',
+            'data' => UserResource::collection($data->paginate($request->per_page ?? 10, ['*'], 'page', $request->page ?? 1))->resource,
+        ]);
     }
 
     /**
@@ -24,9 +29,15 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-        //
+        $user = User::create($request->all());
+        return [
+            'message' => 'User created',
+            'data' => [
+                'user' => new UserResource($user),
+            ]
+        ];
     }
 
     /**
@@ -35,7 +46,7 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user, Request $request)
+    public function show(Request $request, User $user)
     {
         if (auth()->user()->id == $user->id || $request->user()->hasRole('Super Admin')) {
             return [
@@ -55,9 +66,15 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(UserRequest $request, User $user)
     {
-        //
+        $user->update($request->all());
+        return [
+            'message' => 'User updated',
+            'data' => [
+                'user' => new UserResource($user),
+            ]
+        ];
     }
 
     /**
@@ -68,6 +85,10 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        if ($user->hasRole('Super Admin')) abort(403, 'Not allowed');
+        $user->delete();
+        return [
+            'message' => 'User removed',
+        ];
     }
 }
