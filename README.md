@@ -7,6 +7,7 @@
 ```sh
 $ cp -f docker/.env.example laradock/.env
 $ cp -f docker/docker-compose.yml laradock/docker-compose.yml
+$ cd laradock
 ```
 
 * Editar los nombres de usuario, contraseñas y puertos a utilizar en el archivo **laradock/.env**

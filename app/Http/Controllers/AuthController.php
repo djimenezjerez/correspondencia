@@ -3,73 +3,54 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
+use App\Http\Requests\AuthRequest;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(AuthRequest $request)
     {
         $user = User::whereUsername($request->username)->first();
         if ($user) {
             if (Hash::check($request->password, $user->password)) {
-                $user->tokens()->delete();
+                $tokens = $user->tokens()->count();
+                if ($tokens == 1) {
+                    $token = $user->remember_token;
+                } else {
+                    if ($tokens > 1) {
+                        $user->tokens()->delete();
+                    }
+                    $token = $user->createToken('api')->plainTextToken;
+                    $user->remember_token = $token;
+                    $user->save();
+                }
                 return [
-                    'message' => 'Autenticado',
+                    'message' => 'Logged in',
                     'data' => [
-                        'token' => $user->createToken($user->username)->plainTextToken,
+                        'access_token' => $token,
+                        'token_type' => 'Bearer',
                     ],
                 ];
             }
         }
         return [
-            'message' => 'Credenciales inválidas'
+            'message' => 'Invalid credentials',
+            'data' => null,
         ];
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function show(User $user)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, User $user)
-    {
-        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\User  $user
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request)
@@ -77,7 +58,8 @@ class AuthController extends Controller
         $request->user()->tokens()->delete();
 
         return [
-            'message' => 'Sesión finalizada'
+            'message' => 'Logged out',
+            'data' => null,
         ];
     }
 }
