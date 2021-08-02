@@ -16,7 +16,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $data = User::where('username', '!=', 'admin')->orderBy($request->order_by ?? 'name');
+        $data = User::where('username', '!=', 'admin')->orderBy($request->order_by ?? 'name')->withTrashed();
         return response()->json([
             'message' => 'Users list',
             'data' => UserResource::collection($data->paginate($request->per_page ?? 10, ['*'], 'page', $request->page ?? 1))->resource,
@@ -68,13 +68,16 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, User $user)
     {
-        $user->update($request->all());
-        return [
-            'message' => 'User updated',
-            'data' => [
-                'user' => new UserResource($user),
-            ]
-        ];
+        if (auth()->user()->id == $user->id || $request->user()->can('Update User')) {
+            $user->update($request->except('username'));
+            return [
+                'message' => 'User updated',
+                'data' => [
+                    'user' => new UserResource($user),
+                ]
+            ];
+        }
+        abort(403, 'Not allowed');
     }
 
     /**

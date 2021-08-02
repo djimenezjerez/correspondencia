@@ -45,9 +45,6 @@ class UserRequest extends FormRequest
 
     protected function prepareForValidation()
     {
-        if (in_array($this->method(), ['PUT', 'PATCH'])) {
-            unset($this->username);
-        }
         $this->merge([
             'username' => mb_strtolower($this->username),
         ]);
