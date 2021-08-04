@@ -1,11 +1,16 @@
-require('./bootstrap');
+require('@/bootstrap');
 window.Vue = require('vue').default
 
-import vuetify from './vuetify'
-import router from './router'
-import store from './store'
-import Login from './components/Login.vue'
-import MainLayout from './components/MainLayout.vue'
+import Axios from 'axios'
+import vuetify from '@/vuetify'
+import router from '@/router'
+import store from '@/store'
+
+Vue.prototype.$http = Axios;
+const token = localStorage.getItem('token')
+if (token) {
+  Vue.prototype.$http.defaults.headers.common['Authorization'] = `Bearer ${token}`
+}
 
 const app = new Vue({
   store,

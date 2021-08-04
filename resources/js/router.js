@@ -1,15 +1,14 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Login from './components/Login'
-import MainLayout from './components/MainLayout'
-import Dashboard from './components/Dashboard'
-import store from './store.js'
+import Login from '@/components/Login'
+import MainLayout from '@/components/MainLayout'
+import Dashboard from '@/components/Dashboard'
+import store from '@/store.js'
 
 Vue.use(VueRouter)
 
 const router = new VueRouter({
   mode: 'history',
-  base: process.env.BASE_URL,
   routes: [
     {
       path: '*',
