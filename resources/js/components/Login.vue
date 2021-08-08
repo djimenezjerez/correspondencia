@@ -8,7 +8,7 @@
               <v-icon large class="mr-3">mdi-briefcase</v-icon>
               LOGIN
             </v-card-actions>
-            <v-form v-model="valid" ref="form" @submit="submit" v-on:submit.prevent>
+            <v-form v-model="valid" ref="form" @submit="login" v-on:submit.prevent>
               <v-card color="blue-grey lighten-5" elevation="6" class="pl-4 pr-4 pb-4">
                 <v-card-text>
                   <v-text-field
@@ -66,19 +66,23 @@ export default {
     }
   },
   methods: {
-    async submit () {
+    async login() {
       try {
+        window.axios.defaults.baseURL = process.env.MIX_BASE_URL
         await axios.get('/sanctum/csrf-cookie', {
           baseURL: process.env.BASE_URL,
         })
-        window.axios.defaults.baseURL = '/api/'
+        window.axios.defaults.baseURL = window.axios.defaults.baseURL+'/api/'
         let data = {}
         for (const [key, entry] of Object.entries(this.loginForm)) {
           data[key] = entry.value
         }
-        let response = await axios.post('login', data)
-        // Dispatch vuex login action
+        await this.$store.dispatch('login', data)
+        this.$router.push({
+          name: 'dashboard'
+        })
       } catch(error) {
+        console.log(error)
         if ('errors' in error.response.data) {
           Object.keys(error.response.data.errors).forEach((key) => {
             if (key in this.loginForm) {

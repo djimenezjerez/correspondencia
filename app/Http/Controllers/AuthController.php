@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Http\Resources\UserResource;
+use App\Http\Resources\RoleResource;
 use Illuminate\Http\Request;
 use App\Http\Requests\AuthRequest;
 use Illuminate\Support\Facades\Hash;
@@ -34,9 +35,11 @@ class AuthController extends Controller
                 }
                 return [
                     'message' => 'Logged in',
-                    'data' => [
+                    'payload' => [
                         'access_token' => $token,
                         'token_type' => 'Bearer',
+                        'user' => new UserResource($user),
+                        'role' => new RoleResource($user->roles->first()),
                     ],
                 ];
             }

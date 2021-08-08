@@ -7,9 +7,8 @@ import router from '@/router'
 import store from '@/store'
 
 Vue.prototype.$http = Axios;
-const token = localStorage.getItem('token')
-if (token) {
-  Vue.prototype.$http.defaults.headers.common['Authorization'] = `Bearer ${token}`
+if (store.getters.isLoggedIn) {
+  Vue.prototype.$http.defaults.headers.common['Authorization'] = `${store.getters.tokenType} ${store.getters.accessToken}`
 }
 
 const app = new Vue({

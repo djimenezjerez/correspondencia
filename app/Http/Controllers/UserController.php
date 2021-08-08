@@ -19,7 +19,7 @@ class UserController extends Controller
         $data = User::where('username', '!=', 'admin')->orderBy($request->order_by ?? 'name')->withTrashed();
         return response()->json([
             'message' => 'Users list',
-            'data' => UserResource::collection($data->paginate($request->per_page ?? 10, ['*'], 'page', $request->page ?? 1))->resource,
+            'payload' => UserResource::collection($data->paginate($request->per_page ?? 10, ['*'], 'page', $request->page ?? 1))->resource,
         ]);
     }
 
@@ -34,7 +34,7 @@ class UserController extends Controller
         $user = User::create($request->all());
         return [
             'message' => 'User created',
-            'data' => [
+            'payload' => [
                 'user' => new UserResource($user),
             ]
         ];
@@ -51,7 +51,7 @@ class UserController extends Controller
         if (auth()->user()->id == $user->id || $request->user()->hasRole('Super Admin')) {
             return [
                 'message' => 'User data',
-                'data' => [
+                'payload' => [
                     'user' => new UserResource($user),
                 ]
             ];
@@ -72,7 +72,7 @@ class UserController extends Controller
             $user->update($request->except('username'));
             return [
                 'message' => 'User updated',
-                'data' => [
+                'payload' => [
                     'user' => new UserResource($user),
                 ]
             ];

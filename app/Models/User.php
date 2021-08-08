@@ -35,6 +35,16 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = mb_strtoupper($value);
+    }
+
+    public function setUsernameAttribute($value)
+    {
+        $this->attributes['username'] = mb_strtolower($value);
+    }
+
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = Hash::make($value);

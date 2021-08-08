@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('login', [AuthController::class, 'store']);
 
 Route::group(['middleware' => ['auth:sanctum']], function() {
-    Route::delete('logout', [AuthController::class, 'destroy']);
+    Route::post('logout', [AuthController::class, 'destroy']);
     Route::get('user/{user}', [UserController::class, 'show']);
     Route::post('user', [UserController::class, 'store'])->middleware('permission:Create User');
     Route::get('user', [UserController::class, 'index'])->middleware('permission:Read User');
