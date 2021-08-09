@@ -7,9 +7,7 @@ import router from '@/router'
 import store from '@/store'
 
 Vue.prototype.$http = Axios;
-if (store.getters.isLoggedIn) {
-  Vue.prototype.$http.defaults.headers.common['Authorization'] = `${store.getters.tokenType} ${store.getters.accessToken}`
-}
+Vue.prototype.$http.defaults.headers.common['Authorization'] = `${store.getters.tokenType} ${store.getters.accessToken}`
 
 const app = new Vue({
   store,

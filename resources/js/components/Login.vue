@@ -68,11 +68,7 @@ export default {
   methods: {
     async login() {
       try {
-        window.axios.defaults.baseURL = process.env.MIX_BASE_URL
-        await axios.get('/sanctum/csrf-cookie', {
-          baseURL: process.env.BASE_URL,
-        })
-        window.axios.defaults.baseURL = window.axios.defaults.baseURL+'/api/'
+        await axios.get('/sanctum/csrf-cookie')
         let data = {}
         for (const [key, entry] of Object.entries(this.loginForm)) {
           data[key] = entry.value
