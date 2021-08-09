@@ -1,8 +1,8 @@
 <template>
   <v-main>
-    <v-container>
-      <v-row>
-        <v-col>
+    <v-container grid-list-md>
+      <v-layout wrap>
+        <v-flex md6 xs12>
           <v-card>
             <v-card-title class="text-h5">Profile</v-card-title>
             <v-card-text>
@@ -10,8 +10,8 @@
               <p class="text-h5">{{ $store.getters.user.username }}</p>
             </v-card-text>
           </v-card>
-        </v-col>
-        <v-col>
+        </v-flex>
+        <v-flex md6 xs12>
           <v-card :loading="loading">
             <template slot="progress">
               <v-progress-linear
@@ -64,10 +64,8 @@
               </v-form>
             </validation-observer>
           </v-card>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
+        </v-flex>
+        <v-flex xs12>
           <v-card>
             <v-card-title class="text-h5">Roles and permissions</v-card-title>
             <v-card-text>
@@ -97,8 +95,8 @@
               </v-simple-table>
             </v-card-text>
           </v-card>
-        </v-col>
-      </v-row>
+        </v-flex>
+      </v-layout>
     </v-container>
   </v-main>
 </template>
