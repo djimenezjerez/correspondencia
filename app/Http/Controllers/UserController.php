@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
@@ -47,9 +48,11 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, User $user)
+    public function show(User $user)
     {
-        if (auth()->user()->id == $user->id || $request->user()->can('READ USER')) {
+        /** @var \App\Models\User */
+        $auth_user = Auth::user();
+        if ($auth_user->id == $user->id || $auth_user->can('READ USER')) {
             return [
                 'message' => 'User data',
                 'payload' => [

@@ -39,7 +39,8 @@ class AuthController extends Controller
                         'access_token' => $token,
                         'token_type' => 'Bearer',
                         'user' => new UserResource($user),
-                        'role' => new RoleResource($user->roles->first()),
+                        'roles' => $user->roles->pluck('name'),
+                        'permissions' => $user->getAllPermissions()->pluck('name')->unique(),
                     ],
                 ];
             }

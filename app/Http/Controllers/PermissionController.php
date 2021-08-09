@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Http\Request;
@@ -13,9 +14,11 @@ class PermissionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Role $role, Request $request)
+    public function index(Role $role)
     {
-        if (auth()->user()->roles->first()->id == $role->id || $request->user()->can('READ ROLE')) {
+        /** @var \App\Models\User */
+        $user = Auth::user();
+        if ($user->hasRole($role->id) || $user->can('READ ROLE')) {
             return [
                 'message' => 'Permissions list',
                 'payload' => [

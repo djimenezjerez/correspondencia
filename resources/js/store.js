@@ -15,7 +15,8 @@ export default new Vuex.Store({
     acccessToken: '',
     tokenType: '',
     user: {},
-    role: {},
+    roles: [],
+    permissions: [],
   },
   getters: {
     isLoggedIn(state) {
@@ -28,10 +29,11 @@ export default new Vuex.Store({
       }
     },
     user(state) {
-      return state.user
-    },
-    role(state) {
-      return state.user
+      return {
+        ...state.user,
+        roles: state.roles,
+        permissions: state.permissions,
+      }
     },
   },
   mutations: {
@@ -40,14 +42,16 @@ export default new Vuex.Store({
       state.acccessToken = data.access_token
       state.tokenType = data.token_type
       state.user = data.user
-      state.role = data.role
+      state.roles = data.roles
+      state.permissions = data.permissions
       state.loggedIn = true
     },
     logout(state) {
       state.acccessToken = ''
       state.tokenType = ''
       state.user = {}
-      state.role = {}
+      state.roles = []
+      state.permissions = []
       state.loggedIn = false
     },
   },
