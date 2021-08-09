@@ -1,8 +1,8 @@
 <template>
   <v-app>
     <v-main>
-      <v-container fluid fill-height>
-        <v-layout flex align-center justify-center>
+      <v-container fill-height>
+        <v-layout align-center justify-center>
           <v-flex xs12 sm3>
             <v-card-actions class="justify-center display-1 mb-3">
               <v-icon large class="mr-3">mdi-briefcase</v-icon>
@@ -10,7 +10,7 @@
             </v-card-actions>
             <validation-observer ref="loginObserver" v-slot="{ invalid }">
               <v-form @submit="login" v-on:submit.prevent>
-                <v-card color="blue-grey lighten-5" elevation="6" class="pl-4 pr-4 pb-4">
+                <v-card color="secondary lighten-5" elevation="6" class="pl-4 pr-4 pb-4">
                   <v-card-text>
                     <validation-provider
                       v-slot="{ errors }"
@@ -37,9 +37,9 @@
                         data-vv-name="password"
                         :error-messages="errors"
                         prepend-icon="mdi-lock"
-                        :append-icon="shadowPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                        :append-icon="shadowPassword ? 'mdi-eye-off' : 'mdi-eye'"
                         @click:append="() => (shadowPassword = !shadowPassword)"
-                        :type="shadowPassword ? 'password' : 'text'"
+                        :type="shadowPassword ? 'text' : 'password'"
                       ></v-text-field>
                     </validation-provider>
                   </v-card-text>
@@ -49,7 +49,7 @@
                       type="submit"
                       :disabled="invalid"
                     >Login</v-btn>
-                </v-card-actions>
+                  </v-card-actions>
                 </v-card>
               </v-form>
             </validation-observer>
@@ -66,9 +66,9 @@ export default {
   mounted() {
     this.$refs.usernameField.$refs.input.focus()
   },
-  data: function () {
+  data: function() {
     return {
-      shadowPassword: true,
+      shadowPassword: false,
       loginForm: {
         username: '',
         password: '',
@@ -88,7 +88,7 @@ export default {
         }
       } catch(error) {
         this.loginForm.password = ''
-        this.$refs.loginObserver.reset();
+        this.$refs.loginObserver.reset()
         if ('errors' in error.response.data) {
           this.$refs.loginObserver.setErrors(error.response.data.errors)
         }

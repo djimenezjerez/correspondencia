@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Login from '@/components/Login'
 import MainLayout from '@/components/MainLayout'
 import Dashboard from '@/components/Dashboard'
+import Profile from '@/components/Profile'
 import store from '@/store.js'
 
 Vue.use(VueRouter)
@@ -28,6 +29,10 @@ const router = new VueRouter({
           path: '/dashboard',
           name: 'dashboard',
           component: Dashboard,
+        }, {
+          path: '/profile',
+          name: 'profile',
+          component: Profile,
         }
       ]
     },

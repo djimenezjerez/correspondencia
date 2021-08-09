@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -17,10 +18,10 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $data = User::where('username', '!=', 'admin')->orderBy($request->order_by ?? 'name')->withTrashed();
-        return response()->json([
+        return [
             'message' => 'Users list',
             'payload' => UserResource::collection($data->paginate($request->per_page ?? 10, ['*'], 'page', $request->page ?? 1))->resource,
-        ]);
+        ];
     }
 
     /**
@@ -48,7 +49,7 @@ class UserController extends Controller
      */
     public function show(Request $request, User $user)
     {
-        if (auth()->user()->id == $user->id || $request->user()->hasRole('Super Admin')) {
+        if (auth()->user()->id == $user->id || $request->user()->can('READ USER')) {
             return [
                 'message' => 'User data',
                 'payload' => [
@@ -68,7 +69,17 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, User $user)
     {
-        if (auth()->user()->id == $user->id || $request->user()->can('Update User')) {
+        if (auth()->user()->id == $user->id) {
+            if (!Hash::check($request->old_password, $user->password)) {
+                return response()->json([
+                    'message' => 'Invalid credentials',
+                    'errors' => [
+                        'old_password' => ['Old password incorrect']
+                    ]
+                ], 403);
+            }
+        }
+        if (auth()->user()->id == $user->id || $request->user()->can('UPDATE USER')) {
             $user->update($request->except('username'));
             return [
                 'message' => 'User updated',
@@ -88,7 +99,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        if ($user->hasRole('Super Admin')) abort(403, 'Not allowed');
+        if ($user->can('DELETE USER')) abort(403, 'Not allowed');
         $user->delete();
         return [
             'message' => 'User removed',

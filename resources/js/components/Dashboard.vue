@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-layout flex align-start justify-center>
     <h1>DASHBOARD</h1>
-  </div>
+  </v-layout>
 </template>

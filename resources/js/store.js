@@ -21,13 +21,16 @@ export default new Vuex.Store({
     isLoggedIn(state) {
       return state.loggedIn
     },
-    accessToken(state) {
-      return state.acccessToken
-    },
-    tokenType(state) {
-      return state.tokenType
+    token(state) {
+      return {
+        value: state.acccessToken,
+        type: state.tokenType
+      }
     },
     user(state) {
+      return state.user
+    },
+    role(state) {
       return state.user
     },
   },

@@ -25,11 +25,11 @@ class UserRequest extends FormRequest
     {
         $rules = [
             'name' => 'alpha_spaces|min:3',
-            'username' => 'alpha_num|min:3|unique:users,username',
             'password' => 'string|min:4',
         ];
         switch ($this->method()) {
             case 'POST': {
+                $rules['username'] = 'alpha_num|min:3|unique:users,username';
                 foreach (array_slice($rules, 0, 5) as $key => $rule) {
                     $rules[$key] = implode('|', ['required', $rule]);
                 }
@@ -37,7 +37,8 @@ class UserRequest extends FormRequest
             }
             case 'PUT':
             case 'PATCH': {
-                unset($rules['username']);
+                $rules['old_password'] = 'string|min:4|sometimes|required';
+                $rules['password'] = $rules['password'].'|sometimes|required';
                 return $rules;
             }
         }

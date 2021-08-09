@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,8 +22,10 @@ Route::post('login', [AuthController::class, 'store']);
 Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::post('logout', [AuthController::class, 'destroy']);
     Route::get('user/{user}', [UserController::class, 'show']);
-    Route::post('user', [UserController::class, 'store'])->middleware('permission:Create User');
-    Route::get('user', [UserController::class, 'index'])->middleware('permission:Read User');
+    Route::get('role', [RoleController::class, 'index']);
+    Route::get('role/{role}/permission', [PermissionController::class, 'index']);
+    Route::post('user', [UserController::class, 'store'])->middleware('permission:CREATE USER');
+    Route::get('user', [UserController::class, 'index'])->middleware('permission:READ USER');
     Route::patch('user/{user}', [UserController::class, 'update']);
-    Route::delete('user/{user}', [UserController::class, 'destroy'])->middleware('permission:Delete User');
+    Route::delete('user/{user}', [UserController::class, 'destroy'])->middleware('permission:DELETE USER');
 });

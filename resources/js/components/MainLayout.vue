@@ -4,7 +4,7 @@
       app
       dark
       color="info"
-      v-if="'name' in $store.getters.user"
+      v-if="$store.getters.isLoggedIn"
     >
       <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
       <v-toolbar-title>Title</v-toolbar-title>
@@ -26,9 +26,7 @@
           </v-btn>
         </template>
         <v-list>
-          <v-list-item
-            @click="() => {}"
-          >
+          <v-list-item @click="() => $router.push({ name: 'profile' })">
             <v-list-item-avatar class="mr-0">
               <v-icon color="info">
                 mdi-account
@@ -78,9 +76,7 @@
     </v-navigation-drawer>
 
     <v-main>
-      <v-container>
-        <router-view></router-view>
-      </v-container>
+      <router-view></router-view>
     </v-main>
   </v-app>
 </template>
