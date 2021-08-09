@@ -27,6 +27,7 @@
     },
     "dependencies": {
         "css-loader": "^6.2.0",
+        "vee-validate": "^3.4.11",
         "vue-router": "^3.5.2",
         "vuetify": "^2.5.7",
         "vuex": "^3.6.2",

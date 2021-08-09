@@ -8,37 +8,51 @@
               <v-icon large class="mr-3">mdi-briefcase</v-icon>
               LOGIN
             </v-card-actions>
-            <v-form v-model="valid" ref="form" @submit="login" v-on:submit.prevent>
-              <v-card color="blue-grey lighten-5" elevation="6" class="pl-4 pr-4 pb-4">
-                <v-card-text>
-                  <v-text-field
-                    label="User"
-                    v-model="loginForm.username.value"
-                    :error-messages="loginForm.username.error"
-                    prepend-icon="mdi-account"
-                  ></v-text-field>
-                  <v-text-field
-                    label="Password"
-                    v-model="loginForm.password.value"
-                    :error-messages="loginForm.password.error"
-                    prepend-icon="mdi-lock"
-                    :append-icon="shadowPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                    @click:append="() => (shadowPassword = !shadowPassword)"
-                    :type="shadowPassword ? 'password' : 'text'"
-                  ></v-text-field>
-                </v-card-text>
-                <v-card-actions>
-                  <v-btn
-                    block
-                    type="submit"
-                    :class="{
-                      'blue darken-4 white--text': valid,
-                      disabled: !valid
-                    }"
-                  >Login</v-btn>
+            <validation-observer ref="loginObserver" v-slot="{ invalid }">
+              <v-form @submit="login" v-on:submit.prevent>
+                <v-card color="blue-grey lighten-5" elevation="6" class="pl-4 pr-4 pb-4">
+                  <v-card-text>
+                    <validation-provider
+                      v-slot="{ errors }"
+                      name="username"
+                      rules="required|min:3|alpha_num"
+                    >
+                      <v-text-field
+                        label="User"
+                        v-model="loginForm.username"
+                        data-vv-name="username"
+                        :error-messages="errors"
+                        prepend-icon="mdi-account"
+                        ref="usernameField"
+                      ></v-text-field>
+                    </validation-provider>
+                    <validation-provider
+                      v-slot="{ errors }"
+                      name="password"
+                      rules="required|min:4"
+                    >
+                      <v-text-field
+                        label="Password"
+                        v-model="loginForm.password"
+                        data-vv-name="password"
+                        :error-messages="errors"
+                        prepend-icon="mdi-lock"
+                        :append-icon="shadowPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                        @click:append="() => (shadowPassword = !shadowPassword)"
+                        :type="shadowPassword ? 'password' : 'text'"
+                      ></v-text-field>
+                    </validation-provider>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-btn
+                      block
+                      type="submit"
+                      :disabled="invalid"
+                    >Login</v-btn>
                 </v-card-actions>
-              </v-card>
-            </v-form>
+                </v-card>
+              </v-form>
+            </validation-observer>
           </v-flex>
         </v-layout>
       </v-container>
@@ -49,44 +63,35 @@
 <script>
 export default {
   name: 'Login',
+  mounted() {
+    this.$refs.usernameField.$refs.input.focus()
+  },
   data: function () {
     return {
-      valid: false,
       shadowPassword: true,
       loginForm: {
-        username: {
-          value: '',
-          error: null,
-        },
-        password: {
-          value: '',
-          error: null,
-        }
+        username: '',
+        password: '',
       }
     }
   },
   methods: {
     async login() {
       try {
-        await axios.get('/sanctum/csrf-cookie')
-        let data = {}
-        for (const [key, entry] of Object.entries(this.loginForm)) {
-          data[key] = entry.value
-        }
-        await this.$store.dispatch('login', data)
-        this.$router.push({
-          name: 'dashboard'
-        })
-      } catch(error) {
-        console.log(error)
-        if ('errors' in error.response.data) {
-          Object.keys(error.response.data.errors).forEach((key) => {
-            if (key in this.loginForm) {
-              this.loginForm[key].error = error.response.data.errors[key][0]
-            }
+        let valid = await this.$refs.loginObserver.validate()
+        if (valid) {
+          await axios.get('/sanctum/csrf-cookie')
+          await this.$store.dispatch('login', this.loginForm)
+          this.$router.push({
+            name: 'dashboard'
           })
         }
-        this.loginForm.password.value = ''
+      } catch(error) {
+        this.loginForm.password = ''
+        this.$refs.loginObserver.reset();
+        if ('errors' in error.response.data) {
+          this.$refs.loginObserver.setErrors(error.response.data.errors)
+        }
       }
     },
   },
