@@ -79,15 +79,13 @@ class UserController extends Controller
                 ], 403);
             }
         }
-        if (auth()->user()->id == $user->id || $request->user()->can('UPDATE USER')) {
-            $user->update($request->except('username'));
-            return [
-                'message' => 'User updated',
-                'payload' => [
-                    'user' => new UserResource($user),
-                ]
-            ];
-        }
+        $user->update($request->except('username'));
+        return [
+            'message' => 'User updated',
+            'payload' => [
+                'user' => new UserResource($user),
+            ]
+        ];
         abort(403, 'Not allowed');
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserRequest extends FormRequest
@@ -13,7 +14,13 @@ class UserRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        /** @var \App\Models\User */
+        $user = Auth::user();
+        if ($this->id == $user->id || $user->can('UPDATE USER')) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -24,8 +31,8 @@ class UserRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'name' => 'alpha_spaces|min:3',
             'password' => 'string|min:4',
+            'name' => 'alpha_spaces|min:3',
         ];
         switch ($this->method()) {
             case 'POST': {
@@ -37,8 +44,17 @@ class UserRequest extends FormRequest
             }
             case 'PUT':
             case 'PATCH': {
-                $rules['old_password'] = 'string|min:4|sometimes|required';
-                $rules['password'] = $rules['password'].'|sometimes|required';
+                $rules['old_password'] = 'string|min:4';
+                if (($this->user->id == auth()->user()->id)) {
+                    unset($rules['name']);
+                    foreach (array_slice($rules, 0, 5) as $key => $rule) {
+                        $rules[$key] = implode('|', ['required', $rule]);
+                    }
+                } else {
+                    foreach (array_slice($rules, 0, 5) as $key => $rule) {
+                        $rules[$key] = implode('|', ['sometimes|required', $rule]);
+                    }
+                }
                 return $rules;
             }
         }

@@ -34,7 +34,13 @@
                   </v-simple-table>
                 </v-card-text>
               </v-card>
-              <v-card class="mt-5">
+              <v-card class="mt-5" :loading="loading">
+                <template slot="progress">
+                  <v-progress-linear
+                    color="info"
+                    indeterminate
+                  ></v-progress-linear>
+                </template>
                 <v-card-title class="text-h5">Change password</v-card-title>
                 <validation-observer ref="passwordObserver" v-slot="{ invalid }">
                   <v-form @submit="changePassword" v-on:submit.prevent>
@@ -74,8 +80,8 @@
                       <v-btn
                         block
                         type="submit"
-                        :disabled="invalid"
-                      >Login</v-btn>
+                        :disabled="invalid || loading"
+                      >SUBMIT</v-btn>
                     </v-card-actions>
                   </v-form>
                 </validation-observer>
@@ -95,6 +101,7 @@ export default {
     return {
       rolePermissions: [],
       shadowPassword: false,
+      loading: false,
       passwordForm: {
         old_password: '',
         password: '',
@@ -107,25 +114,40 @@ export default {
   methods: {
     async getPermissions(roleId) {
       try {
+        this.loading = true
         let response = await axios.get(`role/${roleId}/permission`)
         this.rolePermissions = response.data.payload.permissions
+        this.loading = false
       } catch(error) {
         console.log(error)
+        this.loading = false
       }
     },
     async changePassword() {
       try {
-        await axios.patch(`user/${this.$store.getters.user.id}`, this.passwordForm)
-        await this.$store.dispatch('logout')
-        this.$router.push({
-          name: 'login'
-        })
+        let valid = await this.$refs.passwordObserver.validate()
+        if (valid) {
+          if (this.passwordForm.old_password == this.passwordForm.password) {
+            this.$refs.passwordObserver.setErrors({
+              password: ['The new password must be different from the old'],
+            })
+          } else {
+            this.loading = true
+            await axios.patch(`user/${this.$store.getters.user.id}`, this.passwordForm)
+            await this.$store.dispatch('logout')
+            this.loading = false
+            this.$router.push({
+              name: 'login'
+            })
+          }
+        }
       } catch(error) {
         this.passwordForm.password = ''
         this.$refs.passwordObserver.reset()
         if ('errors' in error.response.data) {
           this.$refs.passwordObserver.setErrors(error.response.data.errors)
         }
+        this.loading = false
       }
     },
   }

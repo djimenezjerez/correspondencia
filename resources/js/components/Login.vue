@@ -10,7 +10,13 @@
             </v-card-actions>
             <validation-observer ref="loginObserver" v-slot="{ invalid }">
               <v-form @submit="login" v-on:submit.prevent>
-                <v-card color="secondary lighten-5" elevation="6" class="pl-4 pr-4 pb-4">
+                <v-card color="secondary lighten-5" elevation="6" class="pb-4" :loading="loading">
+                  <template slot="progress">
+                    <v-progress-linear
+                      color="info"
+                      indeterminate
+                    ></v-progress-linear>
+                  </template>
                   <v-card-text>
                     <validation-provider
                       v-slot="{ errors }"
@@ -47,8 +53,8 @@
                     <v-btn
                       block
                       type="submit"
-                      :disabled="invalid"
-                    >Login</v-btn>
+                      :disabled="invalid || loading"
+                    >SUBMIT</v-btn>
                   </v-card-actions>
                 </v-card>
               </v-form>
@@ -72,7 +78,8 @@ export default {
       loginForm: {
         username: '',
         password: '',
-      }
+      },
+      loading: false,
     }
   },
   methods: {
@@ -80,8 +87,10 @@ export default {
       try {
         let valid = await this.$refs.loginObserver.validate()
         if (valid) {
+          this.loading = true
           await axios.get('/sanctum/csrf-cookie')
           await this.$store.dispatch('login', this.loginForm)
+          this.loading = false
           this.$router.push({
             name: 'dashboard'
           })
@@ -92,6 +101,7 @@ export default {
         if ('errors' in error.response.data) {
           this.$refs.loginObserver.setErrors(error.response.data.errors)
         }
+        this.loading = false
       }
     },
   },
