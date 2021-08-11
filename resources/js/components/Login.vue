@@ -88,7 +88,7 @@ export default {
         let valid = await this.$refs.loginObserver.validate()
         if (valid) {
           this.loading = true
-          await axios.get('/sanctum/csrf-cookie')
+          await axios.get('sanctum/csrf-cookie')
           await this.$store.dispatch('login', this.loginForm)
           this.loading = false
           this.$router.push({

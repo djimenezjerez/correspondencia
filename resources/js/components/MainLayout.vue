@@ -65,11 +65,11 @@
             <v-list-item-title>Home</v-list-item-title>
           </v-list-item>
 
-          <v-list-item link :to="{ name: 'login' }">
+          <v-list-item link :to="{ name: 'users' }">
             <v-list-item-icon>
               <v-icon>mdi-account</v-icon>
             </v-list-item-icon>
-            <v-list-item-title>Account</v-list-item-title>
+            <v-list-item-title>Users</v-list-item-title>
           </v-list-item>
         </v-list-item-group>
       </v-list>
