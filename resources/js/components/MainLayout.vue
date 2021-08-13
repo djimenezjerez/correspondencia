@@ -77,18 +77,27 @@
 
     <v-main>
       <router-view></router-view>
+      <vtoast ref="vtoast"/>
     </v-main>
   </v-app>
 </template>
 
 <script>
+import vtoast from '@/components/Snackbar'
+
 export default {
   name: 'Login',
+  components:{
+    vtoast
+  },
   data: function() {
     return {
       drawer: false,
       group: null,
     }
+  },
+  mounted() {
+    this.$root.vtoast = this.$refs.vtoast
   },
   methods: {
     async logout() {
