@@ -26,6 +26,7 @@
             </v-toolbar>
             <v-card-text>
               <v-data-table
+                locale="es"
                 :headers="headers"
                 :items="users"
                 :options.sync="options"
@@ -85,7 +86,6 @@ export default {
   },
   methods: {
     async fetchUsers() {
-      console.log(this.options)
       try {
         this.loading = true
         let response = await axios.get('user', {

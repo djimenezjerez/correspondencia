@@ -24,8 +24,8 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::get('user/{user}', [UserController::class, 'show']);
     Route::get('role', [RoleController::class, 'index']);
     Route::get('role/{role}/permission', [PermissionController::class, 'index']);
-    Route::post('user', [UserController::class, 'store'])->middleware('permission:CREATE USER');
-    Route::get('user', [UserController::class, 'index'])->middleware('permission:READ USER');
+    Route::post('user', [UserController::class, 'store'])->middleware('permission:CREAR USUARIO');
+    Route::get('user', [UserController::class, 'index'])->middleware('permission:LEER USUARIO');
     Route::patch('user/{user}', [UserController::class, 'update']);
-    Route::delete('user/{user}', [UserController::class, 'destroy'])->middleware('permission:DELETE USER');
+    Route::delete('user/{user}', [UserController::class, 'destroy'])->middleware('permission:ELIMINAR USUARIO');
 });

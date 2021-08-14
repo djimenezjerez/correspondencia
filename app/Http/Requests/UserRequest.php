@@ -16,7 +16,7 @@ class UserRequest extends FormRequest
     {
         /** @var \App\Models\User */
         $user = Auth::user();
-        if ($this->id == $user->id || $user->can('UPDATE USER')) {
+        if ($this->id == $user->id || $user->can('ACTUALIZAR USUARIO')) {
             return true;
         } else {
             return false;

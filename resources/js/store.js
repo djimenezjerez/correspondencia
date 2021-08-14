@@ -5,7 +5,7 @@ import VuexPersistence from 'vuex-persist'
 Vue.use(Vuex)
 
 const vuexLocal = new VuexPersistence({
-  key: 'boilerplate',
+  key: 'correspondencia',
   storage: window.localStorage,
 })
 

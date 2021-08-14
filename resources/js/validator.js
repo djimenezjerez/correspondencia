@@ -17,11 +17,12 @@ localize({
     names: {
       username: 'usuario',
       password: 'contraseña',
+      old_password: 'contraseña actual',
     }
   },
 })
 
-localize('en');
+localize('es');
 
 Object.keys(rules).forEach(rule => {
   extend(rule, rules[rule])

@@ -3,11 +3,34 @@
     <v-app-bar
       app
       dark
-      color="info"
+      color="tertiary"
       v-if="$store.getters.isLoggedIn"
     >
-      <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
-      <v-toolbar-title>Title</v-toolbar-title>
+      <v-app-bar-nav-icon
+        @click="drawer = true"
+        v-if="$store.getters.user.roles.includes('ADMINISTRADOR')"
+      ></v-app-bar-nav-icon>
+      <v-toolbar-title>
+        <v-img
+          src="/img/logo.png"
+          contain
+          width="200"
+        ></v-img>
+      </v-toolbar-title>
+      <v-divider class="mx-10" color="white" vertical></v-divider>
+      <v-btn
+        outlined
+        x-large
+        :to="{ name: $store.getters.user.roles.includes('ADMINISTRADOR') ? 'users' : 'dashboard' }"
+      >
+        <v-icon
+          dark
+          class="mr-3"
+        >
+          mdi-home
+        </v-icon>
+        Inicio
+      </v-btn>
       <v-spacer></v-spacer>
       <v-menu
         bottom
@@ -20,7 +43,7 @@
             v-on="on"
             class="mr-1"
           >
-            <v-avatar color="primary">
+            <v-avatar color="success">
               <span class="white--text text-h5">{{ $store.getters.user.name.split(' ').slice(0,2).map(i => i[0]).join('') }}</span>
             </v-avatar>
           </v-btn>
@@ -58,18 +81,17 @@
         dense
       >
         <v-list-item-group v-model="group">
-          <v-list-item link :to="{ name: 'dashboard' }">
-            <v-list-item-icon>
-              <v-icon>mdi-home</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Home</v-list-item-title>
-          </v-list-item>
-
           <v-list-item link :to="{ name: 'users' }">
             <v-list-item-icon>
               <v-icon>mdi-account</v-icon>
             </v-list-item-icon>
-            <v-list-item-title>Users</v-list-item-title>
+            <v-list-item-title>Usuarios</v-list-item-title>
+          </v-list-item>
+          <v-list-item link :to="{ name: 'dashboard' }">
+            <v-list-item-icon>
+              <v-icon>mdi-paperclip</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Trámites</v-list-item-title>
           </v-list-item>
         </v-list-item-group>
       </v-list>
@@ -83,7 +105,7 @@
 </template>
 
 <script>
-import vtoast from '@/components/Snackbar'
+import vtoast from '@/layouts/Snackbar'
 
 export default {
   name: 'Login',
@@ -96,7 +118,7 @@ export default {
       group: null,
     }
   },
-  mounted() {
+  beforeMount() {
     this.$root.vtoast = this.$refs.vtoast
   },
   methods: {
@@ -104,7 +126,7 @@ export default {
       try {
         await this.$store.dispatch('logout')
         this.$router.push({
-          name: 'login'
+          name: 'welcome'
         })
       } catch(error) {
         console.log(error)

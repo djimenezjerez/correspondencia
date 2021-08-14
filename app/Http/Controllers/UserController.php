@@ -18,9 +18,9 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $data = User::where('username', '!=', 'admin')->orderBy($request->order_by ?? 'name')->withTrashed();
+        $data = User::where('username', '!=', auth()->user()->username)->orderBy($request->order_by ?? 'name')->withTrashed();
         return [
-            'message' => 'Users list',
+            'message' => 'Lista de usuarios',
             'payload' => UserResource::collection($data->paginate($request->per_page ?? 10, ['*'], 'page', $request->page ?? 1))->resource,
         ];
     }
@@ -35,7 +35,7 @@ class UserController extends Controller
     {
         $user = User::create($request->all());
         return [
-            'message' => 'User created',
+            'message' => 'Usuario creado',
             'payload' => [
                 'user' => new UserResource($user),
             ]
@@ -52,15 +52,15 @@ class UserController extends Controller
     {
         /** @var \App\Models\User */
         $auth_user = Auth::user();
-        if ($auth_user->id == $user->id || $auth_user->can('READ USER')) {
+        if ($auth_user->id == $user->id || $auth_user->can('LEER USUARIO')) {
             return [
-                'message' => 'User data',
+                'message' => 'Datos de usuario',
                 'payload' => [
                     'user' => new UserResource($user),
                 ]
             ];
         }
-        abort(403, 'Not allowed');
+        abort(403, 'Prohibido');
     }
 
     /**
@@ -75,21 +75,21 @@ class UserController extends Controller
         if (auth()->user()->id == $user->id) {
             if (!Hash::check($request->old_password, $user->password)) {
                 return response()->json([
-                    'message' => 'Invalid credentials',
+                    'message' => 'Credenciales inválidas',
                     'errors' => [
-                        'old_password' => ['Old password incorrect']
+                        'old_password' => ['Contraseña actual incorrecta']
                     ]
-                ], 403);
+                ], 400);
             }
         }
         $user->update($request->except('username'));
         return [
-            'message' => 'User updated',
+            'message' => 'Usuario actualizado',
             'payload' => [
                 'user' => new UserResource($user),
             ]
         ];
-        abort(403, 'Not allowed');
+        abort(403, 'Prohibido');
     }
 
     /**
@@ -100,10 +100,9 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        if ($user->can('DELETE USER')) abort(403, 'Not allowed');
         $user->delete();
         return [
-            'message' => 'User removed',
+            'message' => 'Usuario desactivado',
         ];
     }
 }

@@ -23,6 +23,11 @@ class User extends Authenticatable
         'name',
         'username',
         'password',
+        'email',
+        'address',
+        'phone',
+        'document_type_id',
+        'area_id',
     ];
 
     /**
@@ -35,6 +40,16 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function document_type()
+    {
+        return $this->belongsTo(DocumentType::class);
+    }
+
+    public function area()
+    {
+        return $this->belongsTo(Area::class);
+    }
+
     public function setNameAttribute($value)
     {
         $this->attributes['name'] = mb_strtoupper($value);
@@ -42,11 +57,21 @@ class User extends Authenticatable
 
     public function setUsernameAttribute($value)
     {
-        $this->attributes['username'] = mb_strtolower($value);
+        $this->attributes['username'] = mb_strtoupper($value);
     }
 
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = Hash::make($value);
+    }
+
+    public function setEmailAttribute($value)
+    {
+        $this->attributes['email'] = mb_strtoupper($value);
+    }
+
+    public function setAddressAttribute($value)
+    {
+        $this->attributes['address'] = mb_strtoupper($value);
     }
 }

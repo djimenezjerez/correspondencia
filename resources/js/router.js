@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Login from '@/components/Login'
-import MainLayout from '@/components/MainLayout'
+import Welcome from '@/components/auth/Welcome'
+import MainLayout from '@/layouts/Main'
 import Dashboard from '@/components/Dashboard'
-import Profile from '@/components/Profile'
+import Profile from '@/components/auth/Profile'
 import Users from '@/components/Users'
 import store from '@/store.js'
 
@@ -18,9 +18,9 @@ const router = new VueRouter({
         name: 'dashboard',
       }
     }, {
-      path: '/login',
-      name: 'login',
-      component: Login,
+      path: '/welcome',
+      name: 'welcome',
+      component: Welcome,
     }, {
       path: '/',
       name: 'root',
@@ -45,7 +45,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.name != 'login') {
+  if (to.name != 'welcome') {
     if (store.getters.isLoggedIn) {
       if (to.name == 'root') {
         next({
@@ -56,7 +56,7 @@ router.beforeEach((to, from, next) => {
       }
     } else {
       next({
-        name: 'login',
+        name: 'welcome',
       })
     }
   } else {

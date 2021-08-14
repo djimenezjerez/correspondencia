@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Http\Resources\UserResource;
-use App\Http\Resources\RoleResource;
-use Illuminate\Http\Request;
 use App\Http\Requests\AuthRequest;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -24,7 +23,7 @@ class AuthController extends Controller
             if (Hash::check($request->password, $user->password)) {
                 $tokens = $user->tokens()->count();
                 if ($tokens == 1) {
-                    $token = $user->remember_token;
+                    $token = $user->getRememberToken();
                 } else {
                     if ($tokens > 1) {
                         $user->tokens()->delete();
@@ -34,7 +33,7 @@ class AuthController extends Controller
                     $user->save();
                 }
                 return [
-                    'message' => 'Logged in',
+                    'message' => 'Sesión iniciada',
                     'payload' => [
                         'access_token' => $token,
                         'token_type' => 'Bearer',
@@ -46,9 +45,9 @@ class AuthController extends Controller
             }
         }
         return response()->json([
-            'message' => 'Invalid credentials',
+            'message' => 'Credenciales inválidas',
             'errors' => [
-                'username' => ['Username or password incorrect']
+                'username' => ['Usuario o contraseña incorrecta']
             ]
         ], 401);
     }
@@ -59,12 +58,14 @@ class AuthController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy()
     {
-        $request->user()->tokens()->delete();
-
+        /** @var \App\Models\User */
+        $user = Auth::user();
+        $user->setRememberToken(null);
+        $user->tokens()->delete();
         return [
-            'message' => 'Logged out',
+            'message' => 'Sesión finalizada',
         ];
     }
 }

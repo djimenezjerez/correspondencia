@@ -5,6 +5,7 @@
 /public/css
 /public/js
 /storage/*.key
+/storage/app/admin_data.json
 /vendor
 .env
 .env.backup

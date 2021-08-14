@@ -4,7 +4,7 @@
       <v-layout wrap>
         <v-flex md6 xs12>
           <v-card>
-            <v-card-title class="text-h5">Profile</v-card-title>
+            <v-card-title class="text-h5">Perfil</v-card-title>
             <v-card-text>
               <p class="text-h4">{{ $store.getters.user.name }}</p>
               <p class="text-h5">{{ $store.getters.user.username }}</p>
@@ -19,7 +19,7 @@
                 indeterminate
               ></v-progress-linear>
             </template>
-            <v-card-title class="text-h5">Change password</v-card-title>
+            <v-card-title class="text-h5">Cambiar contraseña</v-card-title>
             <validation-observer ref="passwordObserver" v-slot="{ invalid }">
               <v-form @submit="changePassword" v-on:submit.prevent>
                 <v-card-text>
@@ -29,7 +29,7 @@
                     rules="required|min:4"
                   >
                     <v-text-field
-                      label="Old Password"
+                      label="Contraseña actual"
                       v-model="passwordForm.old_password"
                       data-vv-name="old_password"
                       :error-messages="errors"
@@ -43,7 +43,7 @@
                     rules="required|min:4"
                   >
                     <v-text-field
-                      label="New Password"
+                      label="Contraseña nueva"
                       v-model="passwordForm.password"
                       data-vv-name="password"
                       :error-messages="errors"
@@ -58,8 +58,9 @@
                   <v-btn
                     block
                     type="submit"
+                    color="primary"
                     :disabled="invalid || loading"
-                  >SUBMIT</v-btn>
+                  >Enviar</v-btn>
                 </v-card-actions>
               </v-form>
             </validation-observer>
@@ -67,7 +68,7 @@
         </v-flex>
         <v-flex xs12>
           <v-card>
-            <v-card-title class="text-h5">Roles and permissions</v-card-title>
+            <v-card-title class="text-h5">Roles y permissions</v-card-title>
             <v-card-text>
               <v-simple-table>
                 <template v-slot:default>
@@ -77,7 +78,7 @@
                         Roles
                       </th>
                       <th class="text-left">
-                        Permissions
+                        Permisos
                       </th>
                     </tr>
                   </thead>
@@ -121,7 +122,7 @@ export default {
         if (valid) {
           if (this.passwordForm.old_password == this.passwordForm.password) {
             this.$refs.passwordObserver.setErrors({
-              password: ['The new password must be different from the old'],
+              password: ['La contraseña nueva debe ser diferente a la actual'],
             })
           } else {
             this.loading = true
@@ -129,7 +130,10 @@ export default {
             await this.$store.dispatch('logout')
             this.loading = false
             this.$router.push({
-              name: 'login'
+              name: 'welcome',
+              params: {
+                toast: 'Contraseña actualizada'
+              }
             })
           }
         }

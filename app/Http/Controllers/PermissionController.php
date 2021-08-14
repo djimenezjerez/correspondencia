@@ -18,7 +18,7 @@ class PermissionController extends Controller
     {
         /** @var \App\Models\User */
         $user = Auth::user();
-        if ($user->hasRole($role->id) || $user->can('READ ROLE')) {
+        if ($user->hasRole($role->id) || $user->can('LEER ROL')) {
             return [
                 'message' => 'Permissions list',
                 'payload' => [

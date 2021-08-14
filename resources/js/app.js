@@ -1,6 +1,4 @@
 require('@/bootstrap')
-require('@/validator')
-require('@/axios')
 window.Vue = require('vue').default
 
 import vuetify from '@/vuetify'

@@ -6,12 +6,13 @@
     {{ text }}
     <template v-slot:action="{ attrs }">
       <v-btn
-        color="grey lighten-2"
-        text
+        icon
         v-bind="attrs"
         @click="showSnackbar = false"
       >
-        CLOSE
+        <v-icon>
+          mdi-close
+        </v-icon>
       </v-btn>
       </template>
   </v-snackbar>

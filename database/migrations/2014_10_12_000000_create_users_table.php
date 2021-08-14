@@ -15,9 +15,16 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('username')->unique();
-            $table->string('password');
+            $table->string('name')->comment('Nombre');
+            $table->string('username')->unique()->comment('Documento de Identidad');
+            $table->string('password')->comment('Contraseña');
+            $table->string('email')->comment('Correo Electrónico');
+            $table->string('address')->comment('Dirección');
+            $table->integer('phone')->comment('Teléfono');
+            $table->unsignedBigInteger('document_type_id')->comment('Tipo de Documento de Identidad');
+            $table->foreign('document_type_id')->references('id')->on('document_types')->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedBigInteger('area_id')->comment('Área de Trabajo');
+            $table->foreign('area_id')->references('id')->on('areas')->onDelete('cascade')->onUpdate('cascade');
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
