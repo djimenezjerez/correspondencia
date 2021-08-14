@@ -14,7 +14,7 @@
               outlined
               x-large
               class="mt-md-16"
-              @click.stop="dialogLogin = true"
+              @click.stop="$refs.dialogLogin.showDialog()"
               dark
             >
               Ingresar
@@ -47,13 +47,7 @@
         </v-col>
       </v-row>
     </v-container>
-    <v-dialog
-      v-model="dialogLogin"
-      persistent
-      max-width="600"
-    >
-      <Login v-on:closeDialog="dialogLogin = false"/>
-    </v-dialog>
+    <Login ref="dialogLogin"/>
     <vtoast ref="vtoast"/>
   </v-app>
 </template>
