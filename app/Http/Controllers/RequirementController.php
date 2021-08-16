@@ -104,9 +104,15 @@ class RequirementController extends Controller
      */
     public function destroy(Requirement $requirement)
     {
-        $requirement->delete();
-        return [
-            'message' => 'Requisito eliminado',
-        ];
+        if (!$requirement->is_used) {
+            $requirement->delete();
+            return [
+                'message' => 'Requisito eliminado',
+            ];
+        } else {
+            return response()->json([
+                'message' => 'El requisito no puede ser eliminado porque tiene trámites asociados',
+            ], 422);
+        }
     }
 }

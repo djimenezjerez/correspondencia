@@ -64,7 +64,7 @@
                     </template>
                     <span>Editar</span>
                   </v-tooltip>
-                  <v-tooltip bottom>
+                  <v-tooltip bottom v-if="!item.is_used">
                     <template #activator="{ on }">
                       <v-icon
                         class="mr-2"

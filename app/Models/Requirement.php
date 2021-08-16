@@ -27,4 +27,9 @@ class Requirement extends Model
     {
         $this->attributes['name'] = mb_strtoupper($value);
     }
+
+    public function getIsUsedAttribute()
+    {
+        return ($this->procedure_types()->count() > 0);
+    }
 }

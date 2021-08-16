@@ -23,6 +23,7 @@
           <p class="text-center text-h5">
             {{ requirement.name }}?
           </p>
+          <p v-show="error" class="text-center red--text text-h6">{{ errorMessage }}</p>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -32,6 +33,7 @@
             large
             @click="deleteItem"
             :disabled="loading"
+            v-show="!error"
           >
             <v-icon left>
               mdi-check
@@ -48,7 +50,7 @@
             <v-icon left>
               mdi-close
             </v-icon>
-            NO
+            {{ error ? 'Cerrar': 'No' }}
           </v-btn>
         </v-card-actions>
       </div>
@@ -64,11 +66,15 @@ export default {
       dialog: false,
       loading: false,
       requirement: {},
+      error: false,
+      errorMessage: '',
     }
   },
   methods: {
     showDialog(requirement) {
       this.dialog = true
+      this.error = false
+      this.errorMessage = ''
       this.requirement = requirement
     },
     async deleteItem() {
@@ -79,7 +85,9 @@ export default {
         this.$emit('updateList')
         this.dialog = false
       } catch(error) {
-        console.log(error)
+        this.error = true
+        this.errorMessage = error.response.data.message
+        this.$emit('updateList')
       } finally {
         this.loading = false
       }
