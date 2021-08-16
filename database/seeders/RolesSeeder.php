@@ -26,6 +26,13 @@ class RolesSeeder extends Seeder
                     'LEER ROL',
                     'LEER ÁREA',
                     'LEER TIPO DOCUMENTO',
+                    'CREAR TIPO TRÁMITE',
+                    'LEER TIPO TRÁMITES',
+                    'ACTUALIZAR TIPO TRÁMITE',
+                    'CREAR REQUISITO',
+                    'LEER REQUISITOS',
+                    'ACTUALIZAR TIPO TRÁMITE',
+                    'ELIMINAR TIPO TRÁMITE',
                 ],
             ], [
                 'name' => 'RECEPCIÓN',
@@ -34,6 +41,13 @@ class RolesSeeder extends Seeder
                     'LEER TRÁMITE',
                     'ACTUALIZAR TRÁMITE',
                     'ELIMINAR TRÁMITE',
+                    'DERIVAR TRÁMITE',
+                ],
+            ], [
+                'name' => 'VERIFICADOR',
+                'permissions' => [
+                    'LEER TIPO TRÁMITES',
+                    'LEER REQUISITOS',
                     'DERIVAR TRÁMITE',
                 ],
             ], [

@@ -94,7 +94,7 @@
         </v-flex>
       </v-layout>
     </v-container>
-    <UserForm ref="dialogUserForm" :roles="roles" :areas="areas" :document-types="documentTypes" v-on:updateList="fetchUsers"/>
+    <UserForm ref="dialogUserForm" :areas="areas" :document-types="documentTypes" v-on:updateList="fetchUsers"/>
     <UserSwitch ref="dialogUserSwitch" v-on:updateList="fetchUsers"/>
   </v-main>
 </template>
@@ -113,7 +113,6 @@ export default {
     return {
       loading: false,
       search: null,
-      roles: [],
       areas: [],
       documentTypes: [],
       options: {
@@ -176,7 +175,6 @@ export default {
   },
   created() {
     this.fetchUsers()
-    this.fetchRoles()
     this.fetchAreas()
     this.fetchDocumentTypes()
   },
@@ -207,17 +205,6 @@ export default {
         return area.name
       } else {
         return '-'
-      }
-    },
-    async fetchRoles() {
-      try {
-        this.loading = true
-        let response = await axios.get('role')
-        this.roles = response.data.payload.roles
-      } catch(error) {
-        console.log(error)
-      } finally {
-        this.loading = false
       }
     },
     async fetchAreas() {

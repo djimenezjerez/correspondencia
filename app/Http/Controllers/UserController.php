@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Models\Area;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 
@@ -48,8 +49,9 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
+        $area = Area::findOrFail($request->area_id);
         $user = User::create($request->all());
-        $user->syncRoles($request->roles);
+        $user->syncRoles([$area->role_id]);
         return [
             'message' => 'Usuario creado',
             'payload' => [
@@ -99,6 +101,10 @@ class UserController extends Controller
             }
         }
         $user->update($request->except('username'));
+        if ($request->has('area_id')) {
+            $area = Area::findOrFail($request->area_id);
+            $user->syncRoles([$area->role_id]);
+        }
         return [
             'message' => 'Usuario actualizado',
             'payload' => [

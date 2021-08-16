@@ -38,8 +38,6 @@ class UserRequest extends FormRequest
             'phone' => 'numeric',
             'document_type_id' => 'exists:document_types,id',
             'area_id' => 'exists:areas,id',
-            'roles' => 'array',
-            'roles.*' => 'exists:roles,id',
         ];
         switch ($this->method()) {
             case 'POST': {

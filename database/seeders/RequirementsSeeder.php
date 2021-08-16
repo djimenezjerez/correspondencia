@@ -15,11 +15,15 @@ class RequirementsSeeder extends Seeder
     public function run()
     {
         $requirements = [
-            'BOLETA DE PAGO DE LOS 3 ÚLTIMOS MESES',
-            'FOTOCOPIA DE CÉDULA DE IDENTIDAD',
-            'CERTIFICADO DE NACIMIENTO',
+            'FOTOCOPIA BOLETA DE PAGO (MES ANTERIOR)',
+            'EXTRACTO BANCARIO',
+            'FOTOCOPIA CARNET DE IDENTIDAD',
+            'FOTOCOPIA CARNET MILITAR',
+            'FOTOCOPIA CARNET DE SEGURO',
+            'CERTIFICADO DE NO TENER DEUDAS',
+            'CERTIFICADO DE APORTES',
+            'CERTIFICADO DE SOLVENCIA',
         ];
-
         foreach($requirements as $requirement) {
             Requirement::firstOrCreate([
                 'name' => $requirement,

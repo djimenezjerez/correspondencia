@@ -74,7 +74,7 @@ export default {
           await this.$store.dispatch('login', this.loginForm)
           this.loading = false
           this.$router.push({
-            name: 'dashboard'
+            name: 'welcome'
           })
         }
       } catch(error) {

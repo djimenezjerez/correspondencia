@@ -8,7 +8,7 @@
     >
       <v-app-bar-nav-icon
         @click="drawer = true"
-        v-if="$store.getters.user.roles.includes('ADMINISTRADOR')"
+        v-if="$store.getters.user.isAdmin"
       ></v-app-bar-nav-icon>
       <v-toolbar-title>
         <v-img
@@ -22,7 +22,7 @@
         outlined
         x-large
         dark
-        :to="{ name: $store.getters.user.roles.includes('ADMINISTRADOR') ? 'users' : 'dashboard' }"
+        :to="{ name: $store.getters.user.isAdmin ? 'users' : 'procedures' }"
       >
         <v-icon
           class="mr-3"
@@ -87,7 +87,7 @@
             </v-list-item-icon>
             <v-list-item-title>Usuarios</v-list-item-title>
           </v-list-item>
-          <v-list-item link :to="{ name: 'dashboard' }">
+          <v-list-item link :to="{ name: 'procedure_types' }">
             <v-list-item-icon>
               <v-icon>mdi-paperclip</v-icon>
             </v-list-item-icon>
@@ -96,7 +96,6 @@
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-
     <v-main>
       <router-view></router-view>
     </v-main>

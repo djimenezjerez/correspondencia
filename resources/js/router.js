@@ -2,7 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Welcome from '@/components/auth/Welcome'
 import MainLayout from '@/layouts/Main'
-import Dashboard from '@/components/Dashboard'
+import ProcedureTypes from '@/components/procedures/ProcedureTypes'
+import ProceduresList from '@/components/procedures/ProceduresList'
 import Profile from '@/components/auth/Profile'
 import UsersList from '@/components/users/UsersList'
 import store from '@/store.js'
@@ -15,7 +16,7 @@ const router = new VueRouter({
     {
       path: '*',
       redirect: {
-        name: 'dashboard',
+        name: 'root',
       }
     }, {
       path: '/welcome',
@@ -27,9 +28,13 @@ const router = new VueRouter({
       component: MainLayout,
       children: [
         {
-          path: '/dashboard',
-          name: 'dashboard',
-          component: Dashboard,
+          path: '/procedure_types',
+          name: 'procedure_types',
+          component: ProcedureTypes,
+        }, {
+          path: '/procedures',
+          name: 'procedures',
+          component: ProceduresList,
         }, {
           path: '/profile',
           name: 'profile',
@@ -48,9 +53,15 @@ router.beforeEach((to, from, next) => {
   if (to.name != 'welcome') {
     if (store.getters.isLoggedIn) {
       if (to.name == 'root') {
-        next({
-          name: 'dashboard',
-        })
+        if(store.getters.user.isAdmin) {
+          next({
+            name: 'users',
+          })
+        } else {
+          next({
+            name: 'procedures',
+          })
+        }
       } else {
         next()
       }
@@ -62,7 +73,7 @@ router.beforeEach((to, from, next) => {
   } else {
     if (store.getters.isLoggedIn) {
       next({
-        name: 'dashboard',
+        name: 'root',
       })
     } else {
       next()

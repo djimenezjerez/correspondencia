@@ -112,7 +112,7 @@ export default {
           await axios.get('sanctum/csrf-cookie')
           await this.$store.dispatch('login', this.loginForm)
           this.$router.push({
-            name: this.$store.getters.user.roles.includes('ADMINISTRADOR') ? 'users' : 'dashboard'
+            name: this.$store.getters.user.isAdmin ? 'users' : 'procedures'
           })
         }
       } catch(error) {

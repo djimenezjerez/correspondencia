@@ -85,7 +85,7 @@
                   <tbody>
                     <tr>
                       <td>
-                        <p v-for="role in $store.getters.user.roles" :key="role">&#8226; {{ role }}</p>
+                        <p>&#8226; {{ $store.getters.user.role }}</p>
                       </td>
                       <td>
                         <p v-for="permission in $store.getters.user.permissions" :key="permission">&#8226; {{ permission }}</p>

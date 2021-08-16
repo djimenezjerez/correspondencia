@@ -18,18 +18,45 @@ class ProcedureTypeSeeder extends Seeder
     {
         $procedure_types = [
             [
-                'name' => 'OFICIO',
-                'code' => 'OF',
+                'name' => 'TRAMITE GENERAL',
+                'code' => 'TG',
                 'area' => null,
                 'requirements' => [],
             ], [
-                'name' => 'SOLICITUD DE PRÉSTAMO',
-                'code' => 'SDP',
-                'area' => 'SECRETARÍA DE HACIENDA',
+                'name' => 'PRÉSTAMO DE EMERGENCIA',
+                'code' => 'PE',
+                'area' => 'SECRETARÍA HACIENDA',
                 'requirements' => [
-                    'BOLETA DE PAGO DE LOS 3 ÚLTIMOS MESES',
-                    'FOTOCOPIA DE CÉDULA DE IDENTIDAD',
-                    'CERTIFICADO DE NACIMIENTO',
+                    'FOTOCOPIA BOLETA DE PAGO (MES ANTERIOR)',
+                    'EXTRACTO BANCARIO',
+                    'FOTOCOPIA CARNET DE IDENTIDAD',
+                    'FOTOCOPIA CARNET MILITAR',
+                    'FOTOCOPIA CARNET DE SEGURO',
+                ],
+            ], [
+                'name' => 'PRÉSTAMO REGULAR',
+                'code' => 'PR',
+                'area' => 'SECRETARÍA HACIENDA',
+                'requirements' => [
+                    'FOTOCOPIA BOLETA DE PAGO (MES ANTERIOR)',
+                    'EXTRACTO BANCARIO',
+                    'FOTOCOPIA CARNET DE IDENTIDAD',
+                    'FOTOCOPIA CARNET MILITAR',
+                    'FOTOCOPIA CARNET DE SEGURO',
+                ],
+            ], [
+                'name' => 'PRÉSTAMO INICIACIÓN',
+                'code' => 'PI',
+                'area' => 'SECRETARÍA HACIENDA',
+                'requirements' => [
+                    'FOTOCOPIA BOLETA DE PAGO (MES ANTERIOR)',
+                    'EXTRACTO BANCARIO',
+                    'FOTOCOPIA CARNET DE IDENTIDAD',
+                    'FOTOCOPIA CARNET MILITAR',
+                    'FOTOCOPIA CARNET DE SEGURO',
+                    'CERTIFICADO DE NO TENER DEUDAS',
+                    'CERTIFICADO DE APORTES',
+                    'CERTIFICADO DE SOLVENCIA',
                 ],
             ],
         ];

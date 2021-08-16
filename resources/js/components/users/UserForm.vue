@@ -147,23 +147,6 @@
                   prepend-icon="mdi-briefcase"
                 ></v-select>
               </validation-provider>
-              <validation-provider
-                v-slot="{ errors }"
-                name="roles"
-                rules="required"
-              >
-                <v-select
-                  v-model="userForm.roles"
-                  :items="roles"
-                  item-text="name"
-                  item-value="id"
-                  label="Roles"
-                  data-vv-name="roles"
-                  :error-messages="errors"
-                  prepend-icon="mdi-key"
-                  multiple
-                ></v-select>
-              </validation-provider>
             </v-card-text>
             <v-card-actions>
               <v-btn
@@ -186,10 +169,6 @@
 export default {
   name: 'UserForm',
   props: {
-    roles: {
-      type: Array,
-      required: true
-    },
     areas: {
       type: Array,
       required: true
@@ -213,7 +192,6 @@ export default {
         phone: '',
         document_type_id: null,
         area_id: null,
-        roles: [],
       },
       loading: false,
     }
@@ -236,7 +214,6 @@ export default {
           phone: '',
           document_type_id: null,
           area_id: null,
-          roles: [],
         }
       }
       this.dialog = true
