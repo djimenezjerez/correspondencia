@@ -26,8 +26,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         // Localization
-        setlocale(LC_TIME, env('APP_LC_TIME', 'en_US.utf8'));
-        Carbon::setLocale(env('APP_LOCALE', 'en'));
+        setlocale(LC_TIME, env('APP_LC_TIME', 'es_BO.utf8'));
+        Carbon::setLocale(env('APP_LOCALE', 'es'));
 
         // Custom validations
         Validator::extend('alpha_spaces', function ($attribute, $value) {

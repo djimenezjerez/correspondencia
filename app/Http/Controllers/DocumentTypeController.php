@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Area;
+use App\Models\DocumentType;
 use Illuminate\Support\Facades\Auth;
 
-class AreaController extends Controller
+class DocumentTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,9 +15,9 @@ class AreaController extends Controller
     public function index()
     {
         return [
-            'message' => 'Lista de áreas',
+            'message' => 'Lista de tipos de documento',
             'payload' => [
-                'areas' => Area::orderBy('name')->get(),
+                'document_types' => DocumentType::orderBy('name')->get(),
             ],
         ];
     }
@@ -25,18 +25,18 @@ class AreaController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Area  $area
+     * @param  \App\Models\DocumentType  $documentType
      * @return \Illuminate\Http\Response
      */
-    public function show(Area $area)
+    public function show(DocumentType $document_type)
     {
         /** @var \App\Models\User */
         $user = Auth::user();
-        if ($user->area_id == $area->id || $user->can('LEER ÁREA')) {
+        if ($user->document_type_id == $document_type->id || $user->can('LEER TIPO DOCUMENTO')) {
             return [
-                'message' => 'Datos de área',
+                'message' => 'Datos de tipo de documento',
                 'payload' => [
-                    'area' => $area,
+                    'document_type' => $document_type,
                 ],
             ];
         }

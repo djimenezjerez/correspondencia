@@ -48,9 +48,9 @@
                       data-vv-name="password"
                       :error-messages="errors"
                       prepend-icon="mdi-lock"
-                      :append-icon="shadowPassword ? 'mdi-eye-off' : 'mdi-eye'"
+                      :append-icon="shadowPassword ? 'mdi-eye' : 'mdi-eye-off'"
                       @click:append="() => (shadowPassword = !shadowPassword)"
-                      :type="shadowPassword ? 'text' : 'password'"
+                      :type="shadowPassword ? 'password' : 'text'"
                     ></v-text-field>
                   </validation-provider>
                 </v-card-text>
@@ -107,7 +107,7 @@ export default {
   name: 'Profile',
   data: function() {
     return {
-      shadowPassword: false,
+      shadowPassword: true,
       loading: false,
       passwordForm: {
         old_password: '',
@@ -129,11 +129,9 @@ export default {
             await axios.patch(`user/${this.$store.getters.user.id}`, this.passwordForm)
             await this.$store.dispatch('logout')
             this.loading = false
+            this.$toast.info('Contraseña actualiaza correctamente')
             this.$router.push({
               name: 'welcome',
-              params: {
-                toast: 'Contraseña actualizada'
-              }
             })
           }
         }

@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\RoleResource;
+use App\Http\Resources\PermissionResource;
 use Spatie\Permission\Models\Role;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RoleController extends Controller
 {
@@ -13,24 +14,14 @@ class RoleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $data = Role::where('name', '!=', 'ADMINISTRATOR')->orderBy($request->order_by ?? 'name');
         return [
-            'message' => 'Roles list',
-            'payload' => RoleResource::collection($data->paginate($request->per_page ?? 10, ['*'], 'page', $request->page ?? 1))->resource,
+            'message' => 'Lista de roles',
+            'payload' => [
+                'roles' => RoleResource::collection(Role::orderBy('name')->get()),
+            ],
         ];
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
     }
 
     /**
@@ -41,29 +32,17 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Role  $role
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Role $role)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Role  $role
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Role $role)
-    {
-        //
+        /** @var \App\Models\User */
+        $user = Auth::user();
+        if ($user->hasRole($role) || $user->can('LEER ROL')) {
+            return [
+                'message' => 'Datos de rol',
+                'payload' => [
+                    'role' => new RoleResource($role),
+                    'permissions' => PermissionResource::collection($role->permissions()->orderBy('id')->get()),
+                ],
+            ];
+        }
+        abort(403, 'Prohibido');
     }
 }

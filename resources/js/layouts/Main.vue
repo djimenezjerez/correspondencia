@@ -3,7 +3,7 @@
     <v-app-bar
       app
       dark
-      color="tertiary"
+      color="background"
       v-if="$store.getters.isLoggedIn"
     >
       <v-app-bar-nav-icon
@@ -14,17 +14,17 @@
         <v-img
           src="/img/logo.png"
           contain
-          width="200"
+          width="80"
         ></v-img>
       </v-toolbar-title>
       <v-divider class="mx-10" color="white" vertical></v-divider>
       <v-btn
         outlined
         x-large
+        dark
         :to="{ name: $store.getters.user.roles.includes('ADMINISTRADOR') ? 'users' : 'dashboard' }"
       >
         <v-icon
-          dark
           class="mr-3"
         >
           mdi-home
@@ -99,27 +99,18 @@
 
     <v-main>
       <router-view></router-view>
-      <vtoast ref="vtoast"/>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import vtoast from '@/layouts/Snackbar'
-
 export default {
   name: 'Login',
-  components:{
-    vtoast
-  },
   data: function() {
     return {
       drawer: false,
       group: null,
     }
-  },
-  beforeMount() {
-    this.$root.vtoast = this.$refs.vtoast
   },
   methods: {
     async logout() {

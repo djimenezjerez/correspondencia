@@ -34,6 +34,7 @@ class UserController extends Controller
     public function store(UserRequest $request)
     {
         $user = User::create($request->all());
+        $user->syncRoles($request->roles);
         return [
             'message' => 'Usuario creado',
             'payload' => [

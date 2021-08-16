@@ -33,37 +33,44 @@ class UserRequest extends FormRequest
         $rules = [
             'password' => 'string|min:4',
             'name' => 'alpha_spaces|min:3',
+            'email' => 'email:rfc',
+            'address' => 'string|min:3',
+            'phone' => 'numeric',
+            'document_type_id' => 'exists:document_types,id',
+            'area_id' => 'exists:areas,id',
+            'roles' => 'array',
+            'roles.*' => 'exists:roles,id',
         ];
         switch ($this->method()) {
             case 'POST': {
-                $rules['username'] = 'alpha_num|min:3|unique:users,username';
-                foreach (array_slice($rules, 0, 5) as $key => $rule) {
+                $rules['username'] = 'string|min:3|unique:users,username';
+                foreach ($rules as $key => $rule) {
                     $rules[$key] = implode('|', ['required', $rule]);
                 }
                 return $rules;
             }
             case 'PUT':
             case 'PATCH': {
-                $rules['old_password'] = 'string|min:4';
                 if (($this->user->id == auth()->user()->id)) {
-                    unset($rules['name']);
-                    foreach (array_slice($rules, 0, 5) as $key => $rule) {
+                    $rules = [
+                        'old_password' => 'string|min:4'
+                    ] + $rules;
+                    $rules[] = [
+                        'username' => '',
+                    ];
+                    foreach (array_slice($rules, 2) as $key => $rule) {
+                        $rules[$key] = 'prohibited';
+                    }
+                    foreach (array_slice($rules, 0, 2) as $key => $rule) {
                         $rules[$key] = implode('|', ['required', $rule]);
                     }
                 } else {
-                    foreach (array_slice($rules, 0, 5) as $key => $rule) {
+                    foreach ($rules as $key => $rule) {
                         $rules[$key] = implode('|', ['sometimes|required', $rule]);
                     }
                 }
                 return $rules;
             }
         }
-    }
-
-    protected function prepareForValidation()
-    {
-        $this->merge([
-            'username' => mb_strtolower($this->username),
-        ]);
     }
 }

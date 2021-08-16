@@ -67,7 +67,7 @@ class User extends Authenticatable
 
     public function setEmailAttribute($value)
     {
-        $this->attributes['email'] = mb_strtoupper($value);
+        $this->attributes['email'] = mb_strtolower($value);
     }
 
     public function setAddressAttribute($value)

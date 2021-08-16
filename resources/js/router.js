@@ -4,7 +4,7 @@ import Welcome from '@/components/auth/Welcome'
 import MainLayout from '@/layouts/Main'
 import Dashboard from '@/components/Dashboard'
 import Profile from '@/components/auth/Profile'
-import Users from '@/components/Users'
+import UsersList from '@/components/users/UsersList'
 import store from '@/store.js'
 
 Vue.use(VueRouter)
@@ -37,7 +37,7 @@ const router = new VueRouter({
         }, {
           path: '/user',
           name: 'users',
-          component: Users,
+          component: UsersList,
         }
       ]
     },

@@ -15,9 +15,14 @@ localize({
 localize({
   es: {
     names: {
-      username: 'usuario',
+      name: 'nombre',
+      username: 'documento de identidad',
       password: 'contraseña',
       old_password: 'contraseña actual',
+      phone: 'teléfono',
+      address: 'dirección',
+      area_id: 'área',
+      document_type_id: 'tipo de documento',
     }
   },
 })

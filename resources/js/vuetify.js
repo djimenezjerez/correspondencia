@@ -1,10 +1,12 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify'
+import VuetifyToast from 'vuetify-toast-snackbar'
 import es from 'vuetify/src/locale/es.ts'
 
 Vue.use(Vuetify)
 
-export default new Vuetify({
+
+const vuetify = new Vuetify({
   lang: {
     locales: { es },
     current: 'es',
@@ -19,12 +21,19 @@ export default new Vuetify({
     },
     themes: {
       light: {
-        primary: '#005349',
-        secondary: '#696969',
-        tertiary: '#37474F',
+        primary: '#2f3639',
+        secondary: '#4c585d',
+        tertiary: '#eae4e1',
         accent: '#8c9eff',
         error: '#b71c1c',
+        background: '#151b1e',
       },
     },
   },
 })
+
+Vue.use(VuetifyToast, {
+  $vuetify: vuetify.framework
+})
+
+export default vuetify

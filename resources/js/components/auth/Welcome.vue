@@ -4,7 +4,7 @@
       <v-row justify="space-around" align="center">
         <v-col sm="12" md="3" offset-md="1">
           <p class="text-center text-sm-h4 text-md-h3 font-weight-light white--text">
-            Bienvenido al:
+            Bienvenido al
           </p>
           <p class="text-center text-sm-h3 text-md-h2 font-weight-medium white--text">
             Sistema de Correspondencia
@@ -48,28 +48,20 @@
       </v-row>
     </v-container>
     <Login ref="dialogLogin"/>
-    <vtoast ref="vtoast"/>
   </v-app>
 </template>
 
 <script>
 import Login from '@/components/auth/Login'
-import vtoast from '@/layouts/Snackbar'
 
 export default {
   name: 'Welcome',
   components: {
     Login,
-    vtoast
   },
   data: function() {
     return {
       dialogLogin: false,
-    }
-  },
-  mounted() {
-    if ('toast' in this.$route.params) {
-      this.$refs.vtoast.show(this.$route.params.toast.toString())
     }
   },
   methods: {
@@ -100,6 +92,6 @@ export default {
 
 <style>
 #welcome {
-  background-color: var(--v-primary-base);
+  background-color: var(--v-background-base);
 }
 </style>

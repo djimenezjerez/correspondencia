@@ -24,6 +24,8 @@ class RolesSeeder extends Seeder
                     'ACTUALIZAR USUARIO',
                     'ELIMINAR USUARIO',
                     'LEER ROL',
+                    'LEER ÁREA',
+                    'LEER TIPO DOCUMENTO',
                 ],
             ], [
                 'name' => 'RECEPCIÓN',
