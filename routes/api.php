@@ -39,8 +39,8 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
 
     // Usuarios
     Route::get('user', [UserController::class, 'index'])->middleware('permission:LEER USUARIO');
-    Route::post('user', [UserController::class, 'store']);
     Route::get('user/{user}', [UserController::class, 'show']);
+    Route::post('user', [UserController::class, 'store']);
     Route::patch('user/{user}', [UserController::class, 'update']);
     Route::delete('user/{user}', [UserController::class, 'destroy'])->middleware('permission:ELIMINAR USUARIO');
     Route::patch('deleted/user/{user}', [UserController::class, 'restore'])->middleware('permission:CREAR USUARIO');

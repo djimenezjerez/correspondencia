@@ -43,7 +43,7 @@
             v-on="on"
             class="mr-1"
           >
-            <v-avatar color="success">
+            <v-avatar color="secondary">
               <span class="white--text text-h5">{{ $store.getters.user.name.split(' ').slice(0,2).map(i => i[0]).join('') }}</span>
             </v-avatar>
           </v-btn>
@@ -55,7 +55,7 @@
                 mdi-account
               </v-icon>
             </v-list-item-avatar>
-            <v-list-item-title class="mr-3">Profile</v-list-item-title>
+            <v-list-item-title class="mr-3">PERFIL</v-list-item-title>
           </v-list-item>
           <v-list-item
             @click="logout"
@@ -65,7 +65,7 @@
                 mdi-power
               </v-icon>
             </v-list-item-avatar>
-            <v-list-item-title class="mr-3">Logout</v-list-item-title>
+            <v-list-item-title class="mr-3">CERRAR SESIÓN</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>

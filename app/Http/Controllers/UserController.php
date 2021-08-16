@@ -74,7 +74,10 @@ class UserController extends Controller
             return [
                 'message' => 'Datos de usuario',
                 'payload' => [
-                    'user' => new UserResource($user),
+                    'user' => collect([
+                        'area' => $user->area->name,
+                        'document_type' => $user->document_type->name,
+                    ])->merge(new UserResource($user)),
                 ]
             ];
         }
