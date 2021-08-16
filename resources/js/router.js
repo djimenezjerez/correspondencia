@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Welcome from '@/components/auth/Welcome'
 import MainLayout from '@/layouts/Main'
-import ProcedureTypes from '@/components/procedures/ProcedureTypes'
+import ProcedureTypesList from '@/components/procedures/ProcedureTypesList'
 import ProceduresList from '@/components/procedures/ProceduresList'
 import Profile from '@/components/auth/Profile'
 import UsersList from '@/components/users/UsersList'
@@ -30,7 +30,7 @@ const router = new VueRouter({
         {
           path: '/procedure_types',
           name: 'procedure_types',
-          component: ProcedureTypes,
+          component: ProcedureTypesList,
         }, {
           path: '/procedures',
           name: 'procedures',

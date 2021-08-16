@@ -198,6 +198,7 @@ export default {
   },
   methods: {
     showDialog(user = null) {
+      this.shadowPassword = true
       if (user) {
         this.edit = true
         this.userForm = {

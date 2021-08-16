@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: 'ProcedureTypes',
+  name: 'ProcedureTypesList',
   
 }
 </script>
