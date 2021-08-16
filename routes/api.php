@@ -32,6 +32,7 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::post('user', [UserController::class, 'store'])->middleware('permission:CREAR USUARIO');
     Route::get('user/{user}', [UserController::class, 'show']);
     Route::patch('user/{user}', [UserController::class, 'update']);
+    Route::delete('user/{user}', [UserController::class, 'destroy'])->middleware('permission:ELIMINAR USUARIO');
+    Route::patch('deleted/user/{user}', [UserController::class, 'restore'])->middleware('permission:CREAR USUARIO');
     // Route::get('role/{role}/permission', [PermissionController::class, 'index']);
-    // Route::delete('user/{user}', [UserController::class, 'destroy'])->middleware('permission:ELIMINAR USUARIO');
 });

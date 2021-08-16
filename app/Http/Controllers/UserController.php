@@ -18,10 +18,25 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $data = User::where('username', '!=', auth()->user()->username)->orderBy($request->order_by ?? 'name')->withTrashed();
+        $query = User::where('username', '!=', auth()->user()->username);
+        if ($request->has('sort_by') && $request->has('sort_desc')) {
+            foreach ($request->sort_by as $i => $sort) {
+                $query->orderBy($sort, filter_var($request->sort_desc[$i], FILTER_VALIDATE_BOOLEAN) ? 'DESC' : 'ASC');
+            }
+        } else {
+            $query->orderBy('name', 'ASC');
+        }
+        if ($request->has('search')) {
+            if ($request->search != '') {
+                $query->where(function($q) use ($request) {
+                    return $q->orWhere('name', 'like', '%'.mb_strtoupper($request->search).'%')->orWhere('username', 'like', '%'.$request->search.'%');
+                });
+            }
+        }
+        $query->withTrashed();
         return [
             'message' => 'Lista de usuarios',
-            'payload' => UserResource::collection($data->paginate($request->per_page ?? 10, ['*'], 'page', $request->page ?? 1))->resource,
+            'payload' => UserResource::collection($query->paginate($request->per_page ?? 10, ['*'], 'page', $request->page ?? 1))->resource,
         ];
     }
 
@@ -106,4 +121,19 @@ class UserController extends Controller
             'message' => 'Usuario desactivado',
         ];
     }
+
+    /**
+     * Restore the specified resource from storage.
+     *
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Http\Response
+     */
+    public function restore($user)
+    {
+        User::withTrashed()->where('id', $user)->restore();
+        return [
+            'message' => 'Usuario reactivado',
+        ];
+    }
+
 }

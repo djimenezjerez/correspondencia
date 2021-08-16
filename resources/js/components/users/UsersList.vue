@@ -12,11 +12,23 @@
                 Usuarios
               </v-toolbar-title>
               <v-spacer></v-spacer>
+              <v-text-field
+                dark
+                label="Buscar"
+                v-model="search"
+                prepend-icon="mdi-magnify"
+                filled
+                outlined
+                single-line
+                clearable
+                class="mt-8 shrink"
+              ></v-text-field>
+              <v-divider class="mx-10" color="white" vertical></v-divider>
               <v-btn
                 outlined
                 x-large
                 dark
-                @click.stop="$refs.dialogUser.showDialog()"
+                @click.stop="$refs.dialogUserForm.showDialog()"
               >
                 <v-icon
                   class="mr-3"
@@ -44,25 +56,37 @@
                 <template v-slot:[`item.area_id`]="{ item }">
                   {{ area(item.area_id) }}
                 </template>
+                <template v-slot:[`item.is_active`]="{ item }">
+                  {{ item.is_active ? 'ACTIVO' : 'INACTIVO' }}
+                </template>
                 <template v-slot:[`item.actions`]="{ item }">
-                  <v-tooltip bottom>
+                  <v-tooltip bottom v-if="item.is_active">
                     <template #activator="{ on }">
                       <v-icon
                         class="mr-2"
                         color="info"
                         v-on="on"
-                        @click="$refs.dialogUser.showDialog(item)"
+                        @click="$refs.dialogUserForm.showDialog(item)"
                       >
                         mdi-pencil
                       </v-icon>
                     </template>
                     <span>Editar</span>
                   </v-tooltip>
-                  <v-icon
-                    small
-                  >
-                    mdi-delete
-                  </v-icon>
+                  <v-tooltip bottom>
+                    <template #activator="{ on }">
+                      <v-icon
+                        class="mr-2"
+                        :color="item.is_active ? 'error' : 'success'"
+                        v-on="on"
+                        @click="$refs.dialogUserSwitch.showDialog(item)"
+                      >
+                        {{ item.is_active ? 'mdi-close' : 'mdi-restore' }}
+                      </v-icon>
+                    </template>
+                    <span v-if="item.is_active">Desactivar</span>
+                    <span v-else>Reactivar</span>
+                  </v-tooltip>
                 </template>
               </v-data-table>
             </v-card-text>
@@ -70,21 +94,25 @@
         </v-flex>
       </v-layout>
     </v-container>
-    <UserForm ref="dialogUser" :roles="roles" :areas="areas" :document-types="documentTypes" v-on:updateList="fetchUsers"/>
+    <UserForm ref="dialogUserForm" :roles="roles" :areas="areas" :document-types="documentTypes" v-on:updateList="fetchUsers"/>
+    <UserSwitch ref="dialogUserSwitch" v-on:updateList="fetchUsers"/>
   </v-main>
 </template>
 
 <script>
 import UserForm from '@/components/users/UserForm'
+import UserSwitch from '@/components/users/UserSwitch'
 
 export default {
   name: 'UsersList',
   components: {
-    UserForm
+    UserForm,
+    UserSwitch
   },
   data: function() {
     return {
       loading: false,
+      search: null,
       roles: [],
       areas: [],
       documentTypes: [],
@@ -133,7 +161,13 @@ export default {
           sortable: false,
           value: 'email',
         }, {
+          text: 'Estado',
+          align: 'center',
+          sortable: false,
+          value: 'is_active',
+        }, {
           text: 'Acciones',
+          align: 'center',
           value: 'actions',
           sortable: false
         },
@@ -152,6 +186,11 @@ export default {
         this.fetchUsers()
       }
     },
+    search: function(value) {
+      if (value == null || value.length >= 3 || value.length == 0) {
+        this.fetchUsers()
+      }
+    }
   },
   methods: {
     documentType(value) {
@@ -210,9 +249,10 @@ export default {
           params: {
             page: this.options.page,
             per_page: this.options.itemsPerPage,
-            sortBy: this.options.sortBy,
-            sortDesc: this.options.sortDesc,
-          }
+            sort_by: this.options.sortBy,
+            sort_desc: this.options.sortDesc,
+            search: this.search,
+          },
         })
         this.users = response.data.payload.data
         this.totalUsers = response.data.payload.total

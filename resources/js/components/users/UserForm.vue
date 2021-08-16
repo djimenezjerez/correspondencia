@@ -16,7 +16,9 @@
         ></v-progress-linear>
       </template>
       <v-toolbar dense color="secondary">
-        <v-toolbar-title class="white--text">Nuevo usuario</v-toolbar-title>
+        <v-toolbar-title class="white--text">
+          {{ this.edit ? 'Editar usuario' : 'Agregar usuario' }}
+        </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn
           icon
@@ -249,10 +251,11 @@ export default {
           this.loading = true
           if (this.edit) {
             await axios.patch(`user/${this.userForm.id}`, Object.fromEntries(Object.entries(this.userForm).filter(([_, v]) => v != '')))
+            this.$toast.info('Usuario actualizado correctamente')
           } else {
             await axios.post('user', this.userForm)
+            this.$toast.info('Usuario creado correctamente')
           }
-          this.$toast.info('Usuario creado correctamente')
           this.$emit('updateList')
           this.dialog = false
         }
