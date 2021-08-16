@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Welcome from '@/components/auth/Welcome'
 import MainLayout from '@/layouts/Main'
+import RequirementsList from '@/components/requirements/RequirementsList'
 import ProcedureTypesList from '@/components/procedures/ProcedureTypesList'
 import ProceduresList from '@/components/procedures/ProceduresList'
 import Profile from '@/components/auth/Profile'
@@ -28,6 +29,10 @@ const router = new VueRouter({
       component: MainLayout,
       children: [
         {
+          path: '/requirements',
+          name: 'requirements',
+          component: RequirementsList,
+        }, {
           path: '/procedure_types',
           name: 'procedure_types',
           component: ProcedureTypesList,

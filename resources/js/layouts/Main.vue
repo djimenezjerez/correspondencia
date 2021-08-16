@@ -87,6 +87,12 @@
             </v-list-item-icon>
             <v-list-item-title>Usuarios</v-list-item-title>
           </v-list-item>
+          <v-list-item link :to="{ name: 'requirements' }">
+            <v-list-item-icon>
+              <v-icon>mdi-card-account-details</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Requisitos</v-list-item-title>
+          </v-list-item>
           <v-list-item link :to="{ name: 'procedure_types' }">
             <v-list-item-icon>
               <v-icon>mdi-paperclip</v-icon>

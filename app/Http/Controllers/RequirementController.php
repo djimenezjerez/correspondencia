@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Requirement;
+use App\Http\Requests\RequirementRequest;
+use App\Http\Resources\RequirementResource;
 use Illuminate\Http\Request;
 
 class RequirementController extends Controller
@@ -12,9 +14,25 @@ class RequirementController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $query = Requirement::query();
+        if ($request->has('sort_by') && $request->has('sort_desc')) {
+            foreach ($request->sort_by as $i => $sort) {
+                $query->orderBy($sort, filter_var($request->sort_desc[$i], FILTER_VALIDATE_BOOLEAN) ? 'DESC' : 'ASC');
+            }
+        } else {
+            $query->orderBy('name', 'ASC');
+        }
+        if ($request->has('search')) {
+            if ($request->search != '') {
+                $query->where('name', 'like', '%'.mb_strtoupper($request->search).'%');
+            }
+        }
+        return [
+            'message' => 'Lista de requisitos',
+            'payload' => RequirementResource::collection($query->paginate($request->per_page ?? 10, ['*'], 'page', $request->page ?? 1))->resource,
+        ];
     }
 
     /**
@@ -23,9 +41,15 @@ class RequirementController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(RequirementRequest $request)
     {
-        //
+        $requirement = Requirement::create($request->all());
+        return [
+            'message' => 'Requisito creado',
+            'payload' => [
+                'user' => new RequirementResource($requirement),
+            ]
+        ];
     }
 
     /**
@@ -36,7 +60,12 @@ class RequirementController extends Controller
      */
     public function show(Requirement $requirement)
     {
-        //
+        return [
+            'message' => 'Datos de requisito',
+            'payload' => [
+                'user' => new RequirementResource($requirement),
+            ]
+        ];
     }
 
     /**
@@ -46,9 +75,15 @@ class RequirementController extends Controller
      * @param  \App\Models\Requirement  $requirement
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Requirement $requirement)
+    public function update(RequirementRequest $request, Requirement $requirement)
     {
-        //
+        $requirement->update($request->only('name'));
+        return [
+            'message' => 'Requisito actualizado',
+            'payload' => [
+                'user' => new RequirementResource($requirement),
+            ]
+        ];
     }
 
     /**
@@ -59,6 +94,9 @@ class RequirementController extends Controller
      */
     public function destroy(Requirement $requirement)
     {
-        //
+        $requirement->delete();
+        return [
+            'message' => 'Requisito eliminado',
+        ];
     }
 }

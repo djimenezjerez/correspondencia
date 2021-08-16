@@ -16,7 +16,7 @@ class UserRequest extends FormRequest
     {
         /** @var \App\Models\User */
         $user = Auth::user();
-        if ($this->id == $user->id || $user->can('ACTUALIZAR USUARIO')) {
+        if ($this->id == $user->id || $user->can('EDITAR USUARIO') || $user->can('CREAR USUARIO')) {
             return true;
         } else {
             return false;
@@ -45,7 +45,6 @@ class UserRequest extends FormRequest
                 foreach ($rules as $key => $rule) {
                     $rules[$key] = implode('|', ['required', $rule]);
                 }
-                return $rules;
             }
             case 'PUT':
             case 'PATCH': {
@@ -67,8 +66,8 @@ class UserRequest extends FormRequest
                         $rules[$key] = implode('|', ['sometimes|required', $rule]);
                     }
                 }
-                return $rules;
             }
         }
+        return $rules;
     }
 }

@@ -18,10 +18,10 @@
       <div class="px-5 pb-5">
         <v-card-text>
           <p class="text-center text-h5">
-            ¿Seguro que desea {{ user.is_active ? 'desactivar' : 'reactivar' }} al usuario
+            ¿Seguro que desea eliminar el requisito
           </p>
           <p class="text-center text-h5">
-            {{ user.name }}?
+            {{ requirement.name }}?
           </p>
         </v-card-text>
         <v-card-actions>
@@ -30,7 +30,7 @@
             class="mr-2"
             color="success darken-1"
             large
-            @click="switchStatus"
+            @click="deleteItem"
             :disabled="loading"
           >
             <v-icon left>
@@ -58,29 +58,24 @@
 
 <script>
 export default {
-  name: 'UserSwitch',
+  name: 'RequirementDelete',
   data: function() {
     return {
       dialog: false,
       loading: false,
-      user: {},
+      requirement: {},
     }
   },
   methods: {
-    showDialog(user) {
+    showDialog(requirement) {
       this.dialog = true
-      this.user = user
+      this.requirement = requirement
     },
-    async switchStatus() {
+    async deleteItem() {
       try {
         this.loading = true
-        if (this.user.is_active) {
-          await axios.delete(`user/${this.user.id}`)
-          this.$toast.info('Usuario desactivado correctamente')
-        } else {
-          await axios.patch(`deleted/user/${this.user.id}`)
-          this.$toast.info('Usuario reactivado correctamente')
-        }
+        await axios.delete(`requirement/${this.requirement.id}`)
+        this.$toast.info('Requisito eliminado correctamente')
         this.$emit('updateList')
         this.dialog = false
       } catch(error) {
