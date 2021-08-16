@@ -19,20 +19,19 @@ class RolesSeeder extends Seeder
             [
                 'name' => 'ADMINISTRADOR',
                 'permissions' => [
-                    'CREAR USUARIO',
                     'LEER USUARIO',
+                    'CREAR USUARIO',
                     'EDITAR USUARIO',
                     'ELIMINAR USUARIO',
                     'LEER ROL',
                     'LEER ÁREA',
                     'LEER TIPO DOCUMENTO',
-                    'CREAR TIPO TRÁMITE',
-                    'LEER TIPO TRÁMITES',
-                    'EDITAR TIPO TRÁMITE',
                     'LEER REQUISITO',
                     'CREAR REQUISITO',
                     'EDITAR REQUISITO',
                     'ELIMINAR REQUISITO',
+                    'LEER TIPO TRÁMITE',
+                    'CREAR TIPO TRÁMITE',
                     'EDITAR TIPO TRÁMITE',
                     'ELIMINAR TIPO TRÁMITE',
                 ],
@@ -48,7 +47,7 @@ class RolesSeeder extends Seeder
             ], [
                 'name' => 'VERIFICADOR',
                 'permissions' => [
-                    'LEER TIPO TRÁMITES',
+                    'LEER TIPO TRÁMITE',
                     'LEER REQUISITO',
                     'DERIVAR TRÁMITE',
                 ],

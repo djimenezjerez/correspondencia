@@ -126,10 +126,10 @@ export default {
             })
           } else {
             this.loading = true
-            await axios.patch(`user/${this.$store.getters.user.id}`, this.passwordForm)
+            const response = await axios.patch(`user/${this.$store.getters.user.id}`, this.passwordForm)
             await this.$store.dispatch('logout')
             this.loading = false
-            this.$toast.info('Contraseña actualiaza correctamente')
+            this.$toast.info(response.data.message)
             this.$router.push({
               name: 'welcome',
             })

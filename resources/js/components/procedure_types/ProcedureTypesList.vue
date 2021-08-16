@@ -9,7 +9,7 @@
               light
             >
               <v-toolbar-title class="white--text">
-                Requisitos
+                Trámites
               </v-toolbar-title>
               <v-spacer></v-spacer>
               <v-text-field
@@ -28,28 +28,38 @@
                 outlined
                 x-large
                 dark
-                @click.stop="$refs.dialogRequirementForm.showDialog()"
+                @click.stop="$refs.dialogProcedureTypeForm.showDialog()"
               >
                 <v-icon
                   class="mr-3"
                 >
                   mdi-plus
                 </v-icon>
-                Agregar requisito
+                Agregar trámite
               </v-btn>
             </v-toolbar>
             <v-card-text>
               <v-data-table
                 :headers="headers"
-                :items="requirements"
+                :items="procedureTypes"
                 :options.sync="options"
-                :server-items-length="totalRequirements"
+                :server-items-length="totalProcedureTypes"
                 :loading="loading"
                 :footer-props="{
                   itemsPerPageOptions: [8, 15, 30]
                 }"
                 class="elevation-1"
               >
+                <template v-slot:[`item.requirements`]="{ item }" v-if="requirements.length">
+                  <ol class="my-2">
+                    <li
+                      v-for="requirementId in item.requirements"
+                      :key="requirementId"
+                    >
+                      {{ requirements.find(o => o.id === requirementId).name }}
+                    </li>
+                  </ol>
+                </template>
                 <template v-slot:[`item.actions`]="{ item }">
                   <v-tooltip bottom>
                     <template #activator="{ on }">
@@ -57,20 +67,20 @@
                         class="mr-2"
                         color="info"
                         v-on="on"
-                        @click="$refs.dialogRequirementForm.showDialog(item)"
+                        @click="$refs.dialogProcedureTypeForm.showDialog(item)"
                       >
                         mdi-pencil
                       </v-icon>
                     </template>
                     <span>Editar</span>
                   </v-tooltip>
-                  <v-tooltip bottom>
+                  <v-tooltip bottom v-if="item.total_procedures == 0">
                     <template #activator="{ on }">
                       <v-icon
                         class="mr-2"
                         color="error"
                         v-on="on"
-                        @click="$refs.dialogRequirementDelete.showDialog(item)"
+                        @click="$refs.dialogProcedureTypeDelete.showDialog(item)"
                       >
                         mdi-close
                       </v-icon>
@@ -84,20 +94,20 @@
         </v-flex>
       </v-layout>
     </v-container>
-    <RequirementForm ref="dialogRequirementForm" v-on:updateList="fetchRequirements"/>
-    <RequirementDelete ref="dialogRequirementDelete" v-on:updateList="fetchRequirements"/>
+    <ProcedureTypeForm :requirements="requirements" ref="dialogProcedureTypeForm" v-on:updateList="fetchProcedureTypes"/>
+    <ProcedureTypeDelete ref="dialogProcedureTypeDelete" v-on:updateList="fetchProcedureTypes"/>
   </v-main>
 </template>
 
 <script>
-import RequirementForm from '@/components/requirements/RequirementForm'
-import RequirementDelete from '@/components/requirements/RequirementDelete'
+import ProcedureTypeForm from '@/components/procedure_types/ProcedureTypeForm'
+import ProcedureTypeDelete from '@/components/procedure_types/ProcedureTypeDelete'
 
 export default {
-  name: 'RequirementsList',
+  name: 'ProcedureTypesList',
   components: {
-    RequirementForm,
-    RequirementDelete
+    ProcedureTypeForm,
+    ProcedureTypeDelete
   },
   data: function() {
     return {
@@ -109,14 +119,20 @@ export default {
         sortBy: ['name'],
         sortDesc: [false]
       },
-      totalRequirements: 0,
+      totalProcedureTypes: 0,
       requirements: [],
+      procedureTypes: [],
       headers: [
         {
           text: 'Nombre',
           align: 'start',
           sortable: true,
           value: 'name',
+        }, {
+          text: 'Requisitos',
+          align: 'start',
+          sortable: false,
+          value: 'requirements',
         }, {
           text: 'Acciones',
           align: 'center',
@@ -127,17 +143,18 @@ export default {
     }
   },
   created() {
+    this.fetchProcedureTypes()
     this.fetchRequirements()
   },
   watch: {
     options: function(newVal, oldVal) {
       if (newVal.page != oldVal.page || newVal.itemsPerPage != oldVal.itemsPerPage || newVal.sortBy != oldVal.sortBy || newVal.sortDesc != oldVal.sortDesc) {
-        this.fetchRequirements()
+        this.fetchProcedureTypes()
       }
     },
     search: function(value) {
       if (value == null || value.length >= 3 || value.length == 0) {
-        this.fetchRequirements()
+        this.fetchProcedureTypes()
       }
     }
   },
@@ -147,6 +164,21 @@ export default {
         this.loading = true
         let response = await axios.get('requirement', {
           params: {
+            all: true
+          }
+        })
+        this.requirements = response.data.payload.requirements
+      } catch(error) {
+        console.log(error)
+      } finally {
+        this.loading = false
+      }
+    },
+    async fetchProcedureTypes() {
+      try {
+        this.loading = true
+        let response = await axios.get('procedure_type', {
+          params: {
             page: this.options.page,
             per_page: this.options.itemsPerPage,
             sort_by: this.options.sortBy,
@@ -154,8 +186,8 @@ export default {
             search: this.search,
           },
         })
-        this.requirements = response.data.payload.data
-        this.totalRequirements = response.data.payload.total
+        this.procedureTypes = response.data.payload.data
+        this.totalProcedureTypes = response.data.payload.total
         this.options.page = response.data.payload.current_page
         this.options.itemsPerPage = parseInt(response.data.payload.per_page)
       } catch(error) {

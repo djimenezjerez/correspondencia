@@ -16,6 +16,16 @@ class RequirementController extends Controller
      */
     public function index(Request $request)
     {
+        if ($request->has('all')) {
+            if ($request->boolean('all')) {
+                return [
+                    'message' => 'Lista de requisitos',
+                    'payload' => [
+                        'requirements' => RequirementResource::collection(Requirement::get()),
+                    ],
+                ];
+            }
+        }
         $query = Requirement::query();
         if ($request->has('sort_by') && $request->has('sort_desc')) {
             foreach ($request->sort_by as $i => $sort) {

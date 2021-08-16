@@ -18,6 +18,8 @@ class Area extends Model
     protected $fillable = [
         'name',
         'code',
+        'group',
+        'role_id'
     ];
 
     public function users()

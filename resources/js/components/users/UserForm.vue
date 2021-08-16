@@ -74,6 +74,7 @@
                   data-vv-name="username"
                   :error-messages="errors"
                   prepend-icon="mdi-card-account-details"
+                  :disabled="edit"
                 ></v-text-field>
               </validation-provider>
               <validation-provider
@@ -228,11 +229,11 @@ export default {
         if (valid) {
           this.loading = true
           if (this.edit) {
-            await axios.patch(`user/${this.userForm.id}`, Object.fromEntries(Object.entries(this.userForm).filter(([_, v]) => v != '')))
-            this.$toast.info('Usuario actualizado correctamente')
+            const response = await axios.patch(`user/${this.userForm.id}`, Object.fromEntries(Object.entries(this.userForm).filter(([_, v]) => v != '')))
+            this.$toast.info(response.data.message)
           } else {
-            await axios.post('user', this.userForm)
-            this.$toast.info('Usuario creado correctamente')
+            const response = await axios.post('user', this.userForm)
+            this.$toast.info(response.data.message)
           }
           this.$emit('updateList')
           this.dialog = false

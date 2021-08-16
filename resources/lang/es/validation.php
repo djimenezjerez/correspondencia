@@ -21,7 +21,7 @@ return [
     'alpha_dash' => 'El campo :attribute debe contener sólo letras, números y guiones.',
     'alpha_num' => 'El campo :attribute debe contener sólo letras y números.',
     'alpha_spaces' => 'El campo :attribute debe contener sólo letras y espacios.',
-    'array' => 'El campo :attribute debe ser un vector.',
+    'array' => 'El campo :attribute debe ser un arreglo.',
     'before' => 'El campo :attribute debe anterior a :date.',
     'before_or_equal' => 'El campo :attribute debe ser igual o anterior a :date.',
     'between' => [
@@ -168,6 +168,6 @@ return [
         'phone' => 'teléfono',
         'document_type_id' => 'tipo de documento',
         'old_password' => 'contraseña actual',
+        'requirements' => 'requisitos'
     ],
-
 ];

@@ -102,11 +102,11 @@ export default {
         if (valid) {
           this.loading = true
           if (this.edit) {
-            await axios.patch(`requirement/${this.requirementForm.id}`, Object.fromEntries(Object.entries(this.requirementForm).filter(([_, v]) => v != '')))
-            this.$toast.info('Requisito actualizado correctamente')
+            const response = await axios.patch(`requirement/${this.requirementForm.id}`, Object.fromEntries(Object.entries(this.requirementForm).filter(([_, v]) => v != '')))
+            this.$toast.info(response.data.message)
           } else {
-            await axios.post('requirement', this.requirementForm)
-            this.$toast.info('Requisito creado correctamente')
+            const response = await axios.post('requirement', this.requirementForm)
+            this.$toast.info(response.data.message)
           }
           this.$emit('updateList')
           this.dialog = false

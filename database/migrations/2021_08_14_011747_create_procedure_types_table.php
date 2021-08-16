@@ -18,8 +18,6 @@ class CreateProcedureTypesTable extends Migration
             $table->string('name')->comment('Nombre');
             $table->string('code')->unique()->comment('Código');
             $table->integer('counter')->default(0);
-            $table->unsignedBigInteger('area_id')->comment('Área de Trabajo')->nullable();
-            $table->foreign('area_id')->references('id')->on('areas')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

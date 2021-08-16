@@ -20,12 +20,10 @@ class ProcedureTypeSeeder extends Seeder
             [
                 'name' => 'TRAMITE GENERAL',
                 'code' => 'TG',
-                'area' => null,
                 'requirements' => [],
             ], [
                 'name' => 'PRÉSTAMO DE EMERGENCIA',
                 'code' => 'PE',
-                'area' => 'SECRETARÍA HACIENDA',
                 'requirements' => [
                     'FOTOCOPIA BOLETA DE PAGO (MES ANTERIOR)',
                     'EXTRACTO BANCARIO',
@@ -36,7 +34,6 @@ class ProcedureTypeSeeder extends Seeder
             ], [
                 'name' => 'PRÉSTAMO REGULAR',
                 'code' => 'PR',
-                'area' => 'SECRETARÍA HACIENDA',
                 'requirements' => [
                     'FOTOCOPIA BOLETA DE PAGO (MES ANTERIOR)',
                     'EXTRACTO BANCARIO',
@@ -47,7 +44,6 @@ class ProcedureTypeSeeder extends Seeder
             ], [
                 'name' => 'PRÉSTAMO INICIACIÓN',
                 'code' => 'PI',
-                'area' => 'SECRETARÍA HACIENDA',
                 'requirements' => [
                     'FOTOCOPIA BOLETA DE PAGO (MES ANTERIOR)',
                     'EXTRACTO BANCARIO',
@@ -62,18 +58,10 @@ class ProcedureTypeSeeder extends Seeder
         ];
 
         foreach($procedure_types as $procedure_type) {
-            if ($procedure_type['area']) {
-                $area = Area::where('name', $procedure_type['area'])->firstOrFail();
-                $area_id = $area->id;
-            } else {
-                $area_id = null;
-            }
-
             $new_procedure_type = ProcedureType::firstOrCreate([
                 'code' => $procedure_type['code'],
             ], [
                 'name' => $procedure_type['name'],
-                'area_id' => $area_id,
             ]);
 
             $requirements = [];

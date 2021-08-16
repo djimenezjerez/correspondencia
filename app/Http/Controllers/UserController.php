@@ -106,7 +106,7 @@ class UserController extends Controller
             $user->syncRoles([$area->role_id]);
         }
         return [
-            'message' => 'Usuario actualizado',
+            'message' => 'Datos de usuario actualizados',
             'payload' => [
                 'user' => new UserResource($user),
             ]

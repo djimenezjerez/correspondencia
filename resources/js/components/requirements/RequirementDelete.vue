@@ -74,8 +74,8 @@ export default {
     async deleteItem() {
       try {
         this.loading = true
-        await axios.delete(`requirement/${this.requirement.id}`)
-        this.$toast.info('Requisito eliminado correctamente')
+        const response = await axios.delete(`requirement/${this.requirement.id}`)
+        this.$toast.info(response.data.message)
         this.$emit('updateList')
         this.dialog = false
       } catch(error) {

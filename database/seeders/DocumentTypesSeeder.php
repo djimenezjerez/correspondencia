@@ -16,14 +16,14 @@ class DocumentTypesSeeder extends Seeder
     {
         $documents = [
             [
-                'name' => 'CÉDULA DE IDENTIDAD',
+                'name' => 'CARNET DE IDENTIDAD',
                 'code' => 'CI',
             ], [
-                'name' => 'CÉDULA MILITAR',
+                'name' => 'CARNET MILITAR',
                 'code' => 'CM',
             ], [
-                'name' => 'CÉDULA ADMINISTRATIVA',
-                'code' => 'CA',
+                'name' => 'CARNET DE SOCIO',
+                'code' => 'CS',
             ],
         ];
 
