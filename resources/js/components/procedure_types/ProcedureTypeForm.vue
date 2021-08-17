@@ -15,8 +15,8 @@
           indeterminate
         ></v-progress-linear>
       </template>
-      <v-toolbar dense color="secondary">
-        <v-toolbar-title class="white--text">
+      <v-toolbar dense dark color="secondary">
+        <v-toolbar-title>
           {{ this.edit ? 'Editar Trámite' : 'Agregar Trámite' }}
         </v-toolbar-title>
         <v-spacer></v-spacer>
@@ -24,7 +24,7 @@
           icon
           @click.stop="closeDialog"
         >
-          <v-icon color="white">
+          <v-icon>
             mdi-close
           </v-icon>
         </v-btn>

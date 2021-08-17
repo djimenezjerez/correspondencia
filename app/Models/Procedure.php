@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Procedure extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -35,11 +36,21 @@ class Procedure extends Model
 
     public function procedure_flows()
     {
-        return $this->hasMany(ProcedureFlow::class)->withTimestamps();
+        return $this->hasMany(ProcedureFlow::class);
     }
 
     public function setCodeAttribute($value)
     {
         $this->attributes['code'] = mb_strtoupper($value);
+    }
+
+    public function getHasFlowedAttribute()
+    {
+        return $this->procedure_flows()->count() > 0;
+    }
+
+    public function getOwnerAttribute()
+    {
+        return $this->area_id == auth()->user()->area_id;
     }
 }

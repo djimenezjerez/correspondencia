@@ -7,6 +7,7 @@ use App\Http\Controllers\AreaController;
 use App\Http\Controllers\DocumentTypeController;
 use App\Http\Controllers\RequirementController;
 use App\Http\Controllers\ProcedureTypeController;
+use App\Http\Controllers\ProcedureController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,7 +35,7 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::get('document_type/{document_type}', [DocumentTypeController::class, 'show']);
 
     // Áreas
-    Route::get('area', [AreaController::class, 'index'])->middleware('permission:LEER ÁREA');
+    Route::get('area', [AreaController::class, 'index']);
     Route::get('area/{area}', [AreaController::class, 'show']);
 
     // Usuarios
@@ -53,9 +54,17 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::delete('requirement/{requirement}', [RequirementController::class, 'destroy'])->middleware('permission:ELIMINAR REQUISITO');
 
     // Tipos de trámite
-    Route::get('procedure_type', [ProcedureTypeController::class, 'index'])->middleware('permission:LEER TIPO TRÁMITE');
-    Route::get('procedure_type/{procedure_type}', [ProcedureTypeController::class, 'show'])->middleware('permission:LEER TIPO TRÁMITE');
+    Route::get('procedure_type', [ProcedureTypeController::class, 'index']);
+    Route::get('procedure_type/{procedure_type}', [ProcedureTypeController::class, 'show']);
+    Route::get('procedure_type/{procedure_type}/code', [ProcedureTypeController::class, 'getCode']);
     Route::post('procedure_type', [ProcedureTypeController::class, 'store'])->middleware('permission:CREAR TIPO TRÁMITE');
     Route::patch('procedure_type/{procedure_type}', [ProcedureTypeController::class, 'update'])->middleware('permission:EDITAR TIPO TRÁMITE');
     Route::delete('procedure_type/{procedure_type}', [ProcedureTypeController::class, 'destroy'])->middleware('permission:ELIMINAR TIPO TRÁMITE');
+
+    // Trámites
+    Route::get('procedure', [ProcedureController::class, 'index'])->middleware('permission:LEER TRÁMITE');
+    Route::get('procedure/{procedure}', [ProcedureController::class, 'show'])->middleware('permission:LEER TRÁMITE');
+    Route::post('procedure', [ProcedureController::class, 'store'])->middleware('permission:CREAR TRÁMITE');
+    Route::patch('procedure/{procedure}', [ProcedureController::class, 'update']);
+    Route::delete('procedure/{procedure}', [ProcedureController::class, 'destroy'])->middleware('permission:ELIMINAR TRÁMITE');
 });

@@ -15,14 +15,14 @@
           indeterminate
         ></v-progress-linear>
       </template>
-      <v-toolbar dense color="secondary">
-        <v-toolbar-title class="white--text">Bienvenido</v-toolbar-title>
+      <v-toolbar dense dark color="secondary">
+        <v-toolbar-title>Bienvenido</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn
           icon
           @click.stop="dialog = false"
         >
-          <v-icon color="white">
+          <v-icon>
             mdi-close
           </v-icon>
         </v-btn>

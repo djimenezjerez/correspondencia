@@ -13,9 +13,9 @@
             </template>
             <v-toolbar
               color="secondary"
-              light
+              dark
             >
-              <v-toolbar-title class="white--text">
+              <v-toolbar-title>
                 Datos del usuario
               </v-toolbar-title>
             </v-toolbar>
@@ -68,9 +68,9 @@
             </template>
             <v-toolbar
               color="secondary"
-              light
+              dark
             >
-              <v-toolbar-title class="white--text">
+              <v-toolbar-title>
                 Cambiar contraseña
               </v-toolbar-title>
             </v-toolbar>

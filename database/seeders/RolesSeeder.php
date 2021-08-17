@@ -24,13 +24,11 @@ class RolesSeeder extends Seeder
                     'EDITAR USUARIO',
                     'ELIMINAR USUARIO',
                     'LEER ROL',
-                    'LEER ÁREA',
                     'LEER TIPO DOCUMENTO',
                     'LEER REQUISITO',
                     'CREAR REQUISITO',
                     'EDITAR REQUISITO',
                     'ELIMINAR REQUISITO',
-                    'LEER TIPO TRÁMITE',
                     'CREAR TIPO TRÁMITE',
                     'EDITAR TIPO TRÁMITE',
                     'ELIMINAR TIPO TRÁMITE',
@@ -47,7 +45,6 @@ class RolesSeeder extends Seeder
             ], [
                 'name' => 'VERIFICADOR',
                 'permissions' => [
-                    'LEER TIPO TRÁMITE',
                     'LEER REQUISITO',
                     'DERIVAR TRÁMITE',
                 ],

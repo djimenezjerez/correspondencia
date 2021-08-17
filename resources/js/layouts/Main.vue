@@ -17,7 +17,7 @@
           width="80"
         ></v-img>
       </v-toolbar-title>
-      <v-divider class="mx-10" color="white" vertical></v-divider>
+      <v-divider class="mx-10" vertical></v-divider>
       <v-btn
         outlined
         x-large
@@ -35,6 +35,7 @@
       <v-menu
         bottom
         offset-y
+        light
       >
         <template v-slot:activator="{ on, attrs }">
           <v-btn
@@ -44,7 +45,7 @@
             class="mr-1"
           >
             <v-avatar color="secondary">
-              <span class="white--text text-h5">{{ $store.getters.user.name.split(' ').slice(0,2).map(i => i[0]).join('') }}</span>
+              <span class="text-h5">{{ $store.getters.user.name.split(' ').slice(0,2).map(i => i[0]).join('') }}</span>
             </v-avatar>
           </v-btn>
         </template>

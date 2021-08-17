@@ -24,6 +24,7 @@ class CreateProceduresTable extends Migration
             $table->unsignedBigInteger('procedure_type_id')->comment('Tipo de Trámite');
             $table->foreign('procedure_type_id')->references('id')->on('procedure_types')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

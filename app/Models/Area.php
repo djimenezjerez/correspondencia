@@ -39,7 +39,7 @@ class Area extends Model
 
     public function procedure_flows()
     {
-        return $this->hasMany(ProcedureFlow::class)->withTimestamps();
+        return $this->hasMany(ProcedureFlow::class);
     }
 
     public function setNameAttribute($value)

@@ -6,9 +6,9 @@
           <v-card>
             <v-toolbar
               color="secondary"
-              light
+              dark
             >
-              <v-toolbar-title class="white--text">
+              <v-toolbar-title>
                 Trámites
               </v-toolbar-title>
               <v-spacer></v-spacer>
@@ -23,7 +23,7 @@
                 clearable
                 class="mt-8 shrink"
               ></v-text-field>
-              <v-divider class="mx-10" color="white" vertical></v-divider>
+              <v-divider class="mx-10" vertical></v-divider>
               <v-btn
                 outlined
                 x-large

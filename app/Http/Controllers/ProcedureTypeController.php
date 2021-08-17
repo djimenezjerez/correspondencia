@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ProcedureType;
 use App\Http\Requests\ProcedureTypeRequest;
 use App\Http\Resources\ProcedureTypeResource;
+use App\Models\Procedure;
 use Illuminate\Http\Request;
 
 class ProcedureTypeController extends Controller
@@ -16,6 +17,16 @@ class ProcedureTypeController extends Controller
      */
     public function index(Request $request)
     {
+        if ($request->has('all')) {
+            if ($request->boolean('all')) {
+                return [
+                    'message' => 'Lista de tipos de trámites',
+                    'payload' => [
+                        'procedure_types' => ProcedureType::orderBy('name', 'ASC')->get(),
+                    ],
+                ];
+            }
+        }
         $query = ProcedureType::query();
         if ($request->has('sort_by') && $request->has('sort_desc')) {
             foreach ($request->sort_by as $i => $sort) {
@@ -110,5 +121,20 @@ class ProcedureTypeController extends Controller
                 'message' => 'El tipo de trámite no puede ser eliminado porque tiene '.$total.' trámites asociado(s)',
             ], 422);
         }
+    }
+
+    public function getCode(ProcedureType $procedure_type)
+    {
+        $counter = $procedure_type->counter;
+        do {
+            $counter = $counter + 1;
+            $code = implode('/', ['ASCINALSS', auth()->user()->area->code, $procedure_type->code, $counter]);
+        } while (Procedure::where('code', $code)->exists());
+        return [
+            'message' => 'Hoja de ruta válida',
+            'payload' => [
+                'code'  => $code,
+            ],
+        ];
     }
 }
