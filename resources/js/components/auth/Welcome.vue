@@ -1,49 +1,101 @@
 <template>
-  <v-app>
-    <v-container fill-height fluid id="welcome">
-      <v-row justify="space-around" align="center">
-        <v-col sm="12" md="3" offset-md="1">
-          <p class="text-center text-xs-h8 text-sm-h7 text-md-h6 font-weight-light white--text">
-            Bienvenido al
-          </p>
-          <p class="text-center text-xs-h7 text-sm-h6 text-md-h5 font-weight-medium white--text">
-            Sistema de Correspondencia
-          </p>
-          <v-row justify="center" align="center">
-            <v-btn
-              outlined
-              x-large
-              class="mt-md-16"
-              @click.stop="$refs.dialogLogin.showDialog()"
-              dark
+  <v-app id="welcome">
+    <v-container fill-height>
+      <v-row
+        justify="space-around"
+        align="end"
+      >
+        <v-col
+          cols="auto"
+          md="4"
+          sm="12"
+          class="text-center pb-sm-0 pb-md-10"
+        >
+          <v-container>
+            <v-row
+              align="start"
+              class="mb-sm-0 mb-md-4 mb-lg-12"
             >
-              Ingresar
-            </v-btn>
-          </v-row>
+              <v-col cols="12">
+                <div class="white--text">
+                  <div class="font-weight-light mb-sm-0 mb-md-1 mb-lg-4 text-sm-subtitle-1 text-md-h6 text-lg-h5">
+                    Bienvenido al
+                  </div>
+                  <div class="font-weight-normal text-sm-h6 text-md-h5 text-lg-h4">
+                    Sistema de Correspondencia
+                  </div>
+                </div>
+              </v-col>
+            </v-row>
+            <v-row
+              align="end"
+            >
+              <v-col cols="12">
+                <div>
+                  <v-btn
+                    outlined
+                    large
+                    @click.stop="$refs.dialogLogin.showDialog()"
+                    dark
+                  >
+                    Ingresar
+                  </v-btn>
+                </div>
+              </v-col>
+            </v-row>
+          </v-container>
         </v-col>
-        <v-col sm="12" md="3" offset-md="1">
-          <v-row justify="center" align="center">
+        <v-col
+          cols="auto"
+          md="4"
+          sm="12"
+        >
+          <v-row
+            justify="center"
+            no-gutters
+          >
+            <v-col
+              cols="auto"
+            >
+              <v-img
+                contain
+                :max-width="imageWidth"
+                src="/img/logo.png"
+              ></v-img>
+            </v-col>
             <v-col cols="12">
-              <v-img src="/img/logo.png"></v-img>
+              <div class="text-center text-sm-caption text-md-caption text-lg-h6 font-weight-normal white--text" :class="logoTextFont">
+                <div>
+                  Asociacion Nacional de Suboficiales y Sargentos de las Fuerzas Armadas del Estado
+                </div>
+                <div>
+                  &quot;ASCINALSS&quot;
+                </div>
+              </div>
             </v-col>
           </v-row>
-          <v-row justify="center" align="center">
-            <p class="text-center  text-xs-h7 text-sm-h6 text-md-h6 font-weight-light mt-5 white--text">
-              Asociacion Nacional de Sufoficiales y Sargentos de las Fuerzas Armadas del Estado
-            </p>
-          </v-row>
         </v-col>
-        <v-col sm="12" md="4">
-          <v-row justify="center" align="center">
-            <v-btn
-              outlined
-              x-large
-              class="mt-16"
-              dark
-            >
-              Consultar hoja de ruta
-            </v-btn>
-          </v-row>
+        <v-col
+          cols="auto"
+          md="4"
+          sm="12"
+          class="text-center pb-sm-0 pb-md-10"
+        >
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <div class="text-center">
+                  <v-btn
+                    outlined
+                    large
+                    dark
+                  >
+                    Consultar hoja de ruta
+                  </v-btn>
+                </div>
+              </v-col>
+            </v-row>
+          </v-container>
         </v-col>
       </v-row>
     </v-container>
@@ -63,6 +115,23 @@ export default {
     return {
       dialogLogin: false,
     }
+  },
+  computed: {
+    imageWidth() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs': return '180px'
+        case 'sm': return '200px'
+        case 'md': return '250px'
+        default: return '350'
+      }
+    },
+    logoTextFont() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs': return 'font-weight-light'
+        case 'sm': return 'font-weight-light'
+        default: return 'font-weight-normal'
+      }
+    },
   },
   methods: {
     async login() {
