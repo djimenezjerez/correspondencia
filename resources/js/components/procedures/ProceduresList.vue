@@ -9,8 +9,8 @@
               dark
             >
               <v-toolbar-title>
-                Libro de registro de correspondencia
-                <p>{{ $store.getters.user.area_id }}</p>
+                <div>Libro de registro de correspondencia</div>
+                <div>{{ currentArea }}</div>
               </v-toolbar-title>
               <v-spacer></v-spacer>
               <v-text-field
@@ -25,6 +25,18 @@
                 class="mt-8 shrink"
               ></v-text-field>
               <v-divider class="mx-10" vertical></v-divider>
+              <v-btn
+                outlined
+                x-large
+                dark
+              >
+                <v-icon
+                  class="mr-3"
+                >
+                  mdi-plus
+                </v-icon>
+                Agregar hoja de ruta
+              </v-btn>
             </v-toolbar>
             <v-card-text>
               <v-data-table
@@ -73,6 +85,16 @@ export default {
       ],
     }
   },
+  computed: {
+    currentArea() {
+      const area = this.areas.find(o => o.id == this.$store.getters.user.area_id)
+      if (area) {
+        return area.name
+      } else {
+        return ''
+      }
+    }
+  },
   created() {
     this.fetchAreas()
     this.fetchProcedures()
@@ -93,11 +115,7 @@ export default {
     async fetchAreas() {
       try {
         this.loading = true
-        let response = await axios.get('area', {
-          params: {
-            all: true
-          }
-        })
+        let response = await axios.get('area')
         this.areas = response.data.payload.areas
       } catch(error) {
         console.log(error)
