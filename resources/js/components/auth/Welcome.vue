@@ -3,10 +3,10 @@
     <v-container fill-height fluid id="welcome">
       <v-row justify="space-around" align="center">
         <v-col sm="12" md="3" offset-md="1">
-          <p class="text-center text-sm-h4 text-md-h3 font-weight-light white--text">
+          <p class="text-center text-xs-h8 text-sm-h7 text-md-h6 font-weight-light white--text">
             Bienvenido al
           </p>
-          <p class="text-center text-sm-h3 text-md-h2 font-weight-medium white--text">
+          <p class="text-center text-xs-h7 text-sm-h6 text-md-h5 font-weight-medium white--text">
             Sistema de Correspondencia
           </p>
           <v-row justify="center" align="center">
@@ -28,7 +28,7 @@
             </v-col>
           </v-row>
           <v-row justify="center" align="center">
-            <p class="text-center text-sm-h4 text-md-h4 font-weight-light mt-5 white--text">
+            <p class="text-center  text-xs-h7 text-sm-h6 text-md-h6 font-weight-light mt-5 white--text">
               Asociacion Nacional de Sufoficiales y Sargentos de las Fuerzas Armadas del Estado
             </p>
           </v-row>
