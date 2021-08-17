@@ -34,7 +34,7 @@
               <validation-provider
                 v-slot="{ errors }"
                 name="username"
-                rules="required|min:3|alpha_num"
+                rules="required|min:3"
               >
                 <v-text-field
                   label="Usuario"

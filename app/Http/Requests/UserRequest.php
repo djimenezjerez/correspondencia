@@ -48,7 +48,7 @@ class UserRequest extends FormRequest
             }
             case 'PUT':
             case 'PATCH': {
-                if (($this->user->id == auth()->user()->id)) {
+                if (($this->id == auth()->user()->id)) {
                     $rules = [
                         'old_password' => 'string|min:4'
                     ] + $rules;

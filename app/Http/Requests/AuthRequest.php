@@ -21,7 +21,7 @@ class AuthRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'username' => mb_strtolower($this->username),
+            'username' => mb_strtoupper($this->username),
         ]);
     }
 }

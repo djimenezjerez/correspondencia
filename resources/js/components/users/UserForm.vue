@@ -66,7 +66,7 @@
               <validation-provider
                 v-slot="{ errors }"
                 name="username"
-                rules="required|min:3|integer"
+                rules="required|min:3"
               >
                 <v-text-field
                   label="Documento de Identidad"
