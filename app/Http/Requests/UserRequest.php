@@ -16,7 +16,9 @@ class UserRequest extends FormRequest
     {
         /** @var \App\Models\User */
         $user = Auth::user();
-        if ($this->id == $user->id || $user->can('EDITAR USUARIO') || $user->can('CREAR USUARIO')) {
+        if ($this->method() == 'POST' && $user->can('CREAR USUARIO')) {
+            return true;
+        } elseif ((in_array($this->method(), ['PATCH', 'PUT'])) && ($this->user->id == $user->id || $user->can('EDITAR USUARIO'))) {
             return true;
         } else {
             return false;
@@ -69,5 +71,14 @@ class UserRequest extends FormRequest
             }
         }
         return $rules;
+    }
+
+    protected function prepareForValidation()
+    {
+        if (isset($this->username)) {
+            $this->merge([
+                'username' => trim(mb_strtoupper($this->username)),
+            ]);
+        }
     }
 }

@@ -34,4 +34,13 @@ class ProcedureTypeRequest extends FormRequest
         }
         return $rules;
     }
+
+    protected function prepareForValidation()
+    {
+        if (isset($this->code)) {
+            $this->merge([
+                'code' => trim(mb_strtoupper($this->code)),
+            ]);
+        }
+    }
 }

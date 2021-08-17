@@ -31,4 +31,13 @@ class RequirementRequest extends FormRequest
         }
         return $rules;
     }
+
+    protected function prepareForValidation()
+    {
+        if (isset($this->name)) {
+            $this->merge([
+                'name' => trim(mb_strtoupper($this->name)),
+            ]);
+        }
+    }
 }
