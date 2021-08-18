@@ -1,0 +1,32 @@
+<template>
+  <v-btn
+    outlined
+    :large="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
+    :small="$vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+    dark
+    @click="$emit('click', $event)"
+  >
+    <v-icon
+      class="mr-3"
+    >
+      {{ icon }}
+    </v-icon>
+    {{ text }}
+  </v-btn>
+</template>
+
+<script>
+export default {
+  name: 'AddButton',
+  props: {
+    icon: {
+      type: String,
+      default: 'mdi-plus'
+    },
+    text: {
+      type: String,
+      default: 'Agregar'
+    }
+  }
+}
+</script>

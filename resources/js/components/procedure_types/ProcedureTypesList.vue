@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row>
-      <v-col>
+      <v-col cols="12">
         <v-card>
           <v-toolbar
             color="secondary"
@@ -11,22 +11,18 @@
               Trámites
             </v-toolbar-title>
             <v-spacer></v-spacer>
-            <SearchInput v-model="search"/>
-            <v-divider class="mx-10" vertical></v-divider>
-            <v-btn
-              outlined
-              x-large
-              dark
-              @click.stop="$refs.dialogProcedureTypeForm.showDialog()"
-            >
-              <v-icon
-                class="mr-3"
-              >
-                mdi-plus
-              </v-icon>
-              Agregar trámite
-            </v-btn>
+            <v-divider class="mx-5" vertical></v-divider>
+            <AddButton text="Agregar trámite" @click="$refs.dialogProcedureTypeForm.showDialog()"/>
           </v-toolbar>
+          <v-row
+            align="end"
+            justify="end"
+            class="mt-1"
+          >
+            <v-col cols="auto" md="3" sm="4" xs="12">
+              <SearchInput v-model="search"/>
+            </v-col>
+          </v-row>
           <v-card-text>
             <v-data-table
               :headers="headers"
@@ -91,13 +87,15 @@
 import ProcedureTypeForm from '@/components/procedure_types/ProcedureTypeForm'
 import ProcedureTypeDelete from '@/components/procedure_types/ProcedureTypeDelete'
 import SearchInput from '@/components/shared/SearchInput'
+import AddButton from '@/components/shared/AddButton'
 
 export default {
   name: 'ProcedureTypesList',
   components: {
     ProcedureTypeForm,
     ProcedureTypeDelete,
-    SearchInput
+    SearchInput,
+    AddButton,
   },
   data: function() {
     return {

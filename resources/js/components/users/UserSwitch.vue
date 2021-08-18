@@ -17,19 +17,22 @@
       </template>
       <div class="px-5 pb-5">
         <v-card-text>
-          <p class="text-center text-h5">
-            ¿Seguro que desea {{ user.is_active ? 'desactivar' : 'reactivar' }} al usuario
-          </p>
-          <p class="text-center text-h5">
-            {{ user.name }}?
-          </p>
+          <div class="text-center text-xl-h4 text-lg-h6 text-md-h6 text-sm-h6 text-xs-subtitle-1">
+            <div>
+              ¿Seguro que desea {{ user.is_active ? 'desactivar' : 'reactivar' }} al usuario
+            </div>
+            <div>
+              {{ user.name }}?
+            </div>
+          </div>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
             class="mr-2"
             color="success darken-1"
-            large
+            :large="this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl"
+            :small="this.$vuetify.breakpoint.sm || this.$vuetify.breakpoint.xs"
             @click="switchStatus"
             :disabled="loading"
           >
@@ -41,7 +44,8 @@
           <v-btn
             class="ml-2"
             color="error"
-            large
+            :large="this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl"
+            :small="this.$vuetify.breakpoint.sm || this.$vuetify.breakpoint.xs"
             @click="dialog = false"
             :disabled="loading"
           >

@@ -1,62 +1,60 @@
 <template>
-  <v-main>
-    <v-container grid-list-md>
-      <v-layout wrap>
-        <v-flex xs12>
-          <v-card>
-            <v-toolbar
-              color="secondary"
+  <div>
+    <v-row>
+      <v-col>
+        <v-card>
+          <v-toolbar
+            color="secondary"
+            dark
+          >
+            <v-toolbar-title>
+              <div>Libro de registro de correspondencia</div>
+              <div>{{ currentArea }}</div>
+            </v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-text-field
+              dark
+              label="Buscar"
+              v-model="search"
+              prepend-icon="mdi-magnify"
+              filled
+              outlined
+              single-line
+              clearable
+              class="mt-8 shrink"
+            ></v-text-field>
+            <v-divider class="mx-10" vertical></v-divider>
+            <v-btn
+              outlined
+              x-large
               dark
             >
-              <v-toolbar-title>
-                <div>Libro de registro de correspondencia</div>
-                <div>{{ currentArea }}</div>
-              </v-toolbar-title>
-              <v-spacer></v-spacer>
-              <v-text-field
-                dark
-                label="Buscar"
-                v-model="search"
-                prepend-icon="mdi-magnify"
-                filled
-                outlined
-                single-line
-                clearable
-                class="mt-8 shrink"
-              ></v-text-field>
-              <v-divider class="mx-10" vertical></v-divider>
-              <v-btn
-                outlined
-                x-large
-                dark
+              <v-icon
+                class="mr-3"
               >
-                <v-icon
-                  class="mr-3"
-                >
-                  mdi-plus
-                </v-icon>
-                Agregar hoja de ruta
-              </v-btn>
-            </v-toolbar>
-            <v-card-text>
-              <v-data-table
-                :headers="headers"
-                :items="procedures"
-                :options.sync="options"
-                :server-items-length="totalProcedures"
-                :loading="loading"
-                :footer-props="{
-                  itemsPerPageOptions: [8, 15, 30]
-                }"
-                class="elevation-1"
-              >
-              </v-data-table>
-            </v-card-text>
-          </v-card>
-        </v-flex>
-      </v-layout>
-    </v-container>
-  </v-main>
+                mdi-plus
+              </v-icon>
+              Agregar hoja de ruta
+            </v-btn>
+          </v-toolbar>
+          <v-card-text>
+            <v-data-table
+              :headers="headers"
+              :items="procedures"
+              :options.sync="options"
+              :server-items-length="totalProcedures"
+              :loading="loading"
+              :footer-props="{
+                itemsPerPageOptions: [8, 15, 30]
+              }"
+              class="elevation-1"
+            >
+            </v-data-table>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script>

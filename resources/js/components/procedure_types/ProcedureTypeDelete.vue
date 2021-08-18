@@ -17,20 +17,23 @@
       </template>
       <div class="px-5 pb-5">
         <v-card-text>
-          <p class="text-center text-h5">
-            ¿Seguro que desea eliminar el trámite
-          </p>
-          <p class="text-center text-h5">
-            {{ procedure_type.name }}?
-          </p>
-          <p v-show="error" class="text-center red--text text-h6">{{ errorMessage }}</p>
+          <div class="text-center text-xl-h5 text-lg-h6 text-md-h6 text-sm-h6 text-xs-subtitle-1">
+            <div>
+              ¿Seguro que desea eliminar el trámite
+            </div>
+            <div>
+              {{ procedure_type.name }}?
+            </div>
+            <div v-show="error" class="text-center red--text text-xl-h6 text-lg-subtitle-1 text-md-subtitle-1 text-sm-subtitle-2 text-xs-body-1">{{ errorMessage }}</div>
+          </div>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
             class="mr-2"
             color="success darken-1"
-            large
+            :large="this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl"
+            :small="this.$vuetify.breakpoint.sm || this.$vuetify.breakpoint.xs"
             @click="deleteItem"
             :disabled="loading"
             v-show="!error"
@@ -43,7 +46,8 @@
           <v-btn
             class="ml-2"
             color="error"
-            large
+            :large="this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl"
+            :small="this.$vuetify.breakpoint.sm || this.$vuetify.breakpoint.xs"
             @click="dialog = false"
             :disabled="loading"
           >

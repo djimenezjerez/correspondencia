@@ -1,6 +1,6 @@
 <template>
   <v-app id="welcome">
-    <v-container fill-height>
+    <v-container fill-height fluid>
       <v-row
         justify="space-around"
         align="end"
@@ -14,14 +14,14 @@
           <v-container>
             <v-row
               align="start"
-              class="mb-xs-0 mb-sm-6 mb-md-4 mb-lg-14 mb-xl-14"
+              class="mb-xs-0 mb-sm-6 mb-md-4 mb-lg-14 mb-xl-16"
             >
               <v-col cols="12">
                 <div class="white--text">
-                  <div class="font-weight-light mb-xs-0 mb-sm-0 mb-md-1 text-xs-caption text-sm-subtitle-2 text-md-h6">
+                  <div class="font-weight-light mb-xs-0 mb-sm-0 mb-md-1 text-xs-caption text-sm-subtitle-2 text-xl-h4 text-md-h6">
                     Bienvenido al
                   </div>
-                  <div class="font-weight-normal text-xs-body-2 text-sm-subtitle-1 text-md-h5">
+                  <div class="font-weight-normal text-xs-body-2 text-sm-subtitle-1 text-xl-h3 text-md-h5">
                     Sistema de Correspondencia
                   </div>
                 </div>
@@ -66,7 +66,7 @@
               ></v-img>
             </v-col>
             <v-col cols="12">
-              <div class="text-center text-xs-caption text-sm-caption text-md-caption font-weight-normal white--text" :class="logoTextFont">
+              <div class="text-center text-md-caption text-lg-body-1 text-xl-h4 font-weight-normal white--text" :class="logoTextFont" :style="($vuetify.breakpoint.sm || $vuetify.breakpoint.xs) && 'font-size: 10px'">
                 <div>
                   Asociacion Nacional de Suboficiales y Sargentos de las Fuerzas Armadas del Estado
                 </div>
@@ -163,7 +163,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #welcome {
   background-color: var(--v-background-base);
 }

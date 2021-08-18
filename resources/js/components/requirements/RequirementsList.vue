@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row>
-      <v-col>
+      <v-col cols="12">
         <v-card>
           <v-toolbar
             color="secondary"
@@ -11,22 +11,18 @@
               Requisitos
             </v-toolbar-title>
             <v-spacer></v-spacer>
-            <SearchInput v-model="search"/>
-            <v-divider class="mx-10" vertical></v-divider>
-            <v-btn
-              outlined
-              x-large
-              dark
-              @click.stop="$refs.dialogRequirementForm.showDialog()"
-            >
-              <v-icon
-                class="mr-3"
-              >
-                mdi-plus
-              </v-icon>
-              Agregar requisito
-            </v-btn>
+            <v-divider class="mx-5" vertical></v-divider>
+            <AddButton text="Agregar requisito" @click="$refs.dialogRequirementForm.showDialog()"/>
           </v-toolbar>
+          <v-row
+            align="end"
+            justify="end"
+            class="mt-1"
+          >
+            <v-col cols="auto" md="3" sm="4" xs="12">
+              <SearchInput v-model="search"/>
+            </v-col>
+          </v-row>
           <v-card-text>
             <v-data-table
               :headers="headers"
@@ -81,6 +77,7 @@
 import RequirementForm from '@/components/requirements/RequirementForm'
 import RequirementDelete from '@/components/requirements/RequirementDelete'
 import SearchInput from '@/components/shared/SearchInput'
+import AddButton from '@/components/shared/AddButton'
 
 export default {
   name: 'RequirementsList',
@@ -88,6 +85,7 @@ export default {
     RequirementForm,
     RequirementDelete,
     SearchInput,
+    AddButton,
   },
   data: function() {
     return {

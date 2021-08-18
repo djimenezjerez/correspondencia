@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row>
-      <v-col>
+      <v-col cols="12">
         <v-card>
           <v-toolbar
             color="secondary"
@@ -11,22 +11,18 @@
               Usuarios
             </v-toolbar-title>
             <v-spacer></v-spacer>
-            <SearchInput v-model="search"/>
-            <v-divider class="mx-10" vertical></v-divider>
-            <v-btn
-              outlined
-              :large="['xl', 'lg'].includes($vuetify.breakpoint.name)"
-              dark
-              @click.stop="$refs.dialogUserForm.showDialog()"
-            >
-              <v-icon
-                class="mr-3"
-              >
-                mdi-plus
-              </v-icon>
-              Agregar usuario
-            </v-btn>
+            <v-divider class="mx-5" vertical></v-divider>
+            <AddButton text="Agregar usuario" @click="$refs.dialogUserForm.showDialog()"/>
           </v-toolbar>
+          <v-row
+            align="end"
+            justify="end"
+            class="mt-1"
+          >
+            <v-col cols="auto" md="3" sm="4" xs="12">
+              <SearchInput v-model="search"/>
+            </v-col>
+          </v-row>
           <v-card-text>
             <v-data-table
               :headers="headers"
@@ -37,7 +33,6 @@
               :footer-props="{
                 itemsPerPageOptions: [8, 15, 30]
               }"
-              class="elevation-1"
             >
               <template v-slot:[`item.document_type_id`]="{ item }">
                 {{ documentType(item.document_type_id) }}
@@ -101,6 +96,7 @@
 import UserForm from '@/components/users/UserForm'
 import UserSwitch from '@/components/users/UserSwitch'
 import SearchInput from '@/components/shared/SearchInput'
+import AddButton from '@/components/shared/AddButton'
 
 export default {
   name: 'UsersList',
@@ -108,6 +104,7 @@ export default {
     UserForm,
     UserSwitch,
     SearchInput,
+    AddButton,
   },
   data: function() {
     return {

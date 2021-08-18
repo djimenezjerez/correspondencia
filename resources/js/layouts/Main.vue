@@ -3,6 +3,7 @@
     <v-app-bar
       app
       dark
+      :dense="$vuetify.breakpoint.xs"
       color="background"
       v-if="$store.getters.isLoggedIn"
     >
@@ -17,10 +18,11 @@
           width="80"
         ></v-img>
       </v-toolbar-title>
-      <v-divider class="mx-10" vertical></v-divider>
+      <v-divider class="mx-5" vertical></v-divider>
       <v-btn
         outlined
-        large
+        :large="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
+        :small="$vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
         dark
         :to="{ name: $store.getters.user.isAdmin ? 'users' : 'procedures' }"
       >
@@ -39,13 +41,15 @@
       >
         <template v-slot:activator="{ on, attrs }">
           <v-btn
+            :large="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
+            :small="$vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
             icon
             v-bind="attrs"
             v-on="on"
             class="mr-1"
           >
-            <v-avatar color="secondary">
-              <span class="text-h5">{{ $store.getters.user.name.split(' ').slice(0,2).map(i => i[0]).join('') }}</span>
+            <v-avatar color="secondary" :size="avatarSize">
+              <span class="text-xl-h5 text-lg-h6 text-md-subtitle-1 text-sm-subtitle-2 text-xs-body-1">{{ $store.getters.user.name.split(' ').slice(0,2).map(i => i[0]).join('') }}</span>
             </v-avatar>
           </v-btn>
         </template>
@@ -73,9 +77,9 @@
     </v-app-bar>
 
     <v-navigation-drawer
-      v-model="drawer"
-      absolute
+      app
       temporary
+      v-model="drawer"
     >
       <v-list
         nav
@@ -88,23 +92,23 @@
             </v-list-item-icon>
             <v-list-item-title>Usuarios</v-list-item-title>
           </v-list-item>
-          <v-list-item link :to="{ name: 'requirements' }">
-            <v-list-item-icon>
-              <v-icon>mdi-card-account-details</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Requisitos</v-list-item-title>
-          </v-list-item>
           <v-list-item link :to="{ name: 'procedure_types' }">
             <v-list-item-icon>
               <v-icon>mdi-paperclip</v-icon>
             </v-list-item-icon>
             <v-list-item-title>Trámites</v-list-item-title>
           </v-list-item>
+          <v-list-item link :to="{ name: 'requirements' }">
+            <v-list-item-icon>
+              <v-icon>mdi-card-account-details</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Requisitos</v-list-item-title>
+          </v-list-item>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
     <v-main>
-      <v-container fill-width>
+      <v-container fluid>
         <router-view></router-view>
       </v-container>
     </v-main>
@@ -118,6 +122,15 @@ export default {
     return {
       drawer: false,
       group: null,
+    }
+  },
+  computed: {
+    avatarSize() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs': return 40
+        case 'sm': return 40
+        default: return 45
+      }
     }
   },
   methods: {
