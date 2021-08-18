@@ -93,6 +93,14 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, User $user)
     {
+        if (User::whereUsername($request->username)->where('id', '!=', $user->id)->exists()) {
+            return response()->json([
+                'message' => 'Documento de identidad inválido',
+                'errors' => [
+                    'username' => ['El documento de identidad ya existe']
+                ]
+            ], 400);
+        }
         if (auth()->user()->id == $user->id) {
             if (!Hash::check($request->old_password, $user->password)) {
                 return response()->json([
@@ -103,7 +111,7 @@ class UserController extends Controller
                 ], 400);
             }
         }
-        $user->update($request->except('username'));
+        $user->update($request->all());
         if ($request->has('area_id')) {
             $area = Area::findOrFail($request->area_id);
             $user->syncRoles([$area->role_id]);

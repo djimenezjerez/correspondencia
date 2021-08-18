@@ -48,9 +48,6 @@ class ProcedureController extends Controller
         ]);
         $procedure = Procedure::create($request->all());
         $procedure->procedure_type()->increment('counter');
-        $procedure->procedure_flows()->create([
-            'area_id' => $procedure->area_id
-        ]);
         return [
             'message' => 'Trámite creado',
             'payload' => [

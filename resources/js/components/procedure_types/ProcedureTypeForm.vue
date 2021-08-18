@@ -58,7 +58,6 @@
                   data-vv-name="code"
                   :error-messages="errors"
                   prepend-icon="mdi-subtitles-outline"
-                  :disabled="edit"
                 ></v-text-field>
               </validation-provider>
               <v-autocomplete
@@ -206,6 +205,7 @@ export default {
             this.$emit('updateList')
           }
           this.dialog = false
+          this.edit = false
         }
       } catch(error) {
         this.$refs.procedureTypeObserver.reset()
@@ -213,7 +213,6 @@ export default {
           this.$refs.procedureTypeObserver.setErrors(error.response.data.errors)
         }
       } finally {
-        this.edit = false
         this.loading = false
       }
     }

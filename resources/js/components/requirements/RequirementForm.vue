@@ -110,6 +110,7 @@ export default {
           }
           this.$emit('updateList')
           this.dialog = false
+          this.edit = false
         }
       } catch(error) {
         this.$refs.requirementObserver.reset()
@@ -117,7 +118,6 @@ export default {
           this.$refs.requirementObserver.setErrors(error.response.data.errors)
         }
       } finally {
-        this.edit = false
         this.loading = false
       }
     }

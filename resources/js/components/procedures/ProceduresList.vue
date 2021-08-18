@@ -1,42 +1,29 @@
 <template>
   <div>
     <v-row>
-      <v-col>
+      <v-col cols="12">
         <v-card>
           <v-toolbar
             color="secondary"
             dark
           >
             <v-toolbar-title>
-              <div>Libro de registro de correspondencia</div>
-              <div>{{ currentArea }}</div>
+              Libro de registro de correspondencia
             </v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-text-field
-              dark
-              label="Buscar"
-              v-model="search"
-              prepend-icon="mdi-magnify"
-              filled
-              outlined
-              single-line
-              clearable
-              class="mt-8 shrink"
-            ></v-text-field>
-            <v-divider class="mx-10" vertical></v-divider>
-            <v-btn
-              outlined
-              x-large
-              dark
-            >
-              <v-icon
-                class="mr-3"
-              >
-                mdi-plus
-              </v-icon>
-              Agregar hoja de ruta
-            </v-btn>
+            <v-divider class="mx-5" vertical></v-divider>
+            <AddButton text="Agregar hoja de ruta" @click="$refs.dialogProcedureForm.showDialog()"/>
           </v-toolbar>
+          <v-row
+            class="mt-1 px-4"
+          >
+            <v-col xl="9" lg="9" md="9" sm="8" xs="12">
+              <div class="text-xl-h5 text-lg-h5 text-md-h6 text-sm-subtitle-1 text-xs-body-1">{{ currentArea }}</div>
+            </v-col>
+            <v-col xl="3" lg="3" md="3" sm="4" xs="12">
+              <SearchInput v-model="search"/>
+            </v-col>
+          </v-row>
           <v-card-text>
             <v-data-table
               :headers="headers"
@@ -49,17 +36,45 @@
               }"
               class="elevation-1"
             >
+              <template v-slot:[`item.actions`]="{ item }">
+                <v-row justify="center">
+                  <v-col cols="auto" v-if="!item.has_flowed && item.owner">
+                    <v-tooltip bottom>
+                      <template #activator="{ on }">
+                        <v-icon
+                          color="info"
+                          v-on="on"
+                          @click="$refs.dialogProcedureForm.showDialog(item)"
+                        >
+                          mdi-pencil
+                        </v-icon>
+                      </template>
+                      <span>Editar</span>
+                    </v-tooltip>
+                  </v-col>
+                </v-row>
+              </template>
             </v-data-table>
           </v-card-text>
         </v-card>
       </v-col>
     </v-row>
+    <ProcedureForm ref="dialogProcedureForm" :procedure-types="procedureTypes" v-on:updateList="fetchProcedures"/>
   </div>
 </template>
 
 <script>
+import ProcedureForm from '@/components/procedures/ProcedureForm'
+import SearchInput from '@/components/shared/SearchInput'
+import AddButton from '@/components/shared/AddButton'
+
 export default {
   name: 'ProceduresList',
+  components: {
+    ProcedureForm,
+    SearchInput,
+    AddButton,
+  },
   data: function() {
     return {
       loading: false,
@@ -71,14 +86,40 @@ export default {
         sortDesc: [false]
       },
       totalProcedures: 0,
+      procedureTypes: [],
       areas: [],
       procedures: [],
       headers: [
         {
+          text: 'Fecha de inicio',
+          align: 'center',
+          sortable: true,
+          value: 'created_at',
+        }, {
           text: 'Hoja de ruta',
-          align: 'start',
+          align: 'center',
           sortable: true,
           value: 'code',
+        }, {
+          text: 'Procedencia',
+          align: 'start',
+          sortable: false,
+          value: 'origin',
+        }, {
+          text: 'Detalle/Asunto',
+          align: 'start',
+          sortable: false,
+          value: 'detail',
+        }, {
+          text: 'Sección destino',
+          align: 'center',
+          sortable: false,
+          value: 'area_id',
+        }, {
+          text: 'Acciones',
+          align: 'center',
+          sortable: false,
+          value: 'actions',
         },
       ],
     }
@@ -95,6 +136,7 @@ export default {
   },
   created() {
     this.fetchAreas()
+    this.fetchProcedureTypes()
     this.fetchProcedures()
   },
   watch: {
@@ -104,12 +146,25 @@ export default {
       }
     },
     search: function(value) {
-      if (value == null || value.length >= 3 || value.length == 0) {
-        this.fetchProcedures()
-      }
+      this.fetchProcedures()
     }
   },
   methods: {
+    async fetchProcedureTypes() {
+      try {
+        this.loading = true
+        let response = await axios.get('procedure_type', {
+          params: {
+            all: true,
+          },
+        })
+        this.procedureTypes = response.data.payload.procedure_types
+      } catch(error) {
+        console.log(error)
+      } finally {
+        this.loading = false
+      }
+    },
     async fetchAreas() {
       try {
         this.loading = true

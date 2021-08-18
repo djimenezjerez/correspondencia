@@ -24,7 +24,6 @@ class ProcedureTypeRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'counter' => 'prohibited',
             'code' => 'string|min:2|required',
             'requirements' => 'array|sometimes',
             'requirements.*' => 'exists:requirements,id',

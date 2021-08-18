@@ -54,7 +54,7 @@ class ProcedureTypeController extends Controller
      */
     public function store(ProcedureTypeRequest $request)
     {
-        $procedure_type = ProcedureType::create($request->all());
+        $procedure_type = ProcedureType::create($request->except('counter'));
         $procedure_type->counter = 0;
         $procedure_type->requirements()->sync($request->has('requirements') ? $request->requirements : []);
         return [
@@ -90,7 +90,15 @@ class ProcedureTypeController extends Controller
      */
     public function update(ProcedureTypeRequest $request, ProcedureType $procedure_type)
     {
-        $procedure_type->update($request->except('code'));
+        if (ProcedureType::whereCode($request->code)->where('id', '!=', $procedure_type->id)->exists()) {
+            return response()->json([
+                'message' => 'Cödigo inválido',
+                'errors' => [
+                    'code' => ['El código ya existe']
+                ]
+            ], 400);
+        }
+        $procedure_type->update($request->except('counter'));
         if ($request->has('requirements')) {
             $procedure_type->requirements()->sync($request->requirements);
         }

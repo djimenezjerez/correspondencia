@@ -23,6 +23,9 @@ localize({
       address: 'dirección',
       area_id: 'área',
       document_type_id: 'tipo de documento',
+      code: 'código',
+      origin: 'procedencia',
+      detail: 'detalle',
     }
   },
 })

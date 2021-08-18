@@ -46,32 +46,36 @@
                 </ol>
               </template>
               <template v-slot:[`item.actions`]="{ item }">
-                <v-tooltip bottom>
-                  <template #activator="{ on }">
-                    <v-icon
-                      class="mr-2"
-                      color="info"
-                      v-on="on"
-                      @click="$refs.dialogProcedureTypeForm.showDialog(item)"
-                    >
-                      mdi-pencil
-                    </v-icon>
-                  </template>
-                  <span>Editar</span>
-                </v-tooltip>
-                <v-tooltip bottom v-if="item.total_procedures == 0">
-                  <template #activator="{ on }">
-                    <v-icon
-                      class="mr-2"
-                      color="error"
-                      v-on="on"
-                      @click="$refs.dialogProcedureTypeDelete.showDialog(item)"
-                    >
-                      mdi-close
-                    </v-icon>
-                  </template>
-                  <span>Eliminar</span>
-                </v-tooltip>
+                <v-row justify="center">
+                  <v-col cols="auto">
+                    <v-tooltip bottom>
+                      <template #activator="{ on }">
+                        <v-icon
+                          color="info"
+                          v-on="on"
+                          @click="$refs.dialogProcedureTypeForm.showDialog(item)"
+                        >
+                          mdi-pencil
+                        </v-icon>
+                      </template>
+                      <span>Editar</span>
+                    </v-tooltip>
+                  </v-col>
+                  <v-col cols="auto" v-if="item.total_procedures == 0">
+                    <v-tooltip bottom>
+                      <template #activator="{ on }">
+                        <v-icon
+                          color="error"
+                          v-on="on"
+                          @click="$refs.dialogProcedureTypeDelete.showDialog(item)"
+                        >
+                          mdi-close
+                        </v-icon>
+                      </template>
+                      <span>Eliminar</span>
+                    </v-tooltip>
+                  </v-col>
+                </v-row>
               </template>
             </v-data-table>
           </v-card-text>
@@ -121,6 +125,11 @@ export default {
           align: 'start',
           sortable: false,
           value: 'requirements',
+        }, {
+          text: 'Código',
+          align: 'center',
+          sortable: false,
+          value: 'code',
         }, {
           text: 'Acciones',
           align: 'center',

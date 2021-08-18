@@ -2,7 +2,9 @@
   <v-btn
     outlined
     :large="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
-    :small="$vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+    :small="$vuetify.breakpoint.sm"
+    :x-small="$vuetify.breakpoint.xs"
+    class="py-4"
     dark
     @click="$emit('click', $event)"
   >

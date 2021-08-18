@@ -36,32 +36,36 @@
               class="elevation-1"
             >
               <template v-slot:[`item.actions`]="{ item }">
-                <v-tooltip bottom>
-                  <template #activator="{ on }">
-                    <v-icon
-                      class="mr-2"
-                      color="info"
-                      v-on="on"
-                      @click="$refs.dialogRequirementForm.showDialog(item)"
-                    >
-                      mdi-pencil
-                    </v-icon>
-                  </template>
-                  <span>Editar</span>
-                </v-tooltip>
-                <v-tooltip bottom v-if="!item.is_used">
-                  <template #activator="{ on }">
-                    <v-icon
-                      class="mr-2"
-                      color="error"
-                      v-on="on"
-                      @click="$refs.dialogRequirementDelete.showDialog(item)"
-                    >
-                      mdi-close
-                    </v-icon>
-                  </template>
-                  <span>Eliminar</span>
-                </v-tooltip>
+                <v-row justify="center">
+                  <v-col cols="auto">
+                    <v-tooltip bottom>
+                      <template #activator="{ on }">
+                        <v-icon
+                          color="info"
+                          v-on="on"
+                          @click="$refs.dialogRequirementForm.showDialog(item)"
+                        >
+                          mdi-pencil
+                        </v-icon>
+                      </template>
+                      <span>Editar</span>
+                    </v-tooltip>
+                  </v-col>
+                  <v-col cols="auto" v-if="!item.is_used">
+                    <v-tooltip bottom>
+                      <template #activator="{ on }">
+                        <v-icon
+                          color="error"
+                          v-on="on"
+                          @click="$refs.dialogRequirementDelete.showDialog(item)"
+                        >
+                          mdi-close
+                        </v-icon>
+                      </template>
+                      <span>Eliminar</span>
+                    </v-tooltip>
+                  </v-col>
+                </v-row>
               </template>
             </v-data-table>
           </v-card-text>

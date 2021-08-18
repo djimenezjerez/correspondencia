@@ -170,8 +170,9 @@ export default {
         if (valid) {
           if (this.passwordForm.old_password == this.passwordForm.password) {
             this.$refs.passwordObserver.setErrors({
-              password: ['La contraseña nueva debe ser diferente a la actual'],
+              old_password: ['La contraseña nueva debe ser diferente a la actual'],
             })
+            this.passwordForm.password = ''
           } else {
             this.loading = true
             const response = await axios.patch(`user/${this.$store.getters.user.id}`, this.passwordForm)

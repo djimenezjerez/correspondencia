@@ -74,7 +74,6 @@
                   data-vv-name="username"
                   :error-messages="errors"
                   prepend-icon="mdi-card-account-details"
-                  :disabled="edit"
                 ></v-text-field>
               </validation-provider>
               <validation-provider
@@ -237,6 +236,7 @@ export default {
           }
           this.$emit('updateList')
           this.dialog = false
+          this.edit = false
         }
       } catch(error) {
         this.$refs.userObserver.reset()
@@ -244,7 +244,6 @@ export default {
           this.$refs.userObserver.setErrors(error.response.data.errors)
         }
       } finally {
-        this.edit = false
         this.loading = false
       }
     }

@@ -44,14 +44,11 @@
                 {{ item.is_active ? 'ACTIVO' : 'INACTIVO' }}
               </template>
               <template v-slot:[`item.actions`]="{ item }">
-                <v-row no-gutters>
-                  <v-col
-                    cols="6"
-                  >
-                    <v-tooltip bottom v-if="item.is_active">
+                <v-row justify="center">
+                  <v-col cols="auto" v-if="item.is_active">
+                    <v-tooltip bottom>
                       <template #activator="{ on }">
                         <v-icon
-                          class="mr-2"
                           color="info"
                           v-on="on"
                           @click="$refs.dialogUserForm.showDialog(item)"
@@ -62,23 +59,20 @@
                       <span>Editar</span>
                     </v-tooltip>
                   </v-col>
-                  <v-col
-                    cols="6"
-                  >
+                  <v-col cols="auto">
                     <v-tooltip bottom>
-                    <template #activator="{ on }">
-                      <v-icon
-                        class="mr-2"
-                        :color="item.is_active ? 'error' : 'success'"
-                        v-on="on"
-                        @click="$refs.dialogUserSwitch.showDialog(item)"
-                      >
-                        {{ item.is_active ? 'mdi-close' : 'mdi-restore' }}
-                      </v-icon>
-                    </template>
-                    <span v-if="item.is_active">Desactivar</span>
-                    <span v-else>Reactivar</span>
-                  </v-tooltip>
+                      <template #activator="{ on }">
+                        <v-icon
+                          :color="item.is_active ? 'error' : 'success'"
+                          v-on="on"
+                          @click="$refs.dialogUserSwitch.showDialog(item)"
+                        >
+                          {{ item.is_active ? 'mdi-close' : 'mdi-restore' }}
+                        </v-icon>
+                      </template>
+                      <span v-if="item.is_active">Desactivar</span>
+                      <span v-else>Reactivar</span>
+                    </v-tooltip>
                   </v-col>
                 </v-row>
               </template>

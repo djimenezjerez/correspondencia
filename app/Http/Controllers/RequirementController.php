@@ -87,7 +87,15 @@ class RequirementController extends Controller
      */
     public function update(RequirementRequest $request, Requirement $requirement)
     {
-        $requirement->update($request->only('name'));
+        if (Requirement::whereName($request->name)->where('id', '!=', $requirement->id)->exists()) {
+            return response()->json([
+                'message' => 'Nombre inválido',
+                'errors' => [
+                    'name' => ['El requisito ya existe']
+                ]
+            ], 400);
+        }
+        $requirement->update($request->all());
         return [
             'message' => 'Requisito actualizado',
             'payload' => [
