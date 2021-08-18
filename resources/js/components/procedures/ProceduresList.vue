@@ -11,8 +11,8 @@
               Libro de registro de correspondencia
             </v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-divider class="mx-5" vertical></v-divider>
-            <AddButton text="Agregar hoja de ruta" @click="$refs.dialogProcedureForm.showDialog()"/>
+            <v-divider class="mx-5" vertical v-if="$store.getters.user.permissions.includes('CREAR TRÁMITE')"></v-divider>
+            <AddButton text="Agregar hoja de ruta" @click="$refs.dialogProcedureForm.showDialog()" v-if="$store.getters.user.permissions.includes('CREAR TRÁMITE')"/>
           </v-toolbar>
           <v-row
             class="mt-1 px-4"
@@ -37,31 +37,54 @@
               class="elevation-1"
             >
               <template v-slot:[`item.area_id`]="{ item }">
-                {{ area(item.area_id) }}
+                <v-row justify="center">
+                  <div v-if="item.archived">
+                    <v-col cols="auto">
+                      <div>
+                        ARCHIVADO
+                      </div>
+                    </v-col>
+                  </div>
+                  <div v-else>
+                    <v-col cols="auto" v-if="$store.getters.user.permissions.includes('DERIVAR TRÁMITE') && item.owner">
+                      <v-btn
+                        outlined
+                        rounded
+                        color="info darken-2"
+                        @click="$refs.dialogProcedureFlow.showDialog(item, procedureType(item.procedure_type_id))"
+                      >
+                        Derivar
+                      </v-btn>
+                    </v-col>
+                    <v-col cols="autp" v-else>
+                      {{ area(item.area_id) }}
+                    </v-col>
+                  </div>
+                </v-row>
+              </template>
+              <template v-slot:[`item.created_at`]="{ item }">
+                {{ item.created_at | moment('L') }}
               </template>
               <template v-slot:[`item.procedure_type_id`]="{ item }">
                 {{ procedureType(item.procedure_type_id) }}
               </template>
-              <template v-slot:[`item.flow`]="{ item }">
-                <v-btn
-                  v-if="item.owner"
-                  :medium="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
-                  :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
-                  rounded
-                  color="warning"
-                  @click="$refs.dialogProcedureFlow.showDialog(item, procedureType(item.procedure_type_id))"
-                >
-                  <v-icon
-                    class="mr-3"
-                  >
-                    mdi-send
-                  </v-icon>
-                  Derivar
-                </v-btn>
-              </template>
               <template v-slot:[`item.actions`]="{ item }">
                 <v-row justify="center">
-                  <v-col cols="auto" v-if="!item.has_flowed && item.owner">
+                  <v-col cols="4" v-if="$store.getters.user.permissions.includes('ARCHIVAR TRÁMITE') && item.owner && !item.archived && item.has_flowed">
+                    <v-tooltip bottom>
+                      <template #activator="{ on }">
+                        <v-icon
+                          color="warning"
+                          v-on="on"
+                          @click="$refs.dialogProcedureArchive.showDialog(item)"
+                        >
+                          mdi-tray-full
+                        </v-icon>
+                      </template>
+                      <span>Archivar</span>
+                    </v-tooltip>
+                  </v-col>
+                  <v-col cols="4" v-if="!item.has_flowed && item.owner">
                     <v-tooltip bottom>
                       <template #activator="{ on }">
                         <v-icon
@@ -75,7 +98,7 @@
                       <span>Editar</span>
                     </v-tooltip>
                   </v-col>
-                  <v-col cols="auto" v-if="!item.has_flowed && item.owner">
+                  <v-col cols="4" v-if="!item.has_flowed && item.owner">
                     <v-tooltip bottom>
                       <template #activator="{ on }">
                         <v-icon
@@ -99,6 +122,7 @@
     <ProcedureForm ref="dialogProcedureForm" :procedure-types="procedureTypes" v-on:updateList="fetchProcedures"/>
     <ProcedureDelete ref="dialogProcedureDelete" v-on:updateList="fetchProcedures"/>
     <ProcedureFlow ref="dialogProcedureFlow" :areas="areas" v-on:updateList="fetchProcedures"/>
+    <ProcedureArchive ref="dialogProcedureArchive" v-on:updateList="fetchProcedures"/>
   </div>
 </template>
 
@@ -106,6 +130,7 @@
 import ProcedureForm from '@/components/procedures/ProcedureForm'
 import ProcedureDelete from '@/components/procedures/ProcedureDelete'
 import ProcedureFlow from '@/components/procedures/ProcedureFlow'
+import ProcedureArchive from '@/components/procedures/ProcedureArchive'
 import SearchInput from '@/components/shared/SearchInput'
 import AddButton from '@/components/shared/AddButton'
 
@@ -115,6 +140,7 @@ export default {
     ProcedureForm,
     ProcedureDelete,
     ProcedureFlow,
+    ProcedureArchive,
     SearchInput,
     AddButton,
   },
@@ -126,7 +152,7 @@ export default {
         page: 1,
         itemsPerPage: 8,
         sortBy: ['updated_at'],
-        sortDesc: [false]
+        sortDesc: [true]
       },
       totalProcedures: 0,
       procedureTypes: [],
@@ -145,29 +171,24 @@ export default {
           value: 'code',
         }, {
           text: 'Tipo de trámite',
-          align: 'start',
+          align: 'center',
           sortable: true,
           value: 'procedure_type_id',
         }, {
           text: 'Procedencia',
-          align: 'start',
+          align: 'center',
           sortable: false,
           value: 'origin',
         }, {
           text: 'Detalle/Asunto',
-          align: 'start',
+          align: 'center',
           sortable: false,
           value: 'detail',
         }, {
-          text: 'Sección actual',
-          align: 'start',
-          sortable: false,
-          value: 'area_id',
-        }, {
-          text: 'Sección destino',
+          text: 'Sección/Destino',
           align: 'center',
           sortable: false,
-          value: 'flow',
+          value: 'area_id',
         }, {
           text: 'Acciones',
           align: 'center',

@@ -2,6 +2,7 @@ window._ = require('lodash')
 window.axios = require('axios')
 require('@/validator')
 require('@/axios')
+require('@/moment')
 
 // import Echo from 'laravel-echo';
 // window.Pusher = require('pusher-js');

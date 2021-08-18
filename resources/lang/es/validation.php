@@ -158,7 +158,7 @@ return [
         'origin' => 'procedencia',
         'detail' => 'detalle',
         'archived' => 'archivado',
-        'area_id' => 'área',
+        'area_id' => 'sección',
         'procedure_type_id' => 'tipo de trámite',
         'procedure_id' => 'trámite',
         'counter' => 'contador',

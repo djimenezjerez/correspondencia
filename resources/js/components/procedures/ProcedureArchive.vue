@@ -1,5 +1,5 @@
 <template>
-  <v-dialog
+    <v-dialog
     v-model="dialog"
     persistent
     max-width="600"
@@ -19,10 +19,10 @@
         <v-card-text>
           <div class="text-center text-xl-h5 text-lg-h6 text-md-h6 text-sm-h6 text-xs-subtitle-1">
             <div>
-              ¿Seguro que desea eliminar el trámite
+              ¿Seguro que desea archivar la hoja de ruta
             </div>
             <div>
-              {{ procedure_type.name }}?
+              {{ procedure.code }}?
             </div>
             <div v-show="error" class="text-center red--text text-xl-h6 text-lg-subtitle-1 text-md-subtitle-1 text-sm-subtitle-2 text-xs-body-1">{{ errorMessage }}</div>
           </div>
@@ -41,7 +41,7 @@
             <v-icon left>
               mdi-check
             </v-icon>
-            Si
+            SI
           </v-btn>
           <v-btn
             class="ml-2"
@@ -64,34 +64,35 @@
 
 <script>
 export default {
-  name: 'ProcedureTypeDelete',
+  name: 'ProcedureArchive',
   data: function() {
     return {
       dialog: false,
       loading: false,
-      procedure_type: {},
+      procedure: {},
+      procedureType: null,
       error: false,
       errorMessage: '',
     }
   },
   methods: {
-    showDialog(procedure_type) {
-      this.dialog = true
+    showDialog(procedure, procedureType) {
+      this.procedureType = procedureType
+      this.procedure = procedure
       this.error = false
       this.errorMessage = ''
-      this.procedure_type = procedure_type
+      this.dialog = true
     },
     async submit() {
       try {
         this.loading = true
-        const response = await axios.delete(`procedure_type/${this.procedure_type.id}`)
+        const response = await axios.post(`procedure/${this.procedure.id}/archive`)
         this.$toast.info(response.data.message)
         this.$emit('updateList')
         this.dialog = false
       } catch(error) {
         this.error = true
         this.errorMessage = error.response.data.message
-        this.$emit('updateList')
       } finally {
         this.loading = false
       }

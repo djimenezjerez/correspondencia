@@ -34,7 +34,7 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::get('document_type', [DocumentTypeController::class, 'index'])->middleware('permission:LEER TIPO DOCUMENTO');
     Route::get('document_type/{document_type}', [DocumentTypeController::class, 'show']);
 
-    // Áreas
+    // Secciones
     Route::get('area', [AreaController::class, 'index']);
     Route::get('area/{area}', [AreaController::class, 'show']);
 
@@ -67,4 +67,6 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::post('procedure', [ProcedureController::class, 'store'])->middleware('permission:CREAR TRÁMITE');
     Route::patch('procedure/{procedure}', [ProcedureController::class, 'update']);
     Route::delete('procedure/{procedure}', [ProcedureController::class, 'destroy'])->middleware('permission:ELIMINAR TRÁMITE');
+    Route::post('procedure/{procedure}/flow', [ProcedureController::class, 'flow'])->middleware('permission:DERIVAR TRÁMITE');
+    Route::post('procedure/{procedure}/archive', [ProcedureController::class, 'archive'])->middleware('permission:ARCHIVAR TRÁMITE');
 });

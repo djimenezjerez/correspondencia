@@ -28,6 +28,7 @@
     "dependencies": {
         "css-loader": "^6.2.0",
         "vee-validate": "^3.4.11",
+        "vue-moment": "^4.1.0",
         "vue-router": "^3.5.2",
         "vuetify": "^2.5.7",
         "vuetify-toast-snackbar": "^0.6.1",

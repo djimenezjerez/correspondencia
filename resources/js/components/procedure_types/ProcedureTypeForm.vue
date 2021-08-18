@@ -205,7 +205,6 @@ export default {
             this.$emit('updateList')
           }
           this.dialog = false
-          this.edit = false
         }
       } catch(error) {
         this.$refs.procedureTypeObserver.reset()

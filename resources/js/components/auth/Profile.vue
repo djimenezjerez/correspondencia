@@ -28,32 +28,32 @@
                 <template v-slot:default>
                   <tbody>
                     <tr>
-                      <td class="text-right">Nombre: </td>
-                      <td>{{ user.name }}</td>
+                      <td class="text-right text-body-1">Nombre: </td>
+                      <td class="font-weight-bold text-body-1">{{ user.name }}</td>
                     </tr>
                     <tr>
-                      <td class="text-right">Área: </td>
-                      <td>{{ user.area }}</td>
+                      <td class="text-right text-body-1">Sección: </td>
+                      <td class="font-weight-bold text-body-1">{{ user.area }}</td>
                     </tr>
                     <tr>
-                      <td class="text-right">Tipo de documento: </td>
-                      <td>{{ user.document_type }}</td>
+                      <td class="text-right text-body-1">Tipo de documento: </td>
+                      <td class="font-weight-bold text-body-1">{{ user.document_type }}</td>
                     </tr>
                     <tr>
-                      <td class="text-right">Documento de identidad: </td>
-                      <td>{{ user.username }}</td>
+                      <td class="text-right text-body-1">Documento de identidad: </td>
+                      <td class="font-weight-bold text-body-1">{{ user.username }}</td>
                     </tr>
                     <tr>
-                      <td class="text-right">Teléfono: </td>
-                      <td>{{ user.phone }}</td>
+                      <td class="text-right text-body-1">Teléfono: </td>
+                      <td class="font-weight-bold text-body-1">{{ user.phone }}</td>
                     </tr>
                     <tr>
-                      <td class="text-right">Dirección: </td>
-                      <td>{{ user.address }}</td>
+                      <td class="text-right text-body-1">Dirección: </td>
+                      <td class="font-weight-bold text-body-1">{{ user.address }}</td>
                     </tr>
                     <tr>
-                      <td class="text-right">Email: </td>
-                      <td>{{ user.email }}</td>
+                      <td class="text-right text-body-1">Email: </td>
+                      <td class="font-weight-bold text-body-1">{{ user.email }}</td>
                     </tr>
                   </tbody>
                 </template>

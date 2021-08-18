@@ -34,7 +34,7 @@
             color="success darken-1"
             :large="this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl"
             :small="this.$vuetify.breakpoint.sm || this.$vuetify.breakpoint.xs"
-            @click="deleteItem"
+            @click="submit"
             :disabled="loading"
             v-show="!error"
           >
@@ -81,7 +81,7 @@ export default {
       this.errorMessage = ''
       this.requirement = requirement
     },
-    async deleteItem() {
+    async submit() {
       try {
         this.loading = true
         const response = await axios.delete(`requirement/${this.requirement.id}`)

@@ -29,12 +29,21 @@
           </v-icon>
         </v-btn>
       </v-toolbar>
-      <div class="text-center text-xl-h5 text-lg-h6 text-md-h6 text-sm-h6 text-xs-subtitle-1 mt-2">
-        {{ procedure.code }}
-      </div>
-      <div class="text-center text-xl-h6 text-lg-subtitle-1 text-md-subtitle-1 text-sm-subtitle-1 text-xs-body-1 font-weight-light mt-2">
-        {{ procedureType }}
-      </div>
+      <v-simple-table class="mt-3">
+        <template v-slot:default>
+          <tbody>
+            <tr>
+              <td class="text-right text-body-1">Hoja de ruta: </td>
+              <td class="font-weight-bold text-body-1">{{ procedure.code }}</td>
+            </tr>
+            <tr>
+              <td class="text-right text-body-1">Tipo de trámite: </td>
+              <td class="font-weight-bold text-body-1">{{ procedureType }}</td>
+            </tr>
+          </tbody>
+        </template>
+      </v-simple-table>
+      <v-divider></v-divider>
       <div class="px-5 pb-5">
         <validation-observer ref="procedureFlowObserver" v-slot="{ invalid }">
           <form v-on:submit.prevent="submit">
@@ -82,7 +91,7 @@ export default {
   props: {
     areas: {
       type: Array,
-      required: true,
+      default: [],
     },
   },
   data: function() {
@@ -110,6 +119,7 @@ export default {
       this.procedure = {
         ...procedure
       }
+      this.selectedArea = null,
       this.dialog = true
       this.$nextTick(() => {
         this.$refs.procedureFlowObserver.reset()
@@ -126,9 +136,7 @@ export default {
           this.$toast.info(response.data.message)
           this.$emit('updateList')
           this.dialog = false
-          this.edit = false
         }
-        this.loading = true
       } catch(error) {
         this.$refs.procedureFlowObserver.reset()
         if ('errors' in error.response.data) {
@@ -141,3 +149,18 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+  tbody {
+    tr:hover {
+      background-color: transparent !important;
+    }
+  };
+  // table {
+  //   table-layout: fixed;
+  //   width: 100%;
+  // };
+  // td {
+  //   width: 50%;
+  // };
+</style>

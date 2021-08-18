@@ -140,7 +140,7 @@
                   :items="areas"
                   item-text="name"
                   item-value="id"
-                  label="Área"
+                  label="Sección"
                   v-model="userForm.area_id"
                   data-vv-name="area_id"
                   :error-messages="errors"
@@ -236,7 +236,6 @@ export default {
           }
           this.$emit('updateList')
           this.dialog = false
-          this.edit = false
         }
       } catch(error) {
         this.$refs.userObserver.reset()

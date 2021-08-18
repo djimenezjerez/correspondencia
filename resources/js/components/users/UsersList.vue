@@ -45,7 +45,7 @@
               </template>
               <template v-slot:[`item.actions`]="{ item }">
                 <v-row justify="center">
-                  <v-col cols="auto" v-if="item.is_active">
+                  <v-col cols="6" v-if="item.is_active">
                     <v-tooltip bottom>
                       <template #activator="{ on }">
                         <v-icon
@@ -59,7 +59,7 @@
                       <span>Editar</span>
                     </v-tooltip>
                   </v-col>
-                  <v-col cols="auto">
+                  <v-col cols="6">
                     <v-tooltip bottom>
                       <template #activator="{ on }">
                         <v-icon
@@ -131,7 +131,7 @@ export default {
           sortable: false,
           value: 'document_type_id',
         }, {
-          text: 'Área',
+          text: 'Sección',
           align: 'center',
           sortable: false,
           value: 'area_id',

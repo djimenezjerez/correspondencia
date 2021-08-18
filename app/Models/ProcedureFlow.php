@@ -17,6 +17,7 @@ class ProcedureFlow extends Model
     protected $fillable = [
         'procedure_id',
         'area_id',
+        'user_id',
     ];
 
     public function procedure()

@@ -46,12 +46,16 @@ class RolesSeeder extends Seeder
                 'name' => 'VERIFICADOR',
                 'permissions' => [
                     'LEER REQUISITO',
+                    'LEER TRÁMITE',
                     'DERIVAR TRÁMITE',
+                    'ARCHIVAR TRÁMITE',
                 ],
             ], [
                 'name' => 'SECRETARÍA',
                 'permissions' => [
+                    'LEER TRÁMITE',
                     'DERIVAR TRÁMITE',
+                    'ARCHIVAR TRÁMITE',
                 ],
             ],
         ];

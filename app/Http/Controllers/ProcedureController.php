@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Procedure;
 use App\Models\ProcedureType;
 use App\Http\Requests\ProcedureRequest;
 use App\Http\Resources\ProcedureResource;
+use App\Models\ProcedureFlow;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class ProcedureController extends Controller
@@ -23,7 +26,7 @@ class ProcedureController extends Controller
                 $query->orderBy($sort, filter_var($request->sort_desc[$i], FILTER_VALIDATE_BOOLEAN) ? 'DESC' : 'ASC');
             }
         } else {
-            $query->orderBy('code', 'DESC');
+            $query->orderBy('updated_at', 'DESC')->orderBy('code', 'DESC');
         }
         if ($request->has('search')) {
             if ($request->search != '') {
@@ -117,12 +120,104 @@ class ProcedureController extends Controller
     {
         if ($procedure->has_flowed || $procedure->archived || ($procedure->area_id != auth()->user()->area_id)) {
             return response()->json([
-                'message' => 'El trámite no puede ser eliminado porque ya fue editado',
+                'message' => 'El trámite no puede ser eliminado porque ya fue derivado',
             ], 422);
         }
         $procedure->delete();
         return [
             'message' => 'Trámite eliminado',
         ];
+    }
+
+    public function flow(Request $request, Procedure $procedure)
+    {
+        if ($procedure->archived) {
+            return response()->json([
+                'message' => 'El trámite no se puede derivar porque ya fue archivado',
+            ], 422);
+        } elseif ($procedure->area_id != auth()->user()->area_id) {
+            return response()->json([
+                'message' => 'El trámite no se puede derivar porque no se encuentra en su bandeja',
+            ], 422);
+        }
+        $validated = $request->validate([
+            'area_id' => 'required|exists:areas,id',
+        ]);
+        if (!$validated) {
+            return response()->json([
+                'message' => 'El campo sección es requerido',
+            ], 422);
+        } else {
+            DB::beginTransaction();
+            try {
+                DB::table('procedures')->where([
+                    'id' => $procedure->id,
+                ])->update([
+                    'area_id' => $request->area_id,
+                ]);
+                DB::table('procedure_flows')->insert([
+                    'procedure_id' => $procedure->id,
+                    'area_id' => $request->area_id,
+                    'user_id' => auth()->user()->id,
+                    'created_at' =>  Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ]);
+                DB::commit();
+                return [
+                    'message' => 'Trámite derivado',
+                    'payload' => [
+                        'procedure' => $procedure,
+                    ],
+                ];
+            } catch(\Throwable $e) {
+                DB::rollBack();
+                return response()->json([
+                    'message' => 'Error al derivar el trámite',
+                    'errors' => [
+                        'area_id' => 'Ocurrió un error al derivar el trámite',
+                    ],
+                ], 500);
+            }
+        }
+    }
+
+    public function archive(Procedure $procedure)
+    {
+        if ($procedure->archived) {
+            return response()->json([
+                'message' => 'El trámite ya fue archivado',
+            ], 422);
+        } elseif ($procedure->area_id != auth()->user()->area_id) {
+            return response()->json([
+                'message' => 'El trámite no se puede archivar porque no se encuentra en su bandeja',
+            ], 422);
+        }
+        DB::beginTransaction();
+        try {
+            DB::table('procedures')->where([
+                'id' => $procedure->id,
+            ])->update([
+                'archived' => true,
+            ]);
+            DB::table('procedure_flows')->insert([
+                'procedure_id' => $procedure->id,
+                'area_id' => auth()->user()->area_id,
+                'user_id' => auth()->user()->id,
+                'created_at' =>  Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
+            DB::commit();
+            return [
+                'message' => 'Trámite archivado',
+                'payload' => [
+                    'procedure' => $procedure,
+                ],
+            ];
+        } catch(\Throwable $e) {
+            DB::rollBack();
+            return response()->json([
+                'message' => 'Error al archivar el trámite',
+            ], 500);
+        }
     }
 }

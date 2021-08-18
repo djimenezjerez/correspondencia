@@ -65,7 +65,6 @@ class UserRequest extends FormRequest
                     }
                 } else {
                     $rules['username'] = 'string|min:3';
-                    logger($rules);
                     foreach ($rules as $key => $rule) {
                         $rules[$key] = implode('|', ['sometimes|required', $rule]);
                     }

@@ -35,8 +35,9 @@
             <v-card-text>
               <v-text-field
                 label="Fecha de recepción"
-                :value="'created_at' in procedureForm ? procedureForm.created_at : new Date().toISOString()"
+                :value="$moment(procedureForm.created_at || new Date()).format('L')"
                 prepend-icon="mdi-calendar"
+                outlined
                 readonly
               ></v-text-field>
               <validation-provider
@@ -65,7 +66,7 @@
                   v-model="procedureForm.code"
                   data-vv-name="code"
                   :error-messages="errors"
-                  prepend-icon="mdi-subtitles-outline"
+                  prepend-icon="mdi-page-layout-header"
                   ref="codeField"
                   clearable
                 ></v-text-field>
@@ -80,7 +81,7 @@
                   v-model="procedureForm.origin"
                   data-vv-name="origin"
                   :error-messages="errors"
-                  prepend-icon="mdi-send"
+                  prepend-icon="mdi-tray-full"
                   ref="originField"
                 ></v-text-field>
               </validation-provider>
@@ -94,7 +95,7 @@
                   v-model="procedureForm.detail"
                   data-vv-name="detail"
                   :error-messages="errors"
-                  prepend-icon="mdi-text"
+                  prepend-icon="mdi-message-processing"
                 ></v-text-field>
               </validation-provider>
             </v-card-text>
@@ -133,6 +134,7 @@ export default {
         origin: '',
         detail: '',
         procedure_type_id: null,
+        created_at: null,
       },
       loading: false,
     }
@@ -167,9 +169,10 @@ export default {
         this.edit = false
         this.procedureForm = {
           code: '',
-        origin: '',
-        detail: '',
-        procedure_type_id: null,
+          origin: '',
+          detail: '',
+          procedure_type_id: null,
+          created_at: null,
         }
       }
       this.dialog = true
@@ -204,7 +207,6 @@ export default {
           }
           this.$emit('updateList')
           this.dialog = false
-          this.edit = false
         }
       } catch(error) {
         this.$refs.procedureObserver.reset()

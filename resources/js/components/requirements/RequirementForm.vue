@@ -110,7 +110,6 @@ export default {
           }
           this.$emit('updateList')
           this.dialog = false
-          this.edit = false
         }
       } catch(error) {
         this.$refs.requirementObserver.reset()

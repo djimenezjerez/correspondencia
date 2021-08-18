@@ -21,7 +21,7 @@ localize({
       old_password: 'contraseña actual',
       phone: 'teléfono',
       address: 'dirección',
-      area_id: 'área',
+      area_id: 'sección',
       document_type_id: 'tipo de documento',
       code: 'código',
       origin: 'procedencia',

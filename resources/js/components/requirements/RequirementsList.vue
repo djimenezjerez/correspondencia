@@ -37,7 +37,7 @@
             >
               <template v-slot:[`item.actions`]="{ item }">
                 <v-row justify="center">
-                  <v-col cols="auto">
+                  <v-col cols="6">
                     <v-tooltip bottom>
                       <template #activator="{ on }">
                         <v-icon
@@ -51,7 +51,7 @@
                       <span>Editar</span>
                     </v-tooltip>
                   </v-col>
-                  <v-col cols="auto" v-if="!item.is_used">
+                  <v-col cols="6" v-if="!item.is_used">
                     <v-tooltip bottom>
                       <template #activator="{ on }">
                         <v-icon
