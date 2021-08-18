@@ -1,79 +1,76 @@
 <template>
-  <v-main>
-    <v-container grid-list-md>
-      <v-layout wrap>
-        <v-flex xs12>
-          <v-card>
-            <v-toolbar
-              color="secondary"
+  <div>
+    <v-row>
+      <v-col>
+        <v-card>
+          <v-toolbar
+            color="secondary"
+            dark
+          >
+            <v-toolbar-title>
+              Usuarios
+            </v-toolbar-title>
+            <v-spacer></v-spacer>
+            <SearchInput v-model="search"/>
+            <v-divider class="mx-10" vertical></v-divider>
+            <v-btn
+              outlined
+              :large="['xl', 'lg'].includes($vuetify.breakpoint.name)"
               dark
+              @click.stop="$refs.dialogUserForm.showDialog()"
             >
-              <v-toolbar-title>
-                Usuarios
-              </v-toolbar-title>
-              <v-spacer></v-spacer>
-              <v-text-field
-                dark
-                label="Buscar"
-                v-model="search"
-                prepend-icon="mdi-magnify"
-                filled
-                outlined
-                single-line
-                clearable
-                class="mt-8 shrink"
-              ></v-text-field>
-              <v-divider class="mx-10" vertical></v-divider>
-              <v-btn
-                outlined
-                x-large
-                dark
-                @click.stop="$refs.dialogUserForm.showDialog()"
+              <v-icon
+                class="mr-3"
               >
-                <v-icon
-                  class="mr-3"
-                >
-                  mdi-plus
-                </v-icon>
-                Agregar usuario
-              </v-btn>
-            </v-toolbar>
-            <v-card-text>
-              <v-data-table
-                :headers="headers"
-                :items="users"
-                :options.sync="options"
-                :server-items-length="totalUsers"
-                :loading="loading"
-                :footer-props="{
-                  itemsPerPageOptions: [8, 15, 30]
-                }"
-                class="elevation-1"
-              >
-                <template v-slot:[`item.document_type_id`]="{ item }">
-                  {{ documentType(item.document_type_id) }}
-                </template>
-                <template v-slot:[`item.area_id`]="{ item }">
-                  {{ area(item.area_id) }}
-                </template>
-                <template v-slot:[`item.is_active`]="{ item }">
-                  {{ item.is_active ? 'ACTIVO' : 'INACTIVO' }}
-                </template>
-                <template v-slot:[`item.actions`]="{ item }">
-                  <v-tooltip bottom v-if="item.is_active">
-                    <template #activator="{ on }">
-                      <v-icon
-                        class="mr-2"
-                        color="info"
-                        v-on="on"
-                        @click="$refs.dialogUserForm.showDialog(item)"
-                      >
-                        mdi-pencil
-                      </v-icon>
-                    </template>
-                    <span>Editar</span>
-                  </v-tooltip>
-                  <v-tooltip bottom>
+                mdi-plus
+              </v-icon>
+              Agregar usuario
+            </v-btn>
+          </v-toolbar>
+          <v-card-text>
+            <v-data-table
+              :headers="headers"
+              :items="users"
+              :options.sync="options"
+              :server-items-length="totalUsers"
+              :loading="loading"
+              :footer-props="{
+                itemsPerPageOptions: [8, 15, 30]
+              }"
+              class="elevation-1"
+            >
+              <template v-slot:[`item.document_type_id`]="{ item }">
+                {{ documentType(item.document_type_id) }}
+              </template>
+              <template v-slot:[`item.area_id`]="{ item }">
+                {{ area(item.area_id) }}
+              </template>
+              <template v-slot:[`item.is_active`]="{ item }">
+                {{ item.is_active ? 'ACTIVO' : 'INACTIVO' }}
+              </template>
+              <template v-slot:[`item.actions`]="{ item }">
+                <v-row no-gutters>
+                  <v-col
+                    cols="6"
+                  >
+                    <v-tooltip bottom v-if="item.is_active">
+                      <template #activator="{ on }">
+                        <v-icon
+                          class="mr-2"
+                          color="info"
+                          v-on="on"
+                          @click="$refs.dialogUserForm.showDialog(item)"
+                        >
+                          mdi-pencil
+                        </v-icon>
+                      </template>
+                      <span>Editar</span>
+                    </v-tooltip>
+                  </v-col>
+                  <v-col
+                    cols="6"
+                  >
+                    <v-tooltip bottom>
                     <template #activator="{ on }">
                       <v-icon
                         class="mr-2"
@@ -87,27 +84,30 @@
                     <span v-if="item.is_active">Desactivar</span>
                     <span v-else>Reactivar</span>
                   </v-tooltip>
-                </template>
-              </v-data-table>
-            </v-card-text>
-          </v-card>
-        </v-flex>
-      </v-layout>
-    </v-container>
+                  </v-col>
+                </v-row>
+              </template>
+            </v-data-table>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
     <UserForm ref="dialogUserForm" :areas="areas" :document-types="documentTypes" v-on:updateList="fetchUsers"/>
     <UserSwitch ref="dialogUserSwitch" v-on:updateList="fetchUsers"/>
-  </v-main>
+  </div>
 </template>
 
 <script>
 import UserForm from '@/components/users/UserForm'
 import UserSwitch from '@/components/users/UserSwitch'
+import SearchInput from '@/components/shared/SearchInput'
 
 export default {
   name: 'UsersList',
   components: {
     UserForm,
-    UserSwitch
+    UserSwitch,
+    SearchInput,
   },
   data: function() {
     return {
@@ -184,10 +184,8 @@ export default {
         this.fetchUsers()
       }
     },
-    search: function(value) {
-      if (value == null || value.length >= 3 || value.length == 0) {
-        this.fetchUsers()
-      }
+    search: function() {
+      this.fetchUsers()
     }
   },
   methods: {

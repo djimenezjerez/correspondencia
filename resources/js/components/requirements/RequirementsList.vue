@@ -1,103 +1,93 @@
 <template>
-  <v-main>
-    <v-container grid-list-md>
-      <v-layout wrap>
-        <v-flex xs12>
-          <v-card>
-            <v-toolbar
-              color="secondary"
+  <div>
+    <v-row>
+      <v-col>
+        <v-card>
+          <v-toolbar
+            color="secondary"
+            dark
+          >
+            <v-toolbar-title>
+              Requisitos
+            </v-toolbar-title>
+            <v-spacer></v-spacer>
+            <SearchInput v-model="search"/>
+            <v-divider class="mx-10" vertical></v-divider>
+            <v-btn
+              outlined
+              x-large
               dark
+              @click.stop="$refs.dialogRequirementForm.showDialog()"
             >
-              <v-toolbar-title>
-                Requisitos
-              </v-toolbar-title>
-              <v-spacer></v-spacer>
-              <v-text-field
-                dark
-                label="Buscar"
-                v-model="search"
-                prepend-icon="mdi-magnify"
-                filled
-                outlined
-                single-line
-                clearable
-                class="mt-8 shrink"
-              ></v-text-field>
-              <v-divider class="mx-10" vertical></v-divider>
-              <v-btn
-                outlined
-                x-large
-                dark
-                @click.stop="$refs.dialogRequirementForm.showDialog()"
+              <v-icon
+                class="mr-3"
               >
-                <v-icon
-                  class="mr-3"
-                >
-                  mdi-plus
-                </v-icon>
-                Agregar requisito
-              </v-btn>
-            </v-toolbar>
-            <v-card-text>
-              <v-data-table
-                :headers="headers"
-                :items="requirements"
-                :options.sync="options"
-                :server-items-length="totalRequirements"
-                :loading="loading"
-                :footer-props="{
-                  itemsPerPageOptions: [8, 15, 30]
-                }"
-                class="elevation-1"
-              >
-                <template v-slot:[`item.actions`]="{ item }">
-                  <v-tooltip bottom>
-                    <template #activator="{ on }">
-                      <v-icon
-                        class="mr-2"
-                        color="info"
-                        v-on="on"
-                        @click="$refs.dialogRequirementForm.showDialog(item)"
-                      >
-                        mdi-pencil
-                      </v-icon>
-                    </template>
-                    <span>Editar</span>
-                  </v-tooltip>
-                  <v-tooltip bottom v-if="!item.is_used">
-                    <template #activator="{ on }">
-                      <v-icon
-                        class="mr-2"
-                        color="error"
-                        v-on="on"
-                        @click="$refs.dialogRequirementDelete.showDialog(item)"
-                      >
-                        mdi-close
-                      </v-icon>
-                    </template>
-                    <span>Eliminar</span>
-                  </v-tooltip>
-                </template>
-              </v-data-table>
-            </v-card-text>
-          </v-card>
-        </v-flex>
-      </v-layout>
-    </v-container>
+                mdi-plus
+              </v-icon>
+              Agregar requisito
+            </v-btn>
+          </v-toolbar>
+          <v-card-text>
+            <v-data-table
+              :headers="headers"
+              :items="requirements"
+              :options.sync="options"
+              :server-items-length="totalRequirements"
+              :loading="loading"
+              :footer-props="{
+                itemsPerPageOptions: [8, 15, 30]
+              }"
+              class="elevation-1"
+            >
+              <template v-slot:[`item.actions`]="{ item }">
+                <v-tooltip bottom>
+                  <template #activator="{ on }">
+                    <v-icon
+                      class="mr-2"
+                      color="info"
+                      v-on="on"
+                      @click="$refs.dialogRequirementForm.showDialog(item)"
+                    >
+                      mdi-pencil
+                    </v-icon>
+                  </template>
+                  <span>Editar</span>
+                </v-tooltip>
+                <v-tooltip bottom v-if="!item.is_used">
+                  <template #activator="{ on }">
+                    <v-icon
+                      class="mr-2"
+                      color="error"
+                      v-on="on"
+                      @click="$refs.dialogRequirementDelete.showDialog(item)"
+                    >
+                      mdi-close
+                    </v-icon>
+                  </template>
+                  <span>Eliminar</span>
+                </v-tooltip>
+              </template>
+            </v-data-table>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
     <RequirementForm ref="dialogRequirementForm" v-on:updateList="fetchRequirements"/>
     <RequirementDelete ref="dialogRequirementDelete" v-on:updateList="fetchRequirements"/>
-  </v-main>
+  </div>
 </template>
 
 <script>
 import RequirementForm from '@/components/requirements/RequirementForm'
 import RequirementDelete from '@/components/requirements/RequirementDelete'
+import SearchInput from '@/components/shared/SearchInput'
 
 export default {
   name: 'RequirementsList',
   components: {
     RequirementForm,
-    RequirementDelete
+    RequirementDelete,
+    SearchInput,
   },
   data: function() {
     return {
@@ -135,10 +125,8 @@ export default {
         this.fetchRequirements()
       }
     },
-    search: function(value) {
-      if (value == null || value.length >= 3 || value.length == 0) {
-        this.fetchRequirements()
-      }
+    search: function() {
+      this.fetchRequirements()
     }
   },
   methods: {

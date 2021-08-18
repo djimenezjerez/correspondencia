@@ -7,21 +7,21 @@
       >
         <v-col
           cols="auto"
-          md="4"
-          sm="12"
-          class="text-center pb-sm-0 pb-md-10"
+          sm="4"
+          xs="12"
+          class="text-center pb-xs-0 pb-sm-10"
         >
           <v-container>
             <v-row
               align="start"
-              class="mb-sm-0 mb-md-4 mb-lg-12"
+              class="mb-xs-0 mb-sm-6 mb-md-4 mb-lg-14 mb-xl-14"
             >
               <v-col cols="12">
                 <div class="white--text">
-                  <div class="font-weight-light mb-sm-0 mb-md-1 mb-lg-4 text-sm-subtitle-1 text-md-h6 text-lg-h5">
+                  <div class="font-weight-light mb-xs-0 mb-sm-0 mb-md-1 text-xs-caption text-sm-subtitle-2 text-md-h6">
                     Bienvenido al
                   </div>
-                  <div class="font-weight-normal text-sm-h6 text-md-h5 text-lg-h4">
+                  <div class="font-weight-normal text-xs-body-2 text-sm-subtitle-1 text-md-h5">
                     Sistema de Correspondencia
                   </div>
                 </div>
@@ -34,9 +34,11 @@
                 <div>
                   <v-btn
                     outlined
-                    large
                     @click.stop="$refs.dialogLogin.showDialog()"
                     dark
+                    :x-large="this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl"
+                    :large="this.$vuetify.breakpoint.md"
+                    :small="this.$vuetify.breakpoint.sm || this.$vuetify.breakpoint.xs"
                   >
                     Ingresar
                   </v-btn>
@@ -47,8 +49,8 @@
         </v-col>
         <v-col
           cols="auto"
-          md="4"
-          sm="12"
+          sm="4"
+          xs="12"
         >
           <v-row
             justify="center"
@@ -64,7 +66,7 @@
               ></v-img>
             </v-col>
             <v-col cols="12">
-              <div class="text-center text-sm-caption text-md-caption text-lg-h6 font-weight-normal white--text" :class="logoTextFont">
+              <div class="text-center text-xs-caption text-sm-caption text-md-caption font-weight-normal white--text" :class="logoTextFont">
                 <div>
                   Asociacion Nacional de Suboficiales y Sargentos de las Fuerzas Armadas del Estado
                 </div>
@@ -77,22 +79,24 @@
         </v-col>
         <v-col
           cols="auto"
-          md="4"
-          sm="12"
-          class="text-center pb-sm-0 pb-md-10"
+          sm="4"
+          xs="12"
+          class="text-center pb-xs-0 pb-sm-10"
         >
           <v-container>
-            <v-row>
+            <v-row
+              align="start"
+            >
               <v-col cols="12">
-                <div class="text-center">
-                  <v-btn
-                    outlined
-                    large
-                    dark
-                  >
-                    Consultar hoja de ruta
-                  </v-btn>
-                </div>
+                <v-btn
+                  outlined
+                  dark
+                  :x-large="this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl"
+                  :large="this.$vuetify.breakpoint.md"
+                  :small="this.$vuetify.breakpoint.sm || this.$vuetify.breakpoint.xs"
+                >
+                  Consultar hoja de ruta
+                </v-btn>
               </v-col>
             </v-row>
           </v-container>

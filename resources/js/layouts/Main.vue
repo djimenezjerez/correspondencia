@@ -20,7 +20,7 @@
       <v-divider class="mx-10" vertical></v-divider>
       <v-btn
         outlined
-        x-large
+        large
         dark
         :to="{ name: $store.getters.user.isAdmin ? 'users' : 'procedures' }"
       >
@@ -104,7 +104,9 @@
       </v-list>
     </v-navigation-drawer>
     <v-main>
-      <router-view></router-view>
+      <v-container fill-width>
+        <router-view></router-view>
+      </v-container>
     </v-main>
   </v-app>
 </template>

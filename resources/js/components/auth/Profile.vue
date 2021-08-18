@@ -1,8 +1,12 @@
 <template>
-  <v-main>
-    <v-container grid-list-md>
-      <v-layout wrap>
-        <v-flex md6 xs12 class="px-4">
+  <div>
+    <v-container>
+      <v-row>
+        <v-col
+          cols="auto"
+          md="6"
+          sm="12"
+        >
           <v-card :loading="loading">
             <template slot="progress">
               <v-progress-linear
@@ -56,8 +60,12 @@
               </v-simple-table>
             </v-card-text>
           </v-card>
-        </v-flex>
-        <v-flex md6 xs12 class="px-4">
+        </v-col>
+        <v-col
+          cols="auto"
+          md="6"
+          sm="12"
+        >
           <v-card :loading="loading">
             <template slot="progress">
               <v-progress-linear
@@ -121,10 +129,10 @@
               </validation-observer>
             </div>
           </v-card>
-        </v-flex>
-      </v-layout>
+        </v-col>
+      </v-row>
     </v-container>
-  </v-main>
+  </div>
 </template>
 
 <script>
