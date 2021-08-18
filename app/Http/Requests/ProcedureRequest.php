@@ -34,8 +34,6 @@ class ProcedureRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'area_id' => 'prohibited',
-            'archived' => 'prohibited',
             'code' => 'string|min:2',
             'origin' => 'string|min:3',
             'detail' => 'string|min:3',
@@ -43,14 +41,13 @@ class ProcedureRequest extends FormRequest
         ];
         switch ($this->method()) {
             case 'POST': {
-                $rules['code'] .= '|unique:procedures,code';
-                foreach (array_slice($rules, 2) as $key => $rule) {
+                foreach ($rules as $key => $rule) {
                     $rules[$key] = implode('|', ['required', $rule]);
                 }
             }
             case 'PUT':
             case 'PATCH': {
-                foreach (array_slice($rules, 2) as $key => $rule) {
+                foreach ($rules as $key => $rule) {
                     $rules[$key] = implode('|', ['sometimes|required', $rule]);
                 }
             }

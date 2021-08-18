@@ -43,4 +43,14 @@ class ProcedureType extends Model
     {
         return $this->procedures()->count();
     }
+
+    public function getNextCodeAttribute()
+    {
+        $counter = $this->counter;
+        do {
+            $counter = $counter + 1;
+            $code = implode('/', ['ASCINALSS', auth()->user()->area->code, $this->code, $counter]);
+        } while (Procedure::where('code', $code)->exists());
+        return $code;
+    }
 }

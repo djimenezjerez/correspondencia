@@ -36,6 +36,12 @@
               }"
               class="elevation-1"
             >
+              <template v-slot:[`item.area_id`]="{ item }">
+                {{ area(item.area_id) }}
+              </template>
+              <template v-slot:[`item.procedure_type_id`]="{ item }">
+                {{ procedureType(item.procedure_type_id) }}
+              </template>
               <template v-slot:[`item.actions`]="{ item }">
                 <v-row justify="center">
                   <v-col cols="auto" v-if="!item.has_flowed && item.owner">
@@ -52,6 +58,20 @@
                       <span>Editar</span>
                     </v-tooltip>
                   </v-col>
+                  <v-col cols="auto" v-if="!item.has_flowed && item.owner">
+                    <v-tooltip bottom>
+                      <template #activator="{ on }">
+                        <v-icon
+                          color="error"
+                          v-on="on"
+                          @click="$refs.dialogProcedureDelete.showDialog(item)"
+                        >
+                          mdi-close
+                        </v-icon>
+                      </template>
+                      <span>Eliminar</span>
+                    </v-tooltip>
+                  </v-col>
                 </v-row>
               </template>
             </v-data-table>
@@ -60,11 +80,13 @@
       </v-col>
     </v-row>
     <ProcedureForm ref="dialogProcedureForm" :procedure-types="procedureTypes" v-on:updateList="fetchProcedures"/>
+    <ProcedureDelete ref="dialogProcedureDelete" v-on:updateList="fetchProcedures"/>
   </div>
 </template>
 
 <script>
 import ProcedureForm from '@/components/procedures/ProcedureForm'
+import ProcedureDelete from '@/components/procedures/ProcedureDelete'
 import SearchInput from '@/components/shared/SearchInput'
 import AddButton from '@/components/shared/AddButton'
 
@@ -72,6 +94,7 @@ export default {
   name: 'ProceduresList',
   components: {
     ProcedureForm,
+    ProcedureDelete,
     SearchInput,
     AddButton,
   },
@@ -101,6 +124,11 @@ export default {
           sortable: true,
           value: 'code',
         }, {
+          text: 'Tipo de trámite',
+          align: 'start',
+          sortable: true,
+          value: 'procedure_type_id',
+        }, {
           text: 'Procedencia',
           align: 'start',
           sortable: false,
@@ -111,10 +139,15 @@ export default {
           sortable: false,
           value: 'detail',
         }, {
+          text: 'Sección actual',
+          align: 'start',
+          sortable: false,
+          value: 'area_id',
+        }, {
           text: 'Sección destino',
           align: 'center',
           sortable: false,
-          value: 'area_id',
+          value: 'flow',
         }, {
           text: 'Acciones',
           align: 'center',
@@ -150,6 +183,22 @@ export default {
     }
   },
   methods: {
+    procedureType(value) {
+      const procedureType = this.procedureTypes.find(o => o.id === value)
+      if (procedureType) {
+        return procedureType.name
+      } else {
+        return '-'
+      }
+    },
+    area(value) {
+      const area = this.areas.find(o => o.id === value)
+      if (area) {
+        return area.name
+      } else {
+        return '-'
+      }
+    },
     async fetchProcedureTypes() {
       try {
         this.loading = true

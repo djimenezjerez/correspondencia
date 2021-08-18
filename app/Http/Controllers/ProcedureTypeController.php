@@ -133,15 +133,10 @@ class ProcedureTypeController extends Controller
 
     public function getCode(ProcedureType $procedure_type)
     {
-        $counter = $procedure_type->counter;
-        do {
-            $counter = $counter + 1;
-            $code = implode('/', ['ASCINALSS', auth()->user()->area->code, $procedure_type->code, $counter]);
-        } while (Procedure::where('code', $code)->exists());
         return [
             'message' => 'Hoja de ruta válida',
             'payload' => [
-                'code'  => $code,
+                'code'  => $procedure_type->next_code,
             ],
         ];
     }

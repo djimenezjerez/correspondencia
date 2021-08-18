@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Procedure;
+use App\Models\ProcedureType;
 use App\Http\Requests\ProcedureRequest;
 use App\Http\Resources\ProcedureResource;
 use Illuminate\Http\Request;
@@ -43,10 +44,18 @@ class ProcedureController extends Controller
      */
     public function store(ProcedureRequest $request)
     {
+        if (Procedure::whereCode($request->code)->exists()) {
+            return response()->json([
+                'message' => 'Hoja de ruta inválida',
+                'errors' => [
+                    'code' => ['La hoja de ruta ya existe, sugerencia: '.ProcedureType::find($request->procedure_type_id)->next_code]
+                ]
+            ], 400);
+        }
         $request->merge([
             'area_id' => auth()->user()->area_id,
         ]);
-        $procedure = Procedure::create($request->all());
+        $procedure = Procedure::create($request->except('archived'));
         $procedure->procedure_type()->increment('counter');
         return [
             'message' => 'Trámite creado',
@@ -81,7 +90,15 @@ class ProcedureController extends Controller
      */
     public function update(ProcedureRequest $request, Procedure $procedure)
     {
-        $procedure->update($request->except('area_id', 'archived'));
+        if (Procedure::whereCode($request->code)->where('id', '!=', $procedure->id)->exists()) {
+            return response()->json([
+                'message' => 'Hoja de ruta inválida',
+                'errors' => [
+                    'code' => ['La hoja de ruta ya existe, sugerencia: '.ProcedureType::find($procedure->procedure_type_id)->next_code]
+                ]
+            ], 400);
+        }
+        $procedure->update($request->except('archived', 'area_id'));
         return [
             'message' => 'Trámite actualizado',
             'payload' => [

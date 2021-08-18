@@ -84,7 +84,7 @@
                 rules="required|min:3"
               >
                 <v-text-field
-                  label="Detalle"
+                  label="Detalle/Asunto"
                   v-model="procedureForm.detail"
                   data-vv-name="detail"
                   :error-messages="errors"
@@ -140,9 +140,13 @@ export default {
     procedureTypeSelected(value) {
       if (this.procedureForm.code == null || this.procedureForm.code == '') {
         this.fetchCode(value)
-        this.$refs.originField.$refs.input.focus()
+        this.$nextTick(() => {
+          this.$refs.originField.$refs.input.focus()
+        })
       } else {
-        this.$refs.codeField.$refs.input.focus()
+        this.$nextTick(() => {
+          this.$refs.codeField.$refs.input.focus()
+        })
       }
     },
   },
