@@ -157,7 +157,7 @@ class ProcedureController extends Controller
                 ]);
                 DB::table('procedure_flows')->insert([
                     'procedure_id' => $procedure->id,
-                    'from_area' => auth()->user()->id,
+                    'from_area' => auth()->user()->area_id,
                     'to_area' => $request->area_id,
                     'user_id' => auth()->user()->id,
                     'created_at' =>  Carbon::now(),
