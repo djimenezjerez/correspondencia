@@ -19,7 +19,7 @@ class CreateProceduresTable extends Migration
             $table->string('origin')->comment('Procedencia');
             $table->string('detail')->comment('Detalle');
             $table->boolean('archived')->comment('Procedencia')->default(false);
-            $table->unsignedBigInteger('area_id')->comment('Área de Trabajo');
+            $table->unsignedBigInteger('area_id')->comment('Sección');
             $table->foreign('area_id')->references('id')->on('areas')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedBigInteger('procedure_type_id')->comment('Tipo de Trámite');
             $table->foreign('procedure_type_id')->references('id')->on('procedure_types')->onDelete('cascade')->onUpdate('cascade');

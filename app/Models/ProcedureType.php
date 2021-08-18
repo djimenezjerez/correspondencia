@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -46,10 +47,11 @@ class ProcedureType extends Model
 
     public function getNextCodeAttribute()
     {
+        $year = Carbon::now()->year;
         $counter = $this->counter;
         do {
             $counter = $counter + 1;
-            $code = implode('/', ['ASCINALSS', auth()->user()->area->code, $this->code, $counter]);
+            $code = implode('/', ['ASCINALSS', auth()->user()->area->code, $this->code, $counter, $year]);
         } while (Procedure::where('code', $code)->exists());
         return $code;
     }

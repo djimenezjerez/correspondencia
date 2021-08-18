@@ -16,7 +16,8 @@ class ProcedureFlow extends Model
      */
     protected $fillable = [
         'procedure_id',
-        'area_id',
+        'from_area',
+        'to_area',
         'user_id',
     ];
 
@@ -25,8 +26,18 @@ class ProcedureFlow extends Model
         return $this->belongsTo(Procedure::class);
     }
 
-    public function area()
+    public function from_area()
     {
-        return $this->belongsTo(Area::class);
+        return $this->belongsTo(Area::class, 'from_area');
+    }
+
+    public function to_area()
+    {
+        return $this->belongsTo(Area::class, 'to_area');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'to_area');
     }
 }

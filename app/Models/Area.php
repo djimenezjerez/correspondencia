@@ -37,9 +37,14 @@ class Area extends Model
         return $this->hasMany(Procedure::class);
     }
 
-    public function procedure_flows()
+    public function procedure_flows_origin()
     {
-        return $this->hasMany(ProcedureFlow::class);
+        return $this->hasMany(ProcedureFlow::class, 'from_area');
+    }
+
+    public function procedure_flows_destiny()
+    {
+        return $this->hasMany(ProcedureFlow::class, 'to_area');
     }
 
     public function setNameAttribute($value)

@@ -66,7 +66,7 @@
                   v-model="procedureForm.code"
                   data-vv-name="code"
                   :error-messages="errors"
-                  prepend-icon="mdi-page-layout-header"
+                  prepend-icon="mdi-barcode-scan"
                   ref="codeField"
                   clearable
                 ></v-text-field>
@@ -81,7 +81,7 @@
                   v-model="procedureForm.origin"
                   data-vv-name="origin"
                   :error-messages="errors"
-                  prepend-icon="mdi-tray-full"
+                  prepend-icon="mdi-email-open"
                   ref="originField"
                 ></v-text-field>
               </validation-provider>

@@ -50,6 +50,11 @@ class User extends Authenticatable
         return $this->belongsTo(Area::class);
     }
 
+    public function procedure_flows()
+    {
+        return $this->hasMany(ProcedureFlow::class);
+    }
+
     public function setNameAttribute($value)
     {
         $this->attributes['name'] = mb_strtoupper($value);

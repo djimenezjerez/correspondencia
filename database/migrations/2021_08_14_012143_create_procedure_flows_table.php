@@ -17,8 +17,10 @@ class CreateProcedureFlowsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('procedure_id')->comment('Hoja de Ruta');
             $table->foreign('procedure_id')->references('id')->on('procedures')->onDelete('cascade')->onUpdate('cascade');
-            $table->unsignedBigInteger('area_id')->comment('Área de Trabajo');
-            $table->foreign('area_id')->references('id')->on('areas')->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedBigInteger('from_area')->comment('Sección origen');
+            $table->foreign('from_area')->references('id')->on('areas')->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedBigInteger('to_area')->comment('Sección destino');
+            $table->foreign('to_area')->references('id')->on('areas')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedBigInteger('user_id')->comment('Usuario');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
