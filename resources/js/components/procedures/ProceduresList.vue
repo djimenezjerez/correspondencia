@@ -42,6 +42,23 @@
               <template v-slot:[`item.procedure_type_id`]="{ item }">
                 {{ procedureType(item.procedure_type_id) }}
               </template>
+              <template v-slot:[`item.flow`]="{ item }">
+                <v-btn
+                  v-if="item.owner"
+                  :medium="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
+                  :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                  rounded
+                  color="warning"
+                  @click="$refs.dialogProcedureFlow.showDialog(item, procedureType(item.procedure_type_id))"
+                >
+                  <v-icon
+                    class="mr-3"
+                  >
+                    mdi-send
+                  </v-icon>
+                  Derivar
+                </v-btn>
+              </template>
               <template v-slot:[`item.actions`]="{ item }">
                 <v-row justify="center">
                   <v-col cols="auto" v-if="!item.has_flowed && item.owner">
@@ -81,12 +98,14 @@
     </v-row>
     <ProcedureForm ref="dialogProcedureForm" :procedure-types="procedureTypes" v-on:updateList="fetchProcedures"/>
     <ProcedureDelete ref="dialogProcedureDelete" v-on:updateList="fetchProcedures"/>
+    <ProcedureFlow ref="dialogProcedureFlow" :areas="areas" v-on:updateList="fetchProcedures"/>
   </div>
 </template>
 
 <script>
 import ProcedureForm from '@/components/procedures/ProcedureForm'
 import ProcedureDelete from '@/components/procedures/ProcedureDelete'
+import ProcedureFlow from '@/components/procedures/ProcedureFlow'
 import SearchInput from '@/components/shared/SearchInput'
 import AddButton from '@/components/shared/AddButton'
 
@@ -95,6 +114,7 @@ export default {
   components: {
     ProcedureForm,
     ProcedureDelete,
+    ProcedureFlow,
     SearchInput,
     AddButton,
   },

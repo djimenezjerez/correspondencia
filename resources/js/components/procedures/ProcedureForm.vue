@@ -33,6 +33,12 @@
         <validation-observer ref="procedureObserver" v-slot="{ invalid }">
           <form v-on:submit.prevent="submit">
             <v-card-text>
+              <v-text-field
+                label="Fecha de recepción"
+                :value="'created_at' in procedureForm ? procedureForm.created_at : new Date().toISOString()"
+                prepend-icon="mdi-calendar"
+                readonly
+              ></v-text-field>
               <validation-provider
                 v-slot="{ errors }"
                 name="procedure_type_id"
