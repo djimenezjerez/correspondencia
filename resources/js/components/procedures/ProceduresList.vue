@@ -176,7 +176,7 @@ export default {
         {
           text: 'Fecha de ingreso',
           align: 'center',
-          sortable: true,
+          sortable: false,
           value: 'incoming_at',
         }, {
           text: 'Sección/Origen',
@@ -186,12 +186,12 @@ export default {
         }, {
           text: 'Hoja de ruta',
           align: 'center',
-          sortable: true,
+          sortable: false,
           value: 'code',
         }, {
           text: 'Tipo de trámite',
           align: 'center',
-          sortable: true,
+          sortable: false,
           value: 'procedure_type_id',
         }, {
           text: 'Procedencia',
@@ -211,7 +211,7 @@ export default {
         }, {
           text: 'Fecha de derivación',
           align: 'center',
-          sortable: true,
+          sortable: false,
           value: 'outgoing_at',
         }, {
           text: 'Acciones',
