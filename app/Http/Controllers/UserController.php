@@ -37,7 +37,7 @@ class UserController extends Controller
         $query->withTrashed();
         return [
             'message' => 'Lista de usuarios',
-            'payload' => UserResource::collection($query->paginate($request->per_page ?? 10, ['*'], 'page', $request->page ?? 1))->resource,
+            'payload' => UserResource::collection($query->paginate($request->per_page ?? 8, ['*'], 'page', $request->page ?? 1))->resource,
         ];
     }
 

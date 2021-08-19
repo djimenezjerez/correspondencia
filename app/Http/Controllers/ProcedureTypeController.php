@@ -42,7 +42,7 @@ class ProcedureTypeController extends Controller
         }
         return [
             'message' => 'Lista de tipos de trámites',
-            'payload' => ProcedureTypeResource::collection($query->paginate($request->per_page ?? 10, ['*'], 'page', $request->page ?? 1))->resource,
+            'payload' => ProcedureTypeResource::collection($query->paginate($request->per_page ?? 8, ['*'], 'page', $request->page ?? 1))->resource,
         ];
     }
 

@@ -7,7 +7,8 @@ use App\Models\Procedure;
 use App\Models\ProcedureType;
 use App\Http\Requests\ProcedureRequest;
 use App\Http\Resources\ProcedureResource;
-use App\Models\ProcedureFlow;
+use App\Http\Resources\ProcedureFlowResource;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
@@ -20,22 +21,64 @@ class ProcedureController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Procedure::query();
-        if ($request->has('sort_by') && $request->has('sort_desc')) {
-            foreach ($request->sort_by as $i => $sort) {
-                $query->orderBy($sort, filter_var($request->sort_desc[$i], FILTER_VALIDATE_BOOLEAN) ? 'DESC' : 'ASC');
+        /** @var \App\Models\User */
+        $user = Auth::user();
+        $area_id = $user->area_id;
+        $owned_procedures = DB::table('procedures')->where('area_id', $area_id)->select('id');
+        // Tramites que se encuentran actualmente en la sección
+        $current = DB::table('procedures as p')->select('p.*', 'pf.from_area', 'pf.created_at as incoming_at', 'pf.user_id as incoming_user', DB::raw('null as to_area'), DB::raw('null as outgoing_at'), DB::raw('null as outgoing_user'), DB::raw('TRUE as owner'), DB::raw($user->hasRole('RECEPCIÓN') ? 'FALSE as has_flowed' : 'TRUE as has_flowed'))->leftJoin('procedure_flows as pf', function($query) {
+            $query->on('pf.procedure_id','=','p.id')->whereRaw('pf.id IN (select MAX(a.id) from procedure_flows as a join procedures as b on a.procedure_id = b.id group by b.id)');
+        })->whereIn('p.id', $owned_procedures)->where('p.deleted_at', null)->where('p.archived', false);
+        if ($request->has('search')) {
+            if ($request->search != '') {
+                $current->where('p.code', 'like', '%'.mb_strtoupper($request->search).'%');
             }
+        }
+        // Tramites archivados en la sección
+        $archived = DB::table('procedures as p')->select('p.*', 'pf.from_area', 'pf.created_at as incoming_at', 'pf.user_id as incoming_user', DB::raw('null as to_area'), DB::raw('null as outgoing_at'), DB::raw('null as outgoing_user'), DB::raw('TRUE as owner'), DB::raw('TRUE as has_flowed'))->leftJoin('procedure_flows as pf', function($query) {
+            $query->on('pf.procedure_id','=','p.id')->whereRaw('pf.id IN (select MAX(a.id) from procedure_flows as a join procedures as b on a.procedure_id = b.id group by b.id)');
+        })->whereIn('p.id', $owned_procedures)->where('p.deleted_at', null)->where('p.archived', true);
+        if ($request->has('search')) {
+            if ($request->search != '') {
+                $archived->where('p.code', 'like', '%'.mb_strtoupper($request->search).'%');
+            }
+        }
+        // Tramites que llegaron a la sección
+        $incoming = DB::table('procedure_flows as a')->select('a.*')->leftJoin('procedure_flows as b', function($join) {
+            $join->on('a.procedure_id', '=', 'b.procedure_id');
+            $join->on('a.to_area', '=', 'b.to_area');
+            $join->on('a.created_at', '<', 'b.created_at');
+        })->where('b.created_at', null)->where('a.to_area', $area_id)->whereNotIn('a.procedure_id', $owned_procedures);
+        // Tramites que salieron a la sección
+        $outgoing = DB::table('procedure_flows as a')->select('a.*')->leftJoin('procedure_flows as b', function($join) {
+            $join->on('a.procedure_id', '=', 'b.procedure_id');
+            $join->on('a.from_area', '=', 'b.from_area');
+            $join->on('a.created_at', '<', 'b.created_at');
+        })->where('b.created_at', null)->where('a.from_area', $area_id)->whereNotIn('a.procedure_id', $owned_procedures);
+        // Tramites entraron y salieron por la sección
+        if ($user->hasRole('RECEPCIÓN')) {
+            $flowed = DB::table('procedures as p')->leftJoinSub($incoming, 'i', function ($join) {
+                $join->on('p.id', '=', 'i.procedure_id');
+            })->rightJoinSub($outgoing, 'o', function ($join) {
+                $join->on('p.id', '=', 'o.procedure_id');
+            })->select( 'p.*', 'i.from_area', 'i.created_at as incoming_at', 'i.user_id as incoming_user', 'o.to_area', 'o.created_at as outgoing_at', 'o.user_id as outgoing_user', DB::raw('FALSE as owner'), DB::raw('TRUE as has_flowed'))->where('p.deleted_at', null);
         } else {
-            $query->orderBy('updated_at', 'DESC')->orderBy('code', 'DESC');
+            $flowed = DB::table('procedures as p')->rightJoinSub($incoming, 'i', function ($join) {
+                $join->on('p.id', '=', 'i.procedure_id');
+            })->rightJoinSub($outgoing, 'o', function ($join) {
+                $join->on('p.id', '=', 'o.procedure_id');
+            })->select( 'p.*', 'i.from_area', 'i.created_at as incoming_at', 'i.user_id as incoming_user', 'o.to_area', 'o.created_at as outgoing_at', 'o.user_id as outgoing_user', DB::raw('FALSE as owner'), DB::raw('TRUE as has_flowed'))->where('p.deleted_at', null);
         }
         if ($request->has('search')) {
             if ($request->search != '') {
-                $query->where('code', 'like', '%'.mb_strtoupper($request->search).'%');
+                $flowed->where('p.code', 'like', '%'.mb_strtoupper($request->search).'%');
             }
         }
+        // Union de los resultados, primero los que se encuentran en la sección, después los que pasaron por la sección y por último los que fueron archivados en la sección
+        $procedures = DB::table($current)->union($flowed)->union($archived)->orderBy('archived', 'ASC')->orderByRaw('-outgoing_at ASC')->orderByRaw('incoming_at DESC');
         return [
-            'message' => 'Lista de tipos de trámites',
-            'payload' => ProcedureResource::collection($query->paginate($request->per_page ?? 10, ['*'], 'page', $request->page ?? 1))->resource,
+            'message' => 'Lista de trámites',
+            'payload' => ProcedureFlowResource::collection($procedures->paginate($request->per_page ?? 8, ['*'], 'page', $request->page ?? 1))->resource,
         ];
     }
 
@@ -199,13 +242,6 @@ class ProcedureController extends Controller
                 'id' => $procedure->id,
             ])->update([
                 'archived' => true,
-            ]);
-            DB::table('procedure_flows')->insert([
-                'procedure_id' => $procedure->id,
-                'from_area' => auth()->user()->area_id,
-                'to_area' => auth()->user()->area_id,
-                'user_id' => auth()->user()->id,
-                'created_at' =>  Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
             DB::commit();

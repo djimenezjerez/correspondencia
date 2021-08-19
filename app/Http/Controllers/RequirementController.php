@@ -41,7 +41,7 @@ class RequirementController extends Controller
         }
         return [
             'message' => 'Lista de requisitos',
-            'payload' => RequirementResource::collection($query->paginate($request->per_page ?? 10, ['*'], 'page', $request->page ?? 1))->resource,
+            'payload' => RequirementResource::collection($query->paginate($request->per_page ?? 8, ['*'], 'page', $request->page ?? 1))->resource,
         ];
     }
 

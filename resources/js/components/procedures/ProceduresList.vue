@@ -18,7 +18,7 @@
             class="mt-1 px-4"
           >
             <v-col xl="9" lg="9" md="9" sm="8" xs="12">
-              <div class="text-xl-h5 text-lg-h5 text-md-h6 text-sm-subtitle-1 text-xs-body-1">{{ currentArea }}</div>
+              <div class="text-xl-h5 text-lg-h5 text-md-h6 text-sm-subtitle-1 text-xs-body-1">{{ area($store.getters.user.area_id) }}</div>
             </v-col>
             <v-col xl="3" lg="3" md="3" sm="4" xs="12">
               <SearchInput v-model="search"/>
@@ -36,7 +36,7 @@
               }"
               class="elevation-1"
             >
-              <template v-slot:[`item.area_id`]="{ item }">
+              <template v-slot:[`item.to_area`]="{ item }">
                 <v-row justify="center">
                   <div v-if="item.archived">
                     <v-col cols="auto">
@@ -57,13 +57,27 @@
                       </v-btn>
                     </v-col>
                     <v-col cols="autp" v-else>
-                      {{ area(item.area_id) }}
+                      {{ area(item.to_area) }}
                     </v-col>
                   </div>
                 </v-row>
               </template>
-              <template v-slot:[`item.created_at`]="{ item }">
-                {{ item.created_at | moment('L') }}
+              <template v-slot:[`item.incoming_at`]="{ item }">
+                {{ item.incoming_at ? item.incoming_at : item.created_at | moment('L LT') }}
+              </template>
+              <template v-slot:[`item.outgoing_at`]="{ item }">
+                <div v-if="item.archived">
+                  {{ item.updated_at | moment('L LT') }}
+                </div>
+                <div v-else-if="!item.outgoing_at">
+                  -
+                </div>
+                <div v-else>
+                  {{ item.outgoing_at | moment('L LT') }}
+                </div>
+              </template>
+              <template v-slot:[`item.from_area`]="{ item }">
+                {{ area(item.from_area ? item.from_area : $store.getters.user.area_id) }}
               </template>
               <template v-slot:[`item.procedure_type_id`]="{ item }">
                 {{ procedureType(item.procedure_type_id) }}
@@ -160,10 +174,15 @@ export default {
       procedures: [],
       headers: [
         {
-          text: 'Fecha de inicio',
+          text: 'Fecha de ingreso',
           align: 'center',
           sortable: true,
-          value: 'created_at',
+          value: 'incoming_at',
+        }, {
+          text: 'Sección/Origen',
+          align: 'center',
+          sortable: false,
+          value: 'from_area',
         }, {
           text: 'Hoja de ruta',
           align: 'center',
@@ -188,7 +207,12 @@ export default {
           text: 'Sección/Destino',
           align: 'center',
           sortable: false,
-          value: 'area_id',
+          value: 'to_area',
+        }, {
+          text: 'Fecha de derivación',
+          align: 'center',
+          sortable: true,
+          value: 'outgoing_at',
         }, {
           text: 'Acciones',
           align: 'center',
@@ -196,16 +220,6 @@ export default {
           value: 'actions',
         },
       ],
-    }
-  },
-  computed: {
-    currentArea() {
-      const area = this.areas.find(o => o.id == this.$store.getters.user.area_id)
-      if (area) {
-        return area.name
-      } else {
-        return ''
-      }
     }
   },
   created() {

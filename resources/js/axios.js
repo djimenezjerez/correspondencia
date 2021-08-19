@@ -26,8 +26,8 @@ const responseErrorHandler = async error => {
         })
       }
     }
-  } catch(e) {
-    console.log(e)
+  } catch(error) {
+    console.log(error)
   } finally {
     return Promise.reject(error)
   }
