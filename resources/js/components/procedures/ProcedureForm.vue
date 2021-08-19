@@ -62,7 +62,7 @@
                 rules="required|min:2"
               >
                 <v-text-field
-                  label="Hoja de ruta"
+                  label="Código de hoja de ruta"
                   v-model="procedureForm.code"
                   data-vv-name="code"
                   :error-messages="errors"

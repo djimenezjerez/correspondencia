@@ -37,6 +37,7 @@ class RolesSeeder extends Seeder
                 'name' => 'RECEPCIÓN',
                 'permissions' => [
                     'CREAR TRÁMITE',
+                    'LEER REQUISITO',
                     'LEER TRÁMITE',
                     'EDITAR TRÁMITE',
                     'ELIMINAR TRÁMITE',

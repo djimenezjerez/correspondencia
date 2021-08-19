@@ -91,7 +91,7 @@ export default {
   props: {
     areas: {
       type: Array,
-      default: [],
+      required: true,
     },
   },
   data: function() {

@@ -18,6 +18,7 @@ class CreateAreasTable extends Migration
             $table->string('name')->comment('Nombre');
             $table->string('code')->unique()->comment('Código');
             $table->integer('group')->default(1)->comment('Grupo');
+            $table->integer('order')->nullable()->comment('Órden en el listado');
             $table->unsignedBigInteger('role_id')->comment('Rol');
             $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();

@@ -46,15 +46,27 @@
                     </v-col>
                   </div>
                   <div v-else>
-                    <v-col cols="auto" v-if="$store.getters.user.permissions.includes('DERIVAR TRÁMITE') && item.owner">
-                      <v-btn
-                        outlined
-                        rounded
-                        color="info darken-2"
-                        @click="$refs.dialogProcedureFlow.showDialog(item, procedureType(item.procedure_type_id))"
-                      >
-                        Derivar
-                      </v-btn>
+                    <v-col cols="auto" v-if="$store.getters.user.permissions.includes('DERIVAR TRÁMITE') && item.owner && procedureTypes.length > 0">
+                      <div v-if="item.validated || requirementsCount(item.procedure_type_id) == 0 || $store.getters.user.role != 'VERIFICADOR'">
+                        <v-btn
+                          outlined
+                          rounded
+                          color="info darken-2"
+                          @click="$refs.dialogProcedureFlow.showDialog(item, procedureType(item.procedure_type_id))"
+                        >
+                          Derivar
+                        </v-btn>
+                      </div>
+                      <div v-else>
+                        <v-btn
+                          outlined
+                          rounded
+                          color="success darken-2"
+                          @click="$refs.dialogProcedureRequirements.showDialog(item)"
+                        >
+                          Requisitos
+                        </v-btn>
+                      </div>
                     </v-col>
                     <v-col cols="autp" v-else>
                       {{ area(item.to_area) }}
@@ -136,6 +148,7 @@
     <ProcedureForm ref="dialogProcedureForm" :procedure-types="procedureTypes" v-on:updateList="fetchProcedures"/>
     <ProcedureDelete ref="dialogProcedureDelete" v-on:updateList="fetchProcedures"/>
     <ProcedureFlow ref="dialogProcedureFlow" :areas="areas" v-on:updateList="fetchProcedures"/>
+    <ProcedureRequirements ref="dialogProcedureRequirements" :requirements="requirements" v-on:validateProcedure="validateProcedure($event)"/>
     <ProcedureArchive ref="dialogProcedureArchive" v-on:updateList="fetchProcedures"/>
   </div>
 </template>
@@ -145,6 +158,7 @@ import ProcedureForm from '@/components/procedures/ProcedureForm'
 import ProcedureDelete from '@/components/procedures/ProcedureDelete'
 import ProcedureFlow from '@/components/procedures/ProcedureFlow'
 import ProcedureArchive from '@/components/procedures/ProcedureArchive'
+import ProcedureRequirements from '@/components/procedures/ProcedureRequirements'
 import SearchInput from '@/components/shared/SearchInput'
 import AddButton from '@/components/shared/AddButton'
 
@@ -155,6 +169,7 @@ export default {
     ProcedureDelete,
     ProcedureFlow,
     ProcedureArchive,
+    ProcedureRequirements,
     SearchInput,
     AddButton,
   },
@@ -172,6 +187,7 @@ export default {
       procedureTypes: [],
       areas: [],
       procedures: [],
+      requirements: [],
       headers: [
         {
           text: 'Fecha de ingreso',
@@ -184,7 +200,7 @@ export default {
           sortable: false,
           value: 'from_area',
         }, {
-          text: 'Hoja de ruta',
+          text: 'Código de hoja de ruta',
           align: 'center',
           sortable: false,
           value: 'code',
@@ -224,6 +240,7 @@ export default {
   },
   created() {
     this.fetchAreas()
+    this.fetchRequirements()
     this.fetchProcedureTypes()
     this.fetchProcedures()
   },
@@ -238,6 +255,18 @@ export default {
     }
   },
   methods: {
+    requirementsCount(procedureTypeId) {
+      const rocedureType = this.procedureTypes.find(o => o.id == procedureTypeId)
+      if (rocedureType) {
+        return rocedureType.requirements_count
+      } else {
+        return 0
+      }
+    },
+    validateProcedure(procedureId) {
+      const index = this.procedures.findIndex((o => o.id == procedureId))
+      this.procedures[index].validated = true
+    },
     procedureType(value) {
       const procedureType = this.procedureTypes.find(o => o.id === value)
       if (procedureType) {
@@ -280,6 +309,21 @@ export default {
         this.loading = false
       }
     },
+    async fetchRequirements() {
+      try {
+        this.loading = true
+        let response = await axios.get('requirement', {
+          params: {
+            all: true,
+          },
+        })
+        this.requirements = response.data.payload.requirements
+      } catch(error) {
+        console.log(error)
+      } finally {
+        this.loading = false
+      }
+    },
     async fetchProcedures() {
       try {
         this.loading = true
@@ -292,7 +336,10 @@ export default {
             search: this.search,
           },
         })
-        this.procedures = response.data.payload.data
+        this.procedures = response.data.payload.data.map(o => ({
+          ...o,
+          validated: false,
+        }))
         this.totalProcedures = response.data.payload.total
         this.options.page = response.data.payload.current_page
         this.options.itemsPerPage = parseInt(response.data.payload.per_page)

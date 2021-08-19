@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\ProcedureType;
 use App\Http\Requests\ProcedureTypeRequest;
 use App\Http\Resources\ProcedureTypeResource;
-use App\Models\Procedure;
 use Illuminate\Http\Request;
 
 class ProcedureTypeController extends Controller
@@ -22,7 +21,7 @@ class ProcedureTypeController extends Controller
                 return [
                     'message' => 'Lista de tipos de trámites',
                     'payload' => [
-                        'procedure_types' => ProcedureType::orderBy('name', 'ASC')->get(),
+                        'procedure_types' => ProcedureType::withCount('requirements')->orderBy('name', 'ASC')->get(),
                     ],
                 ];
             }

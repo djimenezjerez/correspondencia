@@ -36,6 +36,7 @@
             cols="12"
           >
             <v-img
+              class="mt-4"
               contain
               :max-height="imageHeight"
               :height="imageHeight"
