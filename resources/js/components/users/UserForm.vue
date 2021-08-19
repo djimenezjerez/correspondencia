@@ -58,7 +58,6 @@
                   data-vv-name="last_name"
                   :error-messages="errors"
                   prepend-icon="mdi-account"
-                  autofocus
                 ></v-text-field>
               </validation-provider>
               <validation-provider
@@ -72,7 +71,6 @@
                   data-vv-name="username"
                   :error-messages="errors"
                   prepend-icon="mdi-account"
-                  autofocus
                 ></v-text-field>
               </validation-provider>
               <validation-provider
