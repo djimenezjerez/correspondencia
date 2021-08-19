@@ -49,6 +49,34 @@
               </validation-provider>
               <validation-provider
                 v-slot="{ errors }"
+                name="last_name"
+                rules="required|min:3|alpha_spaces"
+              >
+                <v-text-field
+                  label="Apellido"
+                  v-model="userForm.last_name"
+                  data-vv-name="last_name"
+                  :error-messages="errors"
+                  prepend-icon="mdi-account"
+                  autofocus
+                ></v-text-field>
+              </validation-provider>
+              <validation-provider
+                v-slot="{ errors }"
+                name="username"
+                rules="required|min:3|alpha_num"
+              >
+                <v-text-field
+                  label="Nombre de usuario"
+                  v-model="userForm.username"
+                  data-vv-name="username"
+                  :error-messages="errors"
+                  prepend-icon="mdi-account"
+                  autofocus
+                ></v-text-field>
+              </validation-provider>
+              <validation-provider
+                v-slot="{ errors }"
                 name="document_type_id"
                 rules="required"
               >
@@ -65,13 +93,13 @@
               </validation-provider>
               <validation-provider
                 v-slot="{ errors }"
-                name="username"
-                rules="required|min:3"
+                name="identity_card"
+                rules="required|min:3|alpha_dash"
               >
                 <v-text-field
                   label="Documento de Identidad"
-                  v-model="userForm.username"
-                  data-vv-name="username"
+                  v-model="userForm.identity_card"
+                  data-vv-name="identity_card"
                   :error-messages="errors"
                   prepend-icon="mdi-card-account-details"
                 ></v-text-field>
@@ -185,6 +213,8 @@ export default {
       shadowPassword: true,
       userForm: {
         name: '',
+        last_name: '',
+        identity_card: '',
         username: '',
         password: '',
         email: '',
@@ -195,6 +225,18 @@ export default {
       },
       loading: false,
     }
+  },
+  watch: {
+    'userForm.last_name': function (value) {
+      if (!this.edit && value != '' && value != null && this.userForm.name != '' && this.userForm.name != null) {
+        this.userForm.username = this.userForm.name[0].toLowerCase()+value.split(' ')[0].toLowerCase()
+      }
+    },
+    'userForm.name': function (value) {
+      if (!this.edit && value != '' && value != null && this.userForm.last_name != '' && this.userForm.last_name != null && (this.userForm.username == '' || this.userForm.username == null)) {
+        this.userForm.username = value[0].toLowerCase()+this.userForm.last_name.split(' ')[0].toLowerCase()
+      }
+    },
   },
   methods: {
     showDialog(user = null) {
@@ -208,6 +250,8 @@ export default {
         this.edit = false
         this.userForm = {
           name: '',
+          last_name: '',
+          identity_card: '',
           username: '',
           password: '',
           email: '',

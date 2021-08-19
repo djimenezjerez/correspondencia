@@ -41,7 +41,7 @@ class Procedure extends Model
 
     public function setCodeAttribute($value)
     {
-        $this->attributes['code'] = mb_strtoupper($value);
+        $this->attributes['code'] = trim(mb_strtoupper($value));
     }
 
     public function getHasFlowedAttribute()

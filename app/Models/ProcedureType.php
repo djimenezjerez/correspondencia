@@ -32,12 +32,12 @@ class ProcedureType extends Model
 
     public function setNameAttribute($value)
     {
-        $this->attributes['name'] = mb_strtoupper($value);
+        $this->attributes['name'] = trim(mb_strtoupper($value));
     }
 
     public function setCodeAttribute($value)
     {
-        $this->attributes['code'] = mb_strtoupper($value);
+        $this->attributes['code'] = trim(mb_strtoupper($value));
     }
 
     public function getTotalProceduresAttribute()

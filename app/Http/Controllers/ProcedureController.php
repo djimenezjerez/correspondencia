@@ -31,7 +31,7 @@ class ProcedureController extends Controller
         })->whereIn('p.id', $owned_procedures)->where('p.deleted_at', null)->where('p.archived', false);
         if ($request->has('search')) {
             if ($request->search != '') {
-                $current->where('p.code', 'like', '%'.mb_strtoupper($request->search).'%');
+                $current->where('p.code', 'like', '%'.trim(mb_strtoupper($request->search)).'%');
             }
         }
         // Tramites archivados en la sección
@@ -40,7 +40,7 @@ class ProcedureController extends Controller
         })->whereIn('p.id', $owned_procedures)->where('p.deleted_at', null)->where('p.archived', true);
         if ($request->has('search')) {
             if ($request->search != '') {
-                $archived->where('p.code', 'like', '%'.mb_strtoupper($request->search).'%');
+                $archived->where('p.code', 'like', '%'.trim(mb_strtoupper($request->search)).'%');
             }
         }
         // Tramites que llegaron a la sección
@@ -48,30 +48,30 @@ class ProcedureController extends Controller
             $join->on('a.procedure_id', '=', 'b.procedure_id');
             $join->on('a.to_area', '=', 'b.to_area');
             $join->on('a.created_at', '<', 'b.created_at');
-        })->where('b.created_at', null)->where('a.to_area', $area_id)->whereNotIn('a.procedure_id', $owned_procedures);
+        })->where('b.id', null)->where('a.to_area', $area_id)->where('a.to_area', $area_id)->whereNotIn('a.procedure_id', $owned_procedures);
         // Tramites que salieron a la sección
         $outgoing = DB::table('procedure_flows as a')->select('a.*')->leftJoin('procedure_flows as b', function($join) {
             $join->on('a.procedure_id', '=', 'b.procedure_id');
             $join->on('a.from_area', '=', 'b.from_area');
             $join->on('a.created_at', '<', 'b.created_at');
-        })->where('b.created_at', null)->where('a.from_area', $area_id)->whereNotIn('a.procedure_id', $owned_procedures);
+        })->where('b.id', null)->where('a.from_area', $area_id)->where('a.from_area', $area_id)->whereNotIn('a.procedure_id', $owned_procedures);
         // Tramites entraron y salieron por la sección
         if ($user->hasRole('RECEPCIÓN')) {
-            $flowed = DB::table('procedures as p')->leftJoinSub($incoming, 'i', function ($join) {
-                $join->on('p.id', '=', 'i.procedure_id');
-            })->rightJoinSub($outgoing, 'o', function ($join) {
+            $flowed = DB::table('procedures as p')->rightJoinSub($outgoing, 'o', function ($join) {
                 $join->on('p.id', '=', 'o.procedure_id');
-            })->select( 'p.*', 'i.from_area', 'i.created_at as incoming_at', 'i.user_id as incoming_user', 'o.to_area', 'o.created_at as outgoing_at', 'o.user_id as outgoing_user', DB::raw('FALSE as owner'), DB::raw('TRUE as has_flowed'))->where('p.deleted_at', null);
+            })->select( 'p.*', 'i.from_area', 'i.created_at as incoming_at', 'i.user_id as incoming_user', 'o.to_area', 'o.created_at as outgoing_at', 'o.user_id as outgoing_user', DB::raw('FALSE as owner'), DB::raw('TRUE as has_flowed'))->leftJoinSub($incoming, 'i', function ($join) {
+                $join->on('p.id', '=', 'i.procedure_id');
+            })->where('p.deleted_at', null);
         } else {
             $flowed = DB::table('procedures as p')->rightJoinSub($incoming, 'i', function ($join) {
                 $join->on('p.id', '=', 'i.procedure_id');
-            })->rightJoinSub($outgoing, 'o', function ($join) {
+            })->leftJoinSub($outgoing, 'o', function ($join) {
                 $join->on('p.id', '=', 'o.procedure_id');
             })->select( 'p.*', 'i.from_area', 'i.created_at as incoming_at', 'i.user_id as incoming_user', 'o.to_area', 'o.created_at as outgoing_at', 'o.user_id as outgoing_user', DB::raw('FALSE as owner'), DB::raw('TRUE as has_flowed'))->where('p.deleted_at', null);
         }
         if ($request->has('search')) {
             if ($request->search != '') {
-                $flowed->where('p.code', 'like', '%'.mb_strtoupper($request->search).'%');
+                $flowed->where('p.code', 'like', '%'.trim(mb_strtoupper($request->search)).'%');
             }
         }
         // Union de los resultados, primero los que se encuentran en la sección, después los que pasaron por la sección y por último los que fueron archivados en la sección

@@ -35,6 +35,8 @@ class UserRequest extends FormRequest
         $rules = [
             'password' => 'string|min:4',
             'name' => 'alpha_spaces|min:3',
+            'last_name' => 'alpha_spaces|min:3',
+            'identity_card' => 'alpha_dash|min:4',
             'email' => 'email:rfc',
             'address' => 'string|min:3',
             'phone' => 'numeric',
@@ -43,7 +45,8 @@ class UserRequest extends FormRequest
         ];
         switch ($this->method()) {
             case 'POST': {
-                $rules['username'] = 'string|min:3|unique:users,username';
+                $rules['username'] = 'alpha_num|min:3|unique:users,username';
+                $rules['identity_card'] .= '|unique:users,identity_card';
                 foreach ($rules as $key => $rule) {
                     $rules[$key] = implode('|', ['required', $rule]);
                 }
@@ -64,7 +67,7 @@ class UserRequest extends FormRequest
                         $rules[$key] = implode('|', ['required', $rule]);
                     }
                 } else {
-                    $rules['username'] = 'string|min:3';
+                    $rules['username'] = 'alpha_num|min:3';
                     foreach ($rules as $key => $rule) {
                         $rules[$key] = implode('|', ['sometimes|required', $rule]);
                     }
@@ -79,6 +82,11 @@ class UserRequest extends FormRequest
         if (isset($this->username)) {
             $this->merge([
                 'username' => trim(mb_strtoupper($this->username)),
+            ]);
+        }
+        if (isset($this->identity_card)) {
+            $this->merge([
+                'identity_card' => trim(mb_strtoupper($this->identity_card)),
             ]);
         }
     }

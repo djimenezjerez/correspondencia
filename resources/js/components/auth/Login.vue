@@ -28,52 +28,69 @@
         </v-btn>
       </v-toolbar>
       <div class="px-5 pb-5">
-        <validation-observer ref="loginObserver" v-slot="{ invalid }">
-          <form v-on:submit.prevent="login">
-            <v-card-text>
-              <validation-provider
-                v-slot="{ errors }"
-                name="username"
-                rules="required|min:3"
-              >
-                <v-text-field
-                  label="Usuario"
-                  v-model="loginForm.username"
-                  data-vv-name="username"
-                  :error-messages="errors"
-                  prepend-icon="mdi-account"
-                  autofocus
-                ></v-text-field>
-              </validation-provider>
-              <validation-provider
-                v-slot="{ errors }"
-                name="password"
-                rules="required|min:4"
-              >
-                <v-text-field
-                  label="Contraseña"
-                  v-model="loginForm.password"
-                  data-vv-name="password"
-                  :error-messages="errors"
-                  prepend-icon="mdi-lock"
-                  :append-icon="shadowPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                  @click:append="() => (shadowPassword = !shadowPassword)"
-                  :type="shadowPassword ? 'password' : 'text'"
-                ></v-text-field>
-              </validation-provider>
-            </v-card-text>
-            <v-card-actions>
-              <v-btn
-                block
-                type="submit"
-                color="primary"
-                :disabled="invalid || loading"
-              >
-                Ingresar
-              </v-btn>
-            </v-card-actions>
-          </form>
-        </validation-observer>
+        <v-row
+          justify="center"
+          no-gutters
+        >
+          <v-col
+            cols="12"
+          >
+            <v-img
+              contain
+              :max-height="imageHeight"
+              :height="imageHeight"
+              src="/img/logo.png"
+            ></v-img>
+          </v-col>
+          <v-col cols="12">
+            <validation-observer ref="loginObserver" v-slot="{ invalid }">
+              <form v-on:submit.prevent="login">
+                <v-card-text>
+                  <validation-provider
+                    v-slot="{ errors }"
+                    name="username"
+                    rules="required|min:3"
+                  >
+                    <v-text-field
+                      label="Usuario"
+                      v-model="loginForm.username"
+                      data-vv-name="username"
+                      :error-messages="errors"
+                      prepend-icon="mdi-account"
+                      autofocus
+                    ></v-text-field>
+                  </validation-provider>
+                  <validation-provider
+                    v-slot="{ errors }"
+                    name="password"
+                    rules="required|min:4"
+                  >
+                    <v-text-field
+                      label="Contraseña"
+                      v-model="loginForm.password"
+                      data-vv-name="password"
+                      :error-messages="errors"
+                      prepend-icon="mdi-lock"
+                      :append-icon="shadowPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                      @click:append="() => (shadowPassword = !shadowPassword)"
+                      :type="shadowPassword ? 'password' : 'text'"
+                    ></v-text-field>
+                  </validation-provider>
+                </v-card-text>
+                <v-card-actions>
+                  <v-btn
+                    block
+                    type="submit"
+                    color="primary"
+                    :disabled="invalid || loading"
+                  >
+                    Ingresar
+                  </v-btn>
+                </v-card-actions>
+              </form>
+            </validation-observer>
+          </v-col>
+        </v-row>
       </div>
     </v-card>
   </v-dialog>
@@ -92,6 +109,16 @@ export default {
       },
       loading: false,
     }
+  },
+  computed: {
+    imageHeight() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs': return '80px'
+        case 'sm': return '110px'
+        case 'md': return '140px'
+        default: return '150'
+      }
+    },
   },
   methods: {
     showDialog() {

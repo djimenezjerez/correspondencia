@@ -154,6 +154,8 @@ return [
 
     'attributes' => [
         'name' => 'nombre',
+        'last_name' => 'apellido',
+        'identity_card' => 'documento de identidad',
         'code' => 'código',
         'origin' => 'procedencia',
         'detail' => 'detalle',
@@ -162,7 +164,7 @@ return [
         'procedure_type_id' => 'tipo de trámite',
         'procedure_id' => 'trámite',
         'counter' => 'contador',
-        'username' => 'documento de identidad',
+        'username' => 'usuario',
         'password' => 'contraseña',
         'address' => 'dirección',
         'phone' => 'teléfono',

@@ -1,7 +1,9 @@
 {
-    "name": "JOHN DOE",
-    "username": "123456",
-    "password": "password",
+    "name": "JOHN",
+    "last_name": "DOE",
+    "identity_card": "123456",
+    "username": "admin",
+    "password": "admin",
     "email": "jdoe@ascinalss.com",
     "address": "Z. ZONA AV. AVENIDA Nº 123456",
     "phone": "7654321",

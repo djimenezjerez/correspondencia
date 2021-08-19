@@ -32,16 +32,24 @@
                       <td class="font-weight-bold text-body-1">{{ user.name }}</td>
                     </tr>
                     <tr>
+                      <td class="text-right text-body-1">Apellido: </td>
+                      <td class="font-weight-bold text-body-1">{{ user.last_name }}</td>
+                    </tr>
+                    <tr>
+                      <td class="text-right text-body-1">Nombre de usuario: </td>
+                      <td class="font-weight-bold text-body-1">{{ user.username }}</td>
+                    </tr>
+                    <tr>
                       <td class="text-right text-body-1">Sección: </td>
                       <td class="font-weight-bold text-body-1">{{ user.area }}</td>
                     </tr>
                     <tr>
-                      <td class="text-right text-body-1">Tipo de documento: </td>
-                      <td class="font-weight-bold text-body-1">{{ user.document_type }}</td>
+                      <td class="text-right text-body-1">Documento de identidad: </td>
+                      <td class="font-weight-bold text-body-1">{{ user.identity_card }}</td>
                     </tr>
                     <tr>
-                      <td class="text-right text-body-1">Documento de identidad: </td>
-                      <td class="font-weight-bold text-body-1">{{ user.username }}</td>
+                      <td class="text-right text-body-1">Tipo de documento: </td>
+                      <td class="font-weight-bold text-body-1">{{ user.document_type }}</td>
                     </tr>
                     <tr>
                       <td class="text-right text-body-1">Teléfono: </td>

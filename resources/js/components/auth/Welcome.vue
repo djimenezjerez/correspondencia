@@ -1,6 +1,6 @@
 <template>
   <v-app id="welcome">
-    <v-container fill-height fluid>
+    <v-container :fill-height="!$vuetify.breakpoint.xs" fluid>
       <v-row
         justify="space-around"
         align="end"
@@ -36,9 +36,10 @@
                     outlined
                     @click.stop="$refs.dialogLogin.showDialog()"
                     dark
-                    :x-large="this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl"
-                    :large="this.$vuetify.breakpoint.md"
-                    :small="this.$vuetify.breakpoint.sm || this.$vuetify.breakpoint.xs"
+                    :x-large="$vuetify.breakpoint.lg || $vuetify.breakpoint.xl"
+                    :large="$vuetify.breakpoint.md"
+                    :small="$vuetify.breakpoint.sm"
+                    :x-small="$vuetify.breakpoint.xs"
                   >
                     Ingresar
                   </v-btn>
@@ -91,9 +92,10 @@
                 <v-btn
                   outlined
                   dark
-                  :x-large="this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl"
-                  :large="this.$vuetify.breakpoint.md"
-                  :small="this.$vuetify.breakpoint.sm || this.$vuetify.breakpoint.xs"
+                  :x-large="$vuetify.breakpoint.lg || $vuetify.breakpoint.xl"
+                  :large="$vuetify.breakpoint.md"
+                  :small="$vuetify.breakpoint.sm"
+                  :x-small="$vuetify.breakpoint.xs"
                 >
                   Consultar hoja de ruta
                 </v-btn>
@@ -123,7 +125,7 @@ export default {
   computed: {
     imageWidth() {
       switch (this.$vuetify.breakpoint.name) {
-        case 'xs': return '180px'
+        case 'xs': return '120px'
         case 'sm': return '200px'
         case 'md': return '250px'
         default: return '350'

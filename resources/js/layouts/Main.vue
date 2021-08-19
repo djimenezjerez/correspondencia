@@ -49,7 +49,7 @@
             class="mr-1"
           >
             <v-avatar color="secondary" :size="avatarSize">
-              <span class="text-xl-h5 text-lg-h6 text-md-subtitle-1 text-sm-subtitle-2 text-xs-body-1">{{ $store.getters.user.name.split(' ').slice(0,2).map(i => i[0]).join('') }}</span>
+              <span class="text-xl-h5 text-lg-h6 text-md-subtitle-1 text-sm-subtitle-2 text-xs-body-1">{{ $store.getters.user.name[0] + $store.getters.user.last_name[0] }}</span>
             </v-avatar>
           </v-btn>
         </template>
@@ -75,11 +75,12 @@
         </v-list>
       </v-menu>
     </v-app-bar>
-
     <v-navigation-drawer
       app
+      dark
       temporary
       v-model="drawer"
+      color="secondary"
     >
       <v-list
         nav

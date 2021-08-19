@@ -17,9 +17,9 @@
       </template>
       <div class="px-5 pb-5">
         <v-card-text>
-          <div class="text-center text-xl-h5 text-lg-h6 text-md-h6 text-sm-h6 text-xs-subtitle-1">
+          <div class="text-center text-xl-h6 text-lg-h6 text-subtitle-1 text-sm-subtitle-2 text-xs-body-1">
             <div>
-              ¿Seguro que desea eliminar la hoja de ruta
+              ¿Seguro que desea eliminar la hoja de ruta:
             </div>
             <div>
               {{ procedure.code }}?

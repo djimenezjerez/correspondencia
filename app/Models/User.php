@@ -21,6 +21,8 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'last_name',
+        'identity_card',
         'username',
         'password',
         'email',
@@ -57,12 +59,22 @@ class User extends Authenticatable
 
     public function setNameAttribute($value)
     {
-        $this->attributes['name'] = mb_strtoupper($value);
+        $this->attributes['name'] = trim(mb_strtoupper($value));
+    }
+
+    public function setLastNameAttribute($value)
+    {
+        $this->attributes['last_name'] = trim(mb_strtoupper($value));
+    }
+
+    public function setIdentityCardAttribute($value)
+    {
+        $this->attributes['identity_card'] = trim(mb_strtoupper($value));
     }
 
     public function setUsernameAttribute($value)
     {
-        $this->attributes['username'] = mb_strtoupper($value);
+        $this->attributes['username'] = trim(mb_strtoupper($value));
     }
 
     public function setPasswordAttribute($value)
@@ -72,11 +84,11 @@ class User extends Authenticatable
 
     public function setEmailAttribute($value)
     {
-        $this->attributes['email'] = mb_strtolower($value);
+        $this->attributes['email'] = trim(mb_strtolower($value));
     }
 
     public function setAddressAttribute($value)
     {
-        $this->attributes['address'] = mb_strtoupper($value);
+        $this->attributes['address'] = trim(mb_strtoupper($value));
     }
 }

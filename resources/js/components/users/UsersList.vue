@@ -121,10 +121,20 @@ export default {
           sortable: true,
           value: 'name',
         }, {
-          text: 'Documento de identidad',
+          text: 'Apellido',
+          align: 'start',
+          sortable: true,
+          value: 'last_name',
+        }, {
+          text: 'Nombre de usuario',
           align: 'center',
           sortable: true,
           value: 'username',
+        }, {
+          text: 'Documento de identidad',
+          align: 'center',
+          sortable: true,
+          value: 'identity_card',
         }, {
           text: 'Tipo de documento',
           align: 'center',

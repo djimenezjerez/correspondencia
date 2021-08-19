@@ -16,7 +16,9 @@ localize({
   es: {
     names: {
       name: 'nombre',
-      username: 'documento de identidad',
+      last_name: 'apellido',
+      identity_card: 'documento de identidad',
+      username: 'usuario',
       password: 'contraseña',
       old_password: 'contraseña actual',
       phone: 'teléfono',

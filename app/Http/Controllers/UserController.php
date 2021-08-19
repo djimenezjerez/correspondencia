@@ -30,7 +30,7 @@ class UserController extends Controller
         if ($request->has('search')) {
             if ($request->search != '') {
                 $query->where(function($q) use ($request) {
-                    return $q->orWhere('name', 'like', '%'.mb_strtoupper($request->search).'%')->orWhere('username', 'like', '%'.$request->search.'%');
+                    return $q->orWhere('name', 'like', '%'.trim(mb_strtoupper($request->search)).'%')->orWhere('username', 'like', '%'.$request->search.'%');
                 });
             }
         }
@@ -93,13 +93,25 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, User $user)
     {
-        if (User::whereUsername($request->username)->where('id', '!=', $user->id)->exists()) {
-            return response()->json([
-                'message' => 'Documento de identidad inválido',
-                'errors' => [
-                    'username' => ['El documento de identidad ya existe']
-                ]
-            ], 400);
+        if ($request->has('username')) {
+            if (User::whereUsername($request->username)->where('id', '!=', $user->id)->withTrashed()->exists()) {
+                return response()->json([
+                    'message' => 'Nombre de usuario inválido',
+                    'errors' => [
+                        'username' => ['El nombre de usuario ya existe']
+                    ]
+                ], 400);
+            }
+        }
+        if ($request->has('identity_card')) {
+            if (User::whereIdentityCard($request->identity_card)->where('id', '!=', $user->id)->withTrashed()->exists()) {
+                return response()->json([
+                    'message' => 'Documento de identidad inválido',
+                    'errors' => [
+                        'username' => ['El documento de identidad ya existe']
+                    ]
+                ], 400);
+            }
         }
         if (auth()->user()->id == $user->id) {
             if (!Hash::check($request->old_password, $user->password)) {

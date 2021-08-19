@@ -29,6 +29,8 @@ class UserAdminSeeder extends Seeder
                 'username' => $data['username'],
             ], [
                 'name' => $data['name'],
+                'last_name' => $data['last_name'],
+                'identity_card' => $data['identity_card'],
                 'password' => $data['password'],
                 'email' => $data['email'],
                 'address' => $data['address'],

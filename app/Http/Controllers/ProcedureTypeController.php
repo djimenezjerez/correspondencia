@@ -37,7 +37,7 @@ class ProcedureTypeController extends Controller
         }
         if ($request->has('search')) {
             if ($request->search != '') {
-                $query->where('name', 'like', '%'.mb_strtoupper($request->search).'%');
+                $query->where('name', 'like', '%'.trim(mb_strtoupper($request->search)).'%');
             }
         }
         return [
