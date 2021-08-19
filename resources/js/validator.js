@@ -14,6 +14,9 @@ localize({
 
 localize({
   es: {
+    messages: {
+      strong_password: (field) => `La ${field} debe contener al menos: 1 mayúscula, 1 minúscula, 1 número y 1 símbolo (E.g. , . _ & ? etc)`,
+    },
     names: {
       name: 'nombre',
       last_name: 'apellido',
@@ -37,3 +40,10 @@ localize('es');
 Object.keys(rules).forEach(rule => {
   extend(rule, rules[rule])
 })
+
+extend('strong_password', {
+  validate: value => {
+      var strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+      return strongRegex.test(value);
+  }
+});
