@@ -96,6 +96,7 @@
                   :large="$vuetify.breakpoint.md"
                   :small="$vuetify.breakpoint.sm"
                   :x-small="$vuetify.breakpoint.xs"
+                  @click.stop="$refs.dialogSearchCode.showDialog()"
                 >
                   Consultar hoja de ruta
                 </v-btn>
@@ -106,16 +107,19 @@
       </v-row>
     </v-container>
     <Login ref="dialogLogin"/>
+    <SearchCode ref="dialogSearchCode"/>
   </v-app>
 </template>
 
 <script>
 import Login from '@/components/auth/Login'
+import SearchCode from '@/components/auth/SearchCode'
 
 export default {
   name: 'Welcome',
   components: {
     Login,
+    SearchCode,
   },
   data: function() {
     return {

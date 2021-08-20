@@ -7,6 +7,8 @@ use App\Models\Area;
 use App\Models\Procedure;
 use App\Models\ProcedureType;
 use Spatie\Permission\Models\Role;
+use App\Http\Requests\FlowRequest;
+use App\Http\Requests\CodeRequest;
 use App\Http\Requests\ProcedureRequest;
 use App\Http\Resources\ProcedureResource;
 use App\Http\Resources\ProcedureFlowResource;
@@ -175,7 +177,7 @@ class ProcedureController extends Controller
         ];
     }
 
-    public function flow(Request $request, Procedure $procedure)
+    public function flow(FlowRequest $request, Procedure $procedure)
     {
         if ($procedure->archived) {
             return response()->json([
@@ -186,45 +188,36 @@ class ProcedureController extends Controller
                 'message' => 'El trámite no se puede derivar porque no se encuentra en su bandeja',
             ], 422);
         }
-        $validated = $request->validate([
-            'area_id' => 'required|exists:areas,id',
-        ]);
-        if (!$validated) {
+        DB::beginTransaction();
+        try {
+            DB::table('procedures')->where([
+                'id' => $procedure->id,
+            ])->update([
+                'area_id' => $request->area_id,
+            ]);
+            DB::table('procedure_flows')->insert([
+                'procedure_id' => $procedure->id,
+                'from_area' => auth()->user()->area_id,
+                'to_area' => $request->area_id,
+                'user_id' => auth()->user()->id,
+                'created_at' =>  Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
+            DB::commit();
+            return [
+                'message' => 'Trámite derivado',
+                'payload' => [
+                    'procedure' => $procedure,
+                ],
+            ];
+        } catch(\Throwable $e) {
+            DB::rollBack();
             return response()->json([
-                'message' => 'El campo sección es requerido',
-            ], 422);
-        } else {
-            DB::beginTransaction();
-            try {
-                DB::table('procedures')->where([
-                    'id' => $procedure->id,
-                ])->update([
-                    'area_id' => $request->area_id,
-                ]);
-                DB::table('procedure_flows')->insert([
-                    'procedure_id' => $procedure->id,
-                    'from_area' => auth()->user()->area_id,
-                    'to_area' => $request->area_id,
-                    'user_id' => auth()->user()->id,
-                    'created_at' =>  Carbon::now(),
-                    'updated_at' => Carbon::now(),
-                ]);
-                DB::commit();
-                return [
-                    'message' => 'Trámite derivado',
-                    'payload' => [
-                        'procedure' => $procedure,
-                    ],
-                ];
-            } catch(\Throwable $e) {
-                DB::rollBack();
-                return response()->json([
-                    'message' => 'Error al derivar el trámite',
-                    'errors' => [
-                        'area_id' => 'Ocurrió un error al derivar el trámite',
-                    ],
-                ], 500);
-            }
+                'message' => 'Error al derivar el trámite',
+                'errors' => [
+                    'area_id' => 'Ocurrió un error al derivar el trámite',
+                ],
+            ], 500);
         }
     }
 
@@ -270,7 +263,7 @@ class ProcedureController extends Controller
             'to_area' => [
                 'name' => $area->name,
             ],
-            'action' => 'CREADO',
+            'action' => 'TRÁMITE CREADO',
             'created_at' => $procedure->created_at,
         ]];
         $timeline = $procedure->procedure_flows()->select('to_area', 'created_at')->selectRaw("'DERIVADO' as action")->with(['to_area' => function($q) {
@@ -286,10 +279,22 @@ class ProcedureController extends Controller
                 'created_at' => $procedure->updated_at,
             ]];
         }
+        if (count($timeline) > 0) $timeline[0]['action'] = 'EN POSESIÓN';
         return [
             'message' => 'Historia del trámite',
             'payload' => [
                 'timeline' => TimelineResource::collection(array_merge($archived, $timeline, $created)),
+            ],
+        ];
+    }
+
+    public function code(CodeRequest $request)
+    {
+        $procedure = Procedure::where('code', $request->code)->first();
+        return [
+            'message' => 'Datos del trámite de acuerdo a hoja de ruta',
+            'payload' => [
+                'procedure' => $procedure,
             ],
         ];
     }

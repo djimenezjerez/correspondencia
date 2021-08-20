@@ -31,19 +31,7 @@
       </v-toolbar>
       <div class="px-5 pb-5">
         <v-card-text>
-          <v-timeline :dense="$vuetify.breakpoint.smAndDown">
-            <v-timeline-item v-for="(flow, index) in timeline" :key="index" :class="{ 'text-right': index%2 }">
-              <div class="font-weight-medium">
-                {{ flow.to_area }}
-              </div>
-              <div class="font-weight-regular">
-                {{ flow.action }}
-              </div>
-              <div class="font-weight-light">
-                {{ flow.date | moment('L LT') }}
-              </div>
-            </v-timeline-item>
-          </v-timeline>
+          <Timeline :timeline="timeline"/>
         </v-card-text>
         <v-card-actions>
           <v-btn
@@ -65,8 +53,13 @@
 </template>
 
 <script>
+import Timeline from '@/components/shared/Timeline'
+
 export default {
   name: 'ProcedureHistory',
+  components: {
+    Timeline
+  },
   data: function() {
     return {
       dialog: false,

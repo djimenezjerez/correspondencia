@@ -45,7 +45,7 @@
           </v-col>
           <v-col cols="12">
             <validation-observer ref="loginObserver" v-slot="{ invalid }">
-              <form v-on:submit.prevent="login">
+              <form v-on:submit.prevent="submit">
                 <v-card-text>
                   <validation-provider
                     v-slot="{ errors }"
@@ -132,7 +132,7 @@ export default {
         this.$refs.loginObserver.reset()
       })
     },
-    async login() {
+    async submit() {
       try {
         let valid = await this.$refs.loginObserver.validate()
         if (valid) {

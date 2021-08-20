@@ -22,10 +22,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Autenticación
 Route::post('login', [AuthController::class, 'store']);
+
+// Consulta externa
 Route::get('procedure/{procedure}/flow', [ProcedureController::class, 'timeline']);
+Route::get('procedure_code', [ProcedureController::class, 'code']);
 
 Route::group(['middleware' => ['auth:sanctum']], function() {
+    // Cerrar sesión
     Route::post('logout', [AuthController::class, 'destroy']);
 
     // Roles
