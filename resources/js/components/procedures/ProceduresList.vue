@@ -96,7 +96,7 @@
               </template>
               <template v-slot:[`item.actions`]="{ item }">
                 <v-row justify="space-around">
-                  <v-col v-if="item.owner && !item.archived && $store.getters.user.permissions.includes('ADJUNTAR ARCHIVO')">
+                  <v-col>
                     <v-tooltip bottom>
                       <template v-slot:activator="{ on, attrs }">
                         <v-btn
@@ -114,26 +114,6 @@
                         </v-btn>
                       </template>
                       <span>Adjuntar archivos</span>
-                    </v-tooltip>
-                  </v-col>
-                  <v-col>
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                          v-on="on"
-                          v-bind="attrs"
-                          text
-                          icon
-                          @click="$refs.dialogProcedureDetails.showDialog(item, procedureType(item.procedure_type_id))"
-                        >
-                          <v-icon
-                            color="success darken-2"
-                          >
-                            mdi-eye
-                          </v-icon>
-                        </v-btn>
-                      </template>
-                      <span>Detalles</span>
                     </v-tooltip>
                   </v-col>
                   <v-col v-if="item.has_flowed">
@@ -229,7 +209,6 @@
     <ProcedureRequirements ref="dialogProcedureRequirements" :requirements="requirements" v-on:updateList="fetchProcedures"/>
     <ProcedureArchive ref="dialogProcedureArchive" v-on:updateList="fetchProcedures"/>
     <ProcedureAttachments ref="dialogProcedureAttachments"/>
-    <ProcedureDetails ref="dialogProcedureDetails"/>
     <ProcedureTimeline ref="dialogProcedureTimeline"/>
   </div>
 </template>
@@ -241,7 +220,6 @@ import ProcedureFlow from '@/components/procedures/ProcedureFlow'
 import ProcedureArchive from '@/components/procedures/ProcedureArchive'
 import ProcedureRequirements from '@/components/procedures/ProcedureRequirements'
 import ProcedureAttachments from '@/components/procedures/ProcedureAttachments'
-import ProcedureDetails from '@/components/procedures/ProcedureDetails'
 import ProcedureTimeline from '@/components/procedures/ProcedureTimeline'
 import SearchInput from '@/components/shared/SearchInput'
 import AddButton from '@/components/shared/AddButton'
@@ -255,7 +233,6 @@ export default {
     ProcedureArchive,
     ProcedureRequirements,
     ProcedureAttachments,
-    ProcedureDetails,
     ProcedureTimeline,
     SearchInput,
     AddButton,

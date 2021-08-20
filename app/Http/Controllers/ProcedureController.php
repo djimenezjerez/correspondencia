@@ -65,7 +65,7 @@ class ProcedureController extends Controller
         if ($user->hasRole('RECEPCIÓN')) {
             $flowed = DB::table('procedures as p')->rightJoinSub($outgoing, 'o', function ($join) {
                 $join->on('p.id', '=', 'o.procedure_id');
-            })->select( 'p.id', 'p.archived', 'i.from_area', 'i.created_at as incoming_at', 'i.user_id as incoming_user', 'o.to_area', 'o.created_at as outgoing_at', 'o.user_id as outgoing_user', DB::raw('FALSE as owner'), DB::raw('TRUE as has_flowed'))->leftJoinSub($incoming, 'i', function ($join) {
+            })->select( 'p.id', 'i.from_area', 'i.created_at as incoming_at', 'i.user_id as incoming_user', 'o.to_area', 'o.created_at as outgoing_at', 'o.user_id as outgoing_user', DB::raw('FALSE as archived'), DB::raw('FALSE as owner'), DB::raw('TRUE as has_flowed'))->leftJoinSub($incoming, 'i', function ($join) {
                 $join->on('p.id', '=', 'i.procedure_id');
             })->where('p.deleted_at', null);
         } else {
@@ -73,7 +73,7 @@ class ProcedureController extends Controller
                 $join->on('p.id', '=', 'i.procedure_id');
             })->leftJoinSub($outgoing, 'o', function ($join) {
                 $join->on('p.id', '=', 'o.procedure_id');
-            })->select( 'p.id', 'p.archived', 'i.from_area', 'i.created_at as incoming_at', 'i.user_id as incoming_user', 'o.to_area', 'o.created_at as outgoing_at', 'o.user_id as outgoing_user', DB::raw('FALSE as owner'), DB::raw('TRUE as has_flowed'))->where('p.deleted_at', null);
+            })->select( 'p.id', 'i.from_area', 'i.created_at as incoming_at', 'i.user_id as incoming_user', 'o.to_area', 'o.created_at as outgoing_at', 'o.user_id as outgoing_user', DB::raw('FALSE as archived'), DB::raw('FALSE as owner'), DB::raw('TRUE as has_flowed'))->where('p.deleted_at', null);
         }
         if ($request->has('search')) {
             if ($request->search != '') {

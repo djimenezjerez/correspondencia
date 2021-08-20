@@ -22,7 +22,7 @@ class ProcedureFlowResource extends JsonResource
             'code' => $procedure->code,
             'origin' => $procedure->origin,
             'detail' => $procedure->detail,
-            'archived' => $procedure->archived,
+            'archived' => filter_var($this->archived, FILTER_VALIDATE_BOOLEAN),
             'area_id' => $procedure->area_id,
             'procedure_type_id' => $procedure->procedure_type_id,
             'owner' => filter_var($this->owner, FILTER_VALIDATE_BOOLEAN),
