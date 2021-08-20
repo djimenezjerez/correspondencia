@@ -26,7 +26,7 @@ class ProcedureFlowResource extends JsonResource
             'area_id' => $procedure->area_id,
             'procedure_type_id' => $procedure->procedure_type_id,
             'owner' => filter_var($this->owner, FILTER_VALIDATE_BOOLEAN),
-            'has_flowed' => filter_var($this->has_flowed, FILTER_VALIDATE_BOOLEAN),
+            'has_flowed' => $procedure->has_flowed,
             'validated' => $procedure->validated,
             'created_at' => $procedure->created_at,
             'updated_at' => $procedure->updated_at,

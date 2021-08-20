@@ -247,14 +247,14 @@ export default {
       }
     },
     showDialog(procedure, procedureType) {
+      this.procedure = {
+        ...procedure
+      }
       this.fetchAttachments(procedure.id)
       this.fileSelected = null
       this.files = null
       this.procedureFiles = []
       this.procedureType = procedureType
-      this.procedure = {
-        ...procedure
-      }
       this.dialog = true
       this.$nextTick(() => {
         this.$refs.procedureFilesObserver.reset()
