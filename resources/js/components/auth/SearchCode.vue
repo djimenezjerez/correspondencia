@@ -124,7 +124,6 @@ export default {
           })
           response = await axios.get(`procedure/${response.data.payload.procedure.id}/flow`)
           this.timeline = response.data.payload.timeline
-          console.log(this.timeline)
         }
       } catch(error) {
         if ('errors' in error.response.data) {

@@ -18,9 +18,16 @@ class Requirement extends Model
         'name',
     ];
 
+    public $timestamps = true;
+
     public function procedure_types()
     {
-        return $this->belongsToMany(ProcedureType::class);
+        return $this->morphedByMany(ProcedureType::class, 'requirable')->withTimestamps();
+    }
+
+    public function procedures()
+    {
+        return $this->morphedByMany(Procedure::class, 'requirable')->withPivot('validated')->withTimestamps();
     }
 
     public function setNameAttribute($value)

@@ -119,6 +119,7 @@ class ProcedureTypeController extends Controller
     {
         $total = $procedure_type->total_procedures;
         if ($total == 0) {
+            $procedure_type->requirements()->sync([]);
             $procedure_type->delete();
             return [
                 'message' => 'Tipo de trámite eliminado',

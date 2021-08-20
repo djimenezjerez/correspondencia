@@ -199,7 +199,6 @@ export default {
       }
     },
     async deleteAttachment() {
-      console.log(this.procedure)
       try {
         this.loading = true
         const response = await axios.delete(`procedure/${this.procedure.id}/attachment/${this.fileSelected}`)

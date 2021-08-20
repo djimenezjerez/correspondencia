@@ -20,7 +20,9 @@ class Attachment extends Model
         'user_id',
     ];
 
-    public function uploadable()
+    public $timestamps = true;
+
+    public function attachable()
     {
         return $this->morphTo();
     }

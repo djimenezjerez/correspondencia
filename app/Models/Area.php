@@ -23,6 +23,8 @@ class Area extends Model
         'role_id'
     ];
 
+    public $timestamps = true;
+
     public function users()
     {
         return $this->hasMany(User::class);
@@ -50,7 +52,7 @@ class Area extends Model
 
     public function attachments()
     {
-        return $this->morphMany(Attachment::class, 'uploadable');
+        return $this->morphMany(Attachment::class, 'attachable');
     }
 
     public function setNameAttribute($value)

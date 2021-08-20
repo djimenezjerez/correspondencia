@@ -23,6 +23,7 @@ class ProcedureResource extends JsonResource
             'area_id' => $this->area_id,
             'procedure_type_id' => $this->procedure_type_id,
             'owner' => $this->owner,
+            'validated' => $this->validated,
             'has_flowed' => $this->has_flowed,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

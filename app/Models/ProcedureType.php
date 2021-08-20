@@ -20,9 +20,11 @@ class ProcedureType extends Model
         'code',
     ];
 
+    public $timestamps = true;
+
     public function requirements()
     {
-        return $this->belongsToMany(Requirement::class);
+        return $this->morphToMany(Requirement::class, 'requirable')->withTimestamps();
     }
 
     public function procedures()

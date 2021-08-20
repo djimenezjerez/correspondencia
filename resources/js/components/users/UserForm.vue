@@ -210,6 +210,7 @@ export default {
       edit: false,
       shadowPassword: true,
       userForm: {
+        id: null,
         name: '',
         last_name: '',
         identity_card: '',
@@ -247,6 +248,7 @@ export default {
       } else {
         this.edit = false
         this.userForm = {
+          id: null,
           name: '',
           last_name: '',
           identity_card: '',

@@ -19,6 +19,8 @@ class DocumentType extends Model
         'code',
     ];
 
+    public $timestamps = true;
+
     public function users()
     {
         return $this->hasMany(User::class);

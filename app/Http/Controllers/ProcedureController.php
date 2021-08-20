@@ -106,14 +106,29 @@ class ProcedureController extends Controller
         $request->merge([
             'area_id' => auth()->user()->area_id,
         ]);
-        $procedure = Procedure::create($request->except('archived'));
-        $procedure->procedure_type()->increment('counter');
-        return [
-            'message' => 'Trámite creado',
-            'payload' => [
-                'procedure' => new ProcedureResource($procedure),
-            ]
-        ];
+        $procedure = new Procedure;
+        $procedure->fill($request->except('archived'));
+        DB::beginTransaction();
+        try {
+            $procedure->save(['timestamps' => true]);
+            $procedure->requirements()->sync($procedure->procedure_type->requirements);
+            $procedure->procedure_type()->increment('counter');
+            DB::commit();
+            return [
+                'message' => 'Trámite creado',
+                'payload' => [
+                    'procedure' => new ProcedureResource($procedure),
+                ]
+            ];
+        } catch(\Throwable $e) {
+            DB::rollBack();
+            return response()->json([
+                'message' => 'Error al crear el trámite',
+                'errors' => [
+                    'area_id' => 'Ocurrió un error al crear el trámite',
+                ],
+            ], 500);
+        }
     }
 
     /**
@@ -149,13 +164,41 @@ class ProcedureController extends Controller
                 ]
             ], 400);
         }
-        $procedure->update($request->except('archived', 'area_id'));
-        return [
-            'message' => 'Trámite actualizado',
-            'payload' => [
-                'procedure' => new ProcedureResource($procedure),
-            ]
-        ];
+        $update_requirements = false;
+        if ($request->has('procedure_type_id')) {
+            if ($request->procedure_type_id != $procedure->procedure_type_id) {
+                $update_requirements = true;
+            }
+        }
+        DB::beginTransaction();
+        try {
+            $procedure->update($request->except('archived', 'area_id'));
+            if ($update_requirements) {
+                $requirements = $procedure->procedure_type->requirements->pluck('id')->all();
+                $requirements = array_map(function() {
+                    return [
+                        "validated" => false,
+                    ];
+                }, array_flip($requirements));
+                $procedure->requirements()->sync($requirements);
+                $procedure->procedure_type()->increment('counter');
+            }
+            DB::commit();
+            return [
+                'message' => 'Trámite actualizado',
+                'payload' => [
+                    'procedure' => new ProcedureResource($procedure),
+                ]
+            ];
+        } catch(\Throwable $e) {
+            DB::rollBack();
+            return response()->json([
+                'message' => 'Error al actualizar el trámite',
+                'errors' => [
+                    'area_id' => 'Ocurrió un error al actualizar el trámite',
+                ],
+            ], 500);
+        }
     }
 
     /**

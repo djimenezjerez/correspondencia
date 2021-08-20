@@ -24,6 +24,13 @@ class Procedure extends Model
         'procedure_type_id',
     ];
 
+    public $timestamps = true;
+
+    public function requirements()
+    {
+        return $this->morphToMany(Requirement::class, 'requirable')->withPivot('validated')->withTimestamps();
+    }
+
     public function area()
     {
         return $this->belongsTo(Area::class);
@@ -41,7 +48,7 @@ class Procedure extends Model
 
     public function attachments()
     {
-        return $this->morphMany(Attachment::class, 'uploadable');
+        return $this->morphMany(Attachment::class, 'attachable');
     }
 
     public function setCodeAttribute($value)
@@ -52,6 +59,11 @@ class Procedure extends Model
     public function getHasFlowedAttribute()
     {
         return $this->procedure_flows()->count() > 0;
+    }
+
+    public function getValidatedAttribute()
+    {
+        return $this->requirements()->wherePivot('validated', false)->count() == 0;
     }
 
     public function getOwnerAttribute()

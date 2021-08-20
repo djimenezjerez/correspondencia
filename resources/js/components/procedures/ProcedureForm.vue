@@ -130,6 +130,7 @@ export default {
       dialog: false,
       edit: false,
       procedureForm: {
+        id: null,
         code: '',
         origin: '',
         detail: '',
@@ -168,6 +169,7 @@ export default {
       } else {
         this.edit = false
         this.procedureForm = {
+          id: null,
           code: '',
           origin: '',
           detail: '',

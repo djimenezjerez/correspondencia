@@ -132,6 +132,7 @@ export default {
       dialog: false,
       edit: false,
       procedureTypeForm: {
+        null: null,
         name: '',
         code: '',
         requirements: [],
@@ -179,6 +180,7 @@ export default {
       } else {
         this.edit = false
         this.procedureTypeForm = {
+          null: null,
           name: '',
           code: '',
           requirements: [],

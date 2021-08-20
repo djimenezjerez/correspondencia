@@ -73,6 +73,7 @@ export default {
       dialog: false,
       edit: false,
       requirementForm: {
+        id: null,
         name: '',
       },
       loading: false,
@@ -83,6 +84,7 @@ export default {
       if (requirement) {
         this.edit = true
         this.requirementForm = {
+          id: null,
           ...requirement
         }
       } else {
