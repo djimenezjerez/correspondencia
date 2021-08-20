@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FileUpload;
+use App\Models\Attachment;
 use App\Models\Procedure;
-use App\Http\Requests\FileUploadRequest;
-use App\Http\Resources\FileUploadResource;
+use App\Http\Requests\AttachmentRequest;
+use App\Http\Resources\AttachmentResource;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
-class FileUploadController extends Controller
+class AttachmentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,7 +21,7 @@ class FileUploadController extends Controller
         return [
             'message' => 'Lista de archivos adjuntos',
             'payload' => [
-                'files' => FileUploadResource::collection($procedure->file_uploads),
+                'files' => AttachmentResource::collection($procedure->attachments),
             ]
         ];
     }
@@ -32,19 +32,19 @@ class FileUploadController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(FileUploadRequest $request, Procedure $procedure)
+    public function store(AttachmentRequest $request, Procedure $procedure)
     {
         try {
             $files = [];
             foreach ($request->file('attachments') as $file) {
                 $name = trim(mb_strtoupper($file->getClientOriginalName()));
                 $path = 'uploads/procedures/'.$procedure->id.'/attachments';
-                $file_stored = $procedure->file_uploads()->where('filename', $name)->where('path', $path)->first();
+                $file_stored = $procedure->attachments()->where('filename', $name)->where('path', $path)->first();
                 if ($file_stored) {
                     $files[] = $file_stored->setAttribute('success', false);
                 } else {
                     $file->storeAs($path, $name);
-                    $file = $procedure->file_uploads()->create([
+                    $file = $procedure->attachments()->create([
                         'filename' => $name,
                         'path' => $path,
                         'user_id' => auth()->user()->id,
@@ -66,22 +66,26 @@ class FileUploadController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\FileUpload  $fileUpload
+     * @param  \App\Models\Attachment  $Attachment
      * @return \Illuminate\Http\Response
      */
-    public function show(Procedure $procedure)
+    public function show(Procedure $procedure, Attachment $attachment)
     {
-        //
+        if (Storage::exists($attachment->full_path)) {
+            return Storage::download($attachment->full_path);
+        } else {
+            abort(404, 'El archivo solicitado fue eliminado');
+        }
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\FileUpload  $fileUpload
+     * @param  \App\Models\Attachment  $Attachment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, FileUpload $fileUpload)
+    public function update(Request $request, Attachment $Attachment)
     {
         //
     }
@@ -89,17 +93,17 @@ class FileUploadController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\FileUpload  $fileUpload
+     * @param  \App\Models\Attachment  $Attachment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Procedure $procedure, FileUpload $file_upload)
+    public function destroy(Procedure $procedure, Attachment $attachment)
     {
         if ($procedure->area_id != auth()->user()->area_id) abort(403, 'El trámite no se encuentra en su bandeja');
-        $file = $file_upload->path . '/' . $file_upload->name;
+        $file = $attachment->path . '/' . $attachment->name;
         if (Storage::exists($file)) {
             Storage::delete($file);
         }
-        $file_upload->delete();
+        $attachment->delete();
         return [
             'message' => 'Archivo adjunto eliminado',
         ];

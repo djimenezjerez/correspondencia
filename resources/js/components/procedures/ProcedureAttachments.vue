@@ -162,12 +162,13 @@ export default {
             headers: {
               'Content-Type': 'multipart/form-data'
             },
+            timeout: 30000,
           }
           let formData = new FormData()
           this.files.forEach(file => {
             formData.append('attachments[]', file, file.name)
           })
-          const response = await axios.post(`procedure/${this.procedure.id}/file_upload`, formData, settings)
+          const response = await axios.post(`procedure/${this.procedure.id}/attachment`, formData, settings)
           this.files = response.data.payload.files
           this.success = true
         }

@@ -17,7 +17,7 @@ class AreaController extends Controller
         return [
             'message' => 'Lista de áreas',
             'payload' => [
-                'areas' => Area::orderBy('name')->get(),
+                'areas' => Area::orderBy('order', 'ASC')->orderBy('name', 'ASC')->get(),
             ],
         ];
     }

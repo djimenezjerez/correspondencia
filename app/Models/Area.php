@@ -48,9 +48,9 @@ class Area extends Model
         return $this->hasMany(ProcedureFlow::class, 'to_area');
     }
 
-    public function file_uploads()
+    public function attachments()
     {
-        return $this->morphMany(FileUpload::class, 'uploadable');
+        return $this->morphMany(Attachment::class, 'uploadable');
     }
 
     public function setNameAttribute($value)

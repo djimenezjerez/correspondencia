@@ -6,6 +6,7 @@ import store from '@/store'
 Vue.prototype.$http = Axios
 Vue.prototype.$http.defaults.withCredentials = true
 Vue.prototype.$http.defaults.baseURL = `${process.env.MIX_BASE_URL}/api/`
+Vue.prototype.$http.defaults.timeout = 10000
 Vue.prototype.$http.defaults.headers.common['Authorization'] = `${store.getters.token.type} ${store.getters.token.value}`
 Vue.prototype.$http.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 Vue.prototype.$http.defaults.headers.common['Access-Control-Allow-Origin'] = '*'

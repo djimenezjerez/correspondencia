@@ -8,7 +8,7 @@ use App\Http\Controllers\DocumentTypeController;
 use App\Http\Controllers\RequirementController;
 use App\Http\Controllers\ProcedureTypeController;
 use App\Http\Controllers\ProcedureController;
-use App\Http\Controllers\FileUploadController;
+use App\Http\Controllers\AttachmentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -77,7 +77,8 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::post('procedure/{procedure}/archive', [ProcedureController::class, 'archive'])->middleware('permission:ARCHIVAR TRÁMITE');
 
     // Archivos adjuntos a trámites
-    Route::get('procedure/{procedure}/file_upload', [FileUploadController::class, 'index'])->middleware('permission:LEER TRÁMITE');
-    Route::post('procedure/{procedure}/file_upload', [FileUploadController::class, 'store'])->middleware('permission:ADJUNTAR ARCHIVO');
-    Route::delete('procedure/{procedure}/file_upload/{file_upload}', [FileUploadController::class, 'destroy']);
+    Route::get('procedure/{procedure}/attachment', [AttachmentController::class, 'index'])->middleware('permission:LEER TRÁMITE');
+    Route::get('procedure/{procedure}/attachment/{attachment}', [AttachmentController::class, 'show']);
+    Route::post('procedure/{procedure}/attachment', [AttachmentController::class, 'store'])->middleware('permission:ADJUNTAR ARCHIVO');
+    Route::delete('procedure/{procedure}/attachment/{attachment}', [AttachmentController::class, 'destroy']);
 });

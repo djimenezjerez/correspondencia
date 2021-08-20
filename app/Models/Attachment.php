@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class FileUpload extends Model
+class Attachment extends Model
 {
     use HasFactory;
 
@@ -38,5 +38,10 @@ class FileUpload extends Model
     public function setPathAttribute($value)
     {
         $this->attributes['path'] = trim(mb_strtolower($value));
+    }
+
+    public function getFullPathAttribute()
+    {
+        return $this->path . '/' . $this->filename;
     }
 }
