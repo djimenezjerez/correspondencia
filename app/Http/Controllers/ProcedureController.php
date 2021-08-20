@@ -10,6 +10,7 @@ use Spatie\Permission\Models\Role;
 use App\Http\Requests\FlowRequest;
 use App\Http\Requests\CodeRequest;
 use App\Http\Requests\ProcedureRequest;
+use App\Http\Requests\ProcedureRequirementRequest;
 use App\Http\Resources\ProcedureResource;
 use App\Http\Resources\ProcedureFlowResource;
 use App\Http\Resources\TimelineResource;
@@ -31,7 +32,7 @@ class ProcedureController extends Controller
         $area_id = $user->area_id;
         $owned_procedures = DB::table('procedures')->where('area_id', $area_id)->select('id');
         // Tramites que se encuentran actualmente en la sección
-        $current = DB::table('procedures as p')->select('p.*', 'pf.from_area', 'pf.created_at as incoming_at', 'pf.user_id as incoming_user', DB::raw('null as to_area'), DB::raw('null as outgoing_at'), DB::raw('null as outgoing_user'), DB::raw('TRUE as owner'), DB::raw($user->hasRole('RECEPCIÓN') ? 'FALSE as has_flowed' : 'TRUE as has_flowed'))->leftJoin('procedure_flows as pf', function($query) {
+        $current = DB::table('procedures as p')->select('p.id', 'p.archived', 'pf.from_area', 'pf.created_at as incoming_at', 'pf.user_id as incoming_user', DB::raw('null as to_area'), DB::raw('null as outgoing_at'), DB::raw('null as outgoing_user'), DB::raw('TRUE as owner'), DB::raw($user->hasRole('RECEPCIÓN') ? 'FALSE as has_flowed' : 'TRUE as has_flowed'))->leftJoin('procedure_flows as pf', function($query) {
             $query->on('pf.procedure_id','=','p.id')->whereRaw('pf.id IN (select MAX(a.id) from procedure_flows as a join procedures as b on a.procedure_id = b.id group by b.id)');
         })->whereIn('p.id', $owned_procedures)->where('p.deleted_at', null)->where('p.archived', false);
         if ($request->has('search')) {
@@ -40,7 +41,7 @@ class ProcedureController extends Controller
             }
         }
         // Tramites archivados en la sección
-        $archived = DB::table('procedures as p')->select('p.*', 'pf.from_area', 'pf.created_at as incoming_at', 'pf.user_id as incoming_user', DB::raw('null as to_area'), DB::raw('null as outgoing_at'), DB::raw('null as outgoing_user'), DB::raw('TRUE as owner'), DB::raw('TRUE as has_flowed'))->leftJoin('procedure_flows as pf', function($query) {
+        $archived = DB::table('procedures as p')->select('p.id', 'p.archived', 'pf.from_area', 'pf.created_at as incoming_at', 'pf.user_id as incoming_user', DB::raw('null as to_area'), DB::raw('null as outgoing_at'), DB::raw('null as outgoing_user'), DB::raw('TRUE as owner'), DB::raw('TRUE as has_flowed'))->leftJoin('procedure_flows as pf', function($query) {
             $query->on('pf.procedure_id','=','p.id')->whereRaw('pf.id IN (select MAX(a.id) from procedure_flows as a join procedures as b on a.procedure_id = b.id group by b.id)');
         })->whereIn('p.id', $owned_procedures)->where('p.deleted_at', null)->where('p.archived', true);
         if ($request->has('search')) {
@@ -64,7 +65,7 @@ class ProcedureController extends Controller
         if ($user->hasRole('RECEPCIÓN')) {
             $flowed = DB::table('procedures as p')->rightJoinSub($outgoing, 'o', function ($join) {
                 $join->on('p.id', '=', 'o.procedure_id');
-            })->select( 'p.*', 'i.from_area', 'i.created_at as incoming_at', 'i.user_id as incoming_user', 'o.to_area', 'o.created_at as outgoing_at', 'o.user_id as outgoing_user', DB::raw('FALSE as owner'), DB::raw('TRUE as has_flowed'))->leftJoinSub($incoming, 'i', function ($join) {
+            })->select( 'p.id', 'p.archived', 'i.from_area', 'i.created_at as incoming_at', 'i.user_id as incoming_user', 'o.to_area', 'o.created_at as outgoing_at', 'o.user_id as outgoing_user', DB::raw('FALSE as owner'), DB::raw('TRUE as has_flowed'))->leftJoinSub($incoming, 'i', function ($join) {
                 $join->on('p.id', '=', 'i.procedure_id');
             })->where('p.deleted_at', null);
         } else {
@@ -72,7 +73,7 @@ class ProcedureController extends Controller
                 $join->on('p.id', '=', 'i.procedure_id');
             })->leftJoinSub($outgoing, 'o', function ($join) {
                 $join->on('p.id', '=', 'o.procedure_id');
-            })->select( 'p.*', 'i.from_area', 'i.created_at as incoming_at', 'i.user_id as incoming_user', 'o.to_area', 'o.created_at as outgoing_at', 'o.user_id as outgoing_user', DB::raw('FALSE as owner'), DB::raw('TRUE as has_flowed'))->where('p.deleted_at', null);
+            })->select( 'p.id', 'p.archived', 'i.from_area', 'i.created_at as incoming_at', 'i.user_id as incoming_user', 'o.to_area', 'o.created_at as outgoing_at', 'o.user_id as outgoing_user', DB::raw('FALSE as owner'), DB::raw('TRUE as has_flowed'))->where('p.deleted_at', null);
         }
         if ($request->has('search')) {
             if ($request->search != '') {
@@ -222,13 +223,19 @@ class ProcedureController extends Controller
 
     public function flow(FlowRequest $request, Procedure $procedure)
     {
+        /** @var \App\Models\User */
+        $user = Auth::user();
         if ($procedure->archived) {
             return response()->json([
                 'message' => 'El trámite no se puede derivar porque ya fue archivado',
             ], 422);
-        } elseif ($procedure->area_id != auth()->user()->area_id) {
+        } elseif ($procedure->area_id != $user->area_id) {
             return response()->json([
                 'message' => 'El trámite no se puede derivar porque no se encuentra en su bandeja',
+            ], 422);
+        } elseif (!$procedure->validated && $user->hasRole('VERIFICADOR')) {
+            return response()->json([
+                'message' => 'Antes de derivar debe verificar los requisitos',
             ], 422);
         }
         DB::beginTransaction();
@@ -339,6 +346,21 @@ class ProcedureController extends Controller
             'payload' => [
                 'procedure' => $procedure,
             ],
+        ];
+    }
+
+    public function requirements(ProcedureRequirementRequest $request, Procedure $procedure)
+    {
+        foreach($request->requirements as $requirement) {
+            $procedure->requirements()->updateExistingPivot($requirement['id'], [
+                'validated' => $requirement['validated'],
+            ], false);
+        }
+        return [
+            'message' => 'Trámite actualizado',
+            'payload' => [
+                'procedure' => new ProcedureResource($procedure),
+            ]
         ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Procedure;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProcedureFlowResource extends JsonResource
@@ -14,19 +15,22 @@ class ProcedureFlowResource extends JsonResource
      */
     public function toArray($request)
     {
+        $procedure = Procedure::find($this->id);
+
         return [
-            'id' => intval($this->id),
-            'code' => strval($this->code),
-            'origin' => strval($this->origin),
-            'detail' => strval($this->detail),
-            'archived' => filter_var($this->archived, FILTER_VALIDATE_BOOLEAN),
-            'area_id' => intval($this->area_id),
-            'procedure_type_id' => intval($this->procedure_type_id),
+            'id' => $procedure->id,
+            'code' => $procedure->code,
+            'origin' => $procedure->origin,
+            'detail' => $procedure->detail,
+            'archived' => $procedure->archived,
+            'area_id' => $procedure->area_id,
+            'procedure_type_id' => $procedure->procedure_type_id,
             'owner' => filter_var($this->owner, FILTER_VALIDATE_BOOLEAN),
             'has_flowed' => filter_var($this->has_flowed, FILTER_VALIDATE_BOOLEAN),
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'deleted_at' => $this->updated_at,
+            'validated' => $procedure->validated,
+            'created_at' => $procedure->created_at,
+            'updated_at' => $procedure->updated_at,
+            'deleted_at' => $procedure->updated_at,
             'from_area' => intval($this->from_area),
             'incoming_at' => $this->incoming_at,
             'incoming_user' => intval($this->incoming_user),

@@ -142,6 +142,7 @@ export default {
         if ('errors' in error.response.data) {
           this.$refs.procedureFlowObserver.setErrors(error.response.data.errors)
         }
+        this.$toast.error(error.response.data.message)
       } finally {
         this.loading = false
       }

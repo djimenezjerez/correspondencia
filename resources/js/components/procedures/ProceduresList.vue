@@ -47,7 +47,7 @@
                   </div>
                   <div v-else>
                     <v-col cols="auto" v-if="$store.getters.user.permissions.includes('DERIVAR TRÁMITE') && item.owner && procedureTypes.length > 0">
-                      <div v-if="item.validated || requirementsCount(item.procedure_type_id) == 0 || $store.getters.user.role != 'VERIFICADOR'">
+                      <div v-if="item.validated || $store.getters.user.role != 'VERIFICADOR'">
                         <v-btn
                           outlined
                           rounded
@@ -226,7 +226,7 @@
     <ProcedureForm ref="dialogProcedureForm" :procedure-types="procedureTypes" v-on:updateList="fetchProcedures"/>
     <ProcedureDelete ref="dialogProcedureDelete" v-on:updateList="fetchProcedures"/>
     <ProcedureFlow ref="dialogProcedureFlow" :areas="areas" v-on:updateList="fetchProcedures"/>
-    <ProcedureRequirements ref="dialogProcedureRequirements" :requirements="requirements" v-on:validateProcedure="validateProcedure($event)"/>
+    <ProcedureRequirements ref="dialogProcedureRequirements" :requirements="requirements" v-on:updateList="fetchProcedures"/>
     <ProcedureArchive ref="dialogProcedureArchive" v-on:updateList="fetchProcedures"/>
     <ProcedureAttachments ref="dialogProcedureAttachments"/>
     <ProcedureDetails ref="dialogProcedureDetails"/>
@@ -342,18 +342,6 @@ export default {
     }
   },
   methods: {
-    requirementsCount(procedureTypeId) {
-      const rocedureType = this.procedureTypes.find(o => o.id == procedureTypeId)
-      if (rocedureType) {
-        return rocedureType.requirements_count
-      } else {
-        return 0
-      }
-    },
-    validateProcedure(procedureId) {
-      const index = this.procedures.findIndex((o => o.id == procedureId))
-      this.procedures[index].validated = true
-    },
     procedureType(value) {
       const procedureType = this.procedureTypes.find(o => o.id === value)
       if (procedureType) {
@@ -423,10 +411,7 @@ export default {
             search: this.search,
           },
         })
-        this.procedures = response.data.payload.data.map(o => ({
-          ...o,
-          validated: false,
-        }))
+        this.procedures = response.data.payload.data
         this.totalProcedures = response.data.payload.total
         this.options.page = response.data.payload.current_page
         this.options.itemsPerPage = parseInt(response.data.payload.per_page)

@@ -75,7 +75,10 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::patch('procedure/{procedure}', [ProcedureController::class, 'update']);
     Route::delete('procedure/{procedure}', [ProcedureController::class, 'destroy'])->middleware('permission:ELIMINAR TRÁMITE');
 
-    // Derivaciones
+    // Requisitos de trámite
+    Route::patch('procedure/{procedure}/requirement', [ProcedureController::class, 'requirements'])->middleware('role:VERIFICADOR');
+
+    // Derivar trámite
     Route::post('procedure/{procedure}/flow', [ProcedureController::class, 'flow'])->middleware('permission:DERIVAR TRÁMITE');
 
     // Archivar trámite

@@ -173,5 +173,6 @@ return [
         'requirements' => 'requisitos',
         'attachments' => 'archivos',
         'attachments.*' => 'archivos',
+        'requirements.*' => 'requisito',
     ],
 ];

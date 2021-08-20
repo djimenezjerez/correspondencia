@@ -146,8 +146,23 @@ export default {
       }
     },
     async submit() {
-      this.$emit('validateProcedure', this.procedure.id)
-      this.dialog = false
+      try {
+        if (this.validProcedure) {
+          this.loading = true
+          const response = await axios.patch(`procedure/${this.procedure.id}/requirement`, {
+            requirements: this.procedureRequirements,
+          })
+          if (response.data.payload.procedure.validated) {
+            this.$toast.info(response.data.message)
+            this.$emit('updateList')
+            this.dialog = false
+          }
+        }
+      } catch(error) {
+        console.log(error)
+      } finally {
+        this.loading = false
+      }
     }
   },
 }
