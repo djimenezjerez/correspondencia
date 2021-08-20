@@ -91,4 +91,9 @@ class User extends Authenticatable
     {
         $this->attributes['address'] = trim(mb_strtoupper($value));
     }
+
+    public function getFullNameAttribute()
+    {
+        return $this->name . ' ' . $this->last_name;
+    }
 }

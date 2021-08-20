@@ -1,0 +1,100 @@
+<template>
+  <v-dialog
+    v-model="dialog"
+    persistent
+    max-width="600"
+    @keydown.esc="dialog = false"
+  >
+    <v-card
+      :loading="loading"
+    >
+      <template slot="progress">
+        <v-progress-linear
+          color="secondary"
+          height="10"
+          indeterminate
+        ></v-progress-linear>
+      </template>
+      <v-toolbar dense dark color="secondary">
+        <v-toolbar-title>
+          Registro de derivaciones
+        </v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click.stop="dialog = false"
+        >
+          <v-icon>
+            mdi-close
+          </v-icon>
+        </v-btn>
+      </v-toolbar>
+      <div class="px-5 pb-5">
+        <v-card-text>
+          <v-timeline :dense="$vuetify.breakpoint.smAndDown">
+            <v-timeline-item v-for="(flow, index) in timeline" :key="index" :class="{ 'text-right': index%2 }">
+              <div class="font-weight-medium">
+                {{ flow.to_area }}
+              </div>
+              <div class="font-weight-regular">
+                {{ flow.action }}
+              </div>
+              <div class="font-weight-light">
+                {{ flow.date | moment('L LT') }}
+              </div>
+            </v-timeline-item>
+          </v-timeline>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn
+            block
+            type="submit"
+            color="primary"
+            :disabled="loading"
+            @click="dialog = false"
+          >
+            <v-icon left>
+              mdi-close
+            </v-icon>
+            Cerrar
+          </v-btn>
+        </v-card-actions>
+      </div>
+    </v-card>
+  </v-dialog>
+</template>
+
+<script>
+export default {
+  name: 'ProcedureHistory',
+  data: function() {
+    return {
+      dialog: false,
+      loading: true,
+      timeline: [],
+      procedure: {},
+    }
+  },
+  methods: {
+    showDialog(procedure) {
+      this.timeline = []
+      this.fetchFlows(procedure.id)
+      this.procedure = {
+        ...procedure
+      }
+      this.dialog = true
+    },
+    async fetchFlows(procedureId) {
+      try {
+        this.loading = true
+        const response = await axios.get(`procedure/${procedureId}/flow`)
+        this.timeline = response.data.payload.timeline
+      } catch (error) {
+        console.log(error)
+      } finally {
+        this.loading = false
+      }
+    }
+  },
+}
+</script>

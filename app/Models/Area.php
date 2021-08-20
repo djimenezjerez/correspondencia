@@ -19,6 +19,7 @@ class Area extends Model
         'name',
         'code',
         'group',
+        'order',
         'role_id'
     ];
 
@@ -45,6 +46,11 @@ class Area extends Model
     public function procedure_flows_destiny()
     {
         return $this->hasMany(ProcedureFlow::class, 'to_area');
+    }
+
+    public function file_uploads()
+    {
+        return $this->morphMany(FileUpload::class, 'uploadable');
     }
 
     public function setNameAttribute($value)

@@ -112,7 +112,7 @@ return [
     'same' => 'El campo :attribute y :other no concuerdan.',
     'size' => [
         'numeric' => 'El campo :attribute debe ser :size.',
-        'file' => 'El campo :attribute debe ser de :size kilobytes.',
+        'file' => 'El campo :attribute debe ser de :size kilobytes como máximo.',
         'string' => 'El campo :attribute debe ser de :size caracteres.',
         'array' => 'El campo :attribute debe contener :size ítems.',
     ],
@@ -170,6 +170,8 @@ return [
         'phone' => 'teléfono',
         'document_type_id' => 'tipo de documento',
         'old_password' => 'contraseña actual',
-        'requirements' => 'requisitos'
+        'requirements' => 'requisitos',
+        'attachments' => 'archivos',
+        'attachments.*' => 'archivos',
     ],
 ];

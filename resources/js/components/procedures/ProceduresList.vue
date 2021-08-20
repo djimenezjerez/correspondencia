@@ -95,45 +95,123 @@
                 {{ procedureType(item.procedure_type_id) }}
               </template>
               <template v-slot:[`item.actions`]="{ item }">
-                <v-row justify="center">
-                  <v-col cols="4" v-if="$store.getters.user.permissions.includes('ARCHIVAR TRÁMITE') && item.owner && !item.archived && item.has_flowed">
+                <v-row justify="space-around">
+                  <v-col v-if="item.owner && !item.archived && $store.getters.user.permissions.includes('ADJUNTAR ARCHIVO')">
                     <v-tooltip bottom>
-                      <template #activator="{ on }">
-                        <v-icon
-                          color="warning"
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
                           v-on="on"
+                          v-bind="attrs"
+                          text
+                          icon
+                          @click="$refs.dialogProcedureAttachments.showDialog(item, procedureType(item.procedure_type_id))"
+                        >
+                          <v-icon
+                            color="grey darken-3"
+                          >
+                            mdi-content-save
+                          </v-icon>
+                        </v-btn>
+                      </template>
+                      <span>Adjuntar archivos</span>
+                    </v-tooltip>
+                  </v-col>
+                  <v-col>
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          v-on="on"
+                          v-bind="attrs"
+                          text
+                          icon
+                          @click="$refs.dialogProcedureDetails.showDialog(item, procedureType(item.procedure_type_id))"
+                        >
+                          <v-icon
+                            color="success darken-2"
+                          >
+                            mdi-eye
+                          </v-icon>
+                        </v-btn>
+                      </template>
+                      <span>Detalles</span>
+                    </v-tooltip>
+                  </v-col>
+                  <v-col v-if="item.has_flowed">
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          v-on="on"
+                          v-bind="attrs"
+                          text
+                          icon
+                          @click="$refs.dialogProcedureTimeline.showDialog(item)"
+                        >
+                          <v-icon
+                            color="info"
+                          >
+                            mdi-chart-timeline-variant
+                          </v-icon>
+                        </v-btn>
+                      </template>
+                      <span>Historial</span>
+                    </v-tooltip>
+                  </v-col>
+                  <v-col v-if="$store.getters.user.permissions.includes('ARCHIVAR TRÁMITE') && item.has_flowed && item.owner && !item.archived">
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          v-on="on"
+                          v-bind="attrs"
+                          text
+                          icon
                           @click="$refs.dialogProcedureArchive.showDialog(item)"
                         >
-                          mdi-tray-full
-                        </v-icon>
+                          <v-icon
+                            color="warning"
+                          >
+                            mdi-tray-full
+                          </v-icon>
+                        </v-btn>
                       </template>
                       <span>Archivar</span>
                     </v-tooltip>
                   </v-col>
-                  <v-col cols="4" v-if="!item.has_flowed && item.owner">
+                  <v-col v-if="!item.has_flowed && item.owner && !item.archived && $store.getters.user.permissions.includes('EDITAR TRÁMITE')">
                     <v-tooltip bottom>
-                      <template #activator="{ on }">
-                        <v-icon
-                          color="info"
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
                           v-on="on"
+                          v-bind="attrs"
+                          text
+                          icon
                           @click="$refs.dialogProcedureForm.showDialog(item)"
                         >
-                          mdi-pencil
-                        </v-icon>
+                          <v-icon
+                            color="info"
+                          >
+                            mdi-pencil
+                          </v-icon>
+                        </v-btn>
                       </template>
                       <span>Editar</span>
                     </v-tooltip>
                   </v-col>
-                  <v-col cols="4" v-if="!item.has_flowed && item.owner">
+                  <v-col v-if="!item.has_flowed && item.owner && !item.archived && $store.getters.user.permissions.includes('ELIMINAR TRÁMITE')">
                     <v-tooltip bottom>
-                      <template #activator="{ on }">
-                        <v-icon
-                          color="error"
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
                           v-on="on"
+                          v-bind="attrs"
+                          text
+                          icon
                           @click="$refs.dialogProcedureDelete.showDialog(item)"
                         >
-                          mdi-close
-                        </v-icon>
+                          <v-icon
+                            color="error"
+                          >
+                            mdi-close
+                          </v-icon>
+                        </v-btn>
                       </template>
                       <span>Eliminar</span>
                     </v-tooltip>
@@ -150,6 +228,9 @@
     <ProcedureFlow ref="dialogProcedureFlow" :areas="areas" v-on:updateList="fetchProcedures"/>
     <ProcedureRequirements ref="dialogProcedureRequirements" :requirements="requirements" v-on:validateProcedure="validateProcedure($event)"/>
     <ProcedureArchive ref="dialogProcedureArchive" v-on:updateList="fetchProcedures"/>
+    <ProcedureAttachments ref="dialogProcedureAttachments"/>
+    <ProcedureDetails ref="dialogProcedureDetails"/>
+    <ProcedureTimeline ref="dialogProcedureTimeline"/>
   </div>
 </template>
 
@@ -159,6 +240,9 @@ import ProcedureDelete from '@/components/procedures/ProcedureDelete'
 import ProcedureFlow from '@/components/procedures/ProcedureFlow'
 import ProcedureArchive from '@/components/procedures/ProcedureArchive'
 import ProcedureRequirements from '@/components/procedures/ProcedureRequirements'
+import ProcedureAttachments from '@/components/procedures/ProcedureAttachments'
+import ProcedureDetails from '@/components/procedures/ProcedureDetails'
+import ProcedureTimeline from '@/components/procedures/ProcedureTimeline'
 import SearchInput from '@/components/shared/SearchInput'
 import AddButton from '@/components/shared/AddButton'
 
@@ -170,6 +254,9 @@ export default {
     ProcedureFlow,
     ProcedureArchive,
     ProcedureRequirements,
+    ProcedureAttachments,
+    ProcedureDetails,
+    ProcedureTimeline,
     SearchInput,
     AddButton,
   },

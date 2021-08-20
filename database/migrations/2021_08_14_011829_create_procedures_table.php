@@ -21,7 +21,7 @@ class CreateProceduresTable extends Migration
             $table->boolean('archived')->comment('Procedencia')->default(false);
             $table->unsignedBigInteger('area_id')->comment('Sección');
             $table->foreign('area_id')->references('id')->on('areas')->onDelete('cascade')->onUpdate('cascade');
-            $table->boolean('received')->default(false)->comment('Traḿite recibido por la sección');
+            $table->boolean('pending')->default(true)->comment('Traḿite pendiente en la bandeja');
             $table->unsignedBigInteger('procedure_type_id')->comment('Tipo de Trámite');
             $table->foreign('procedure_type_id')->references('id')->on('procedure_types')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();

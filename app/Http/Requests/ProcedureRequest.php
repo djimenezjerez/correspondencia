@@ -18,7 +18,7 @@ class ProcedureRequest extends FormRequest
         $user = Auth::user();
         if ($this->method() == 'POST' && $user->can('CREAR TRÁMITE')) {
             return true;
-        } elseif (in_array($this->method(), ['PATCH', 'PUT']) && !$this->procedure->archived && ($this->procedure->area_id == $user->area_id) && $user->can('EDITAR TRÁMITE')) {
+        } elseif (in_array($this->method(), ['PATCH', 'PUT']) && !$this->procedure->archived && $this->procedure->owner && $user->can('EDITAR TRÁMITE')) {
             return true;
         } else {
             return false;

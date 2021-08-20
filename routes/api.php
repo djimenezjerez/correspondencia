@@ -8,6 +8,7 @@ use App\Http\Controllers\DocumentTypeController;
 use App\Http\Controllers\RequirementController;
 use App\Http\Controllers\ProcedureTypeController;
 use App\Http\Controllers\ProcedureController;
+use App\Http\Controllers\FileUploadController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,6 +23,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('login', [AuthController::class, 'store']);
+Route::get('procedure/{procedure}/flow', [ProcedureController::class, 'timeline']);
 
 Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::post('logout', [AuthController::class, 'destroy']);
@@ -47,8 +49,8 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::patch('deleted/user/{user}', [UserController::class, 'restore'])->middleware('permission:CREAR USUARIO');
 
     // Requisitos
-    Route::get('requirement', [RequirementController::class, 'index'])->middleware('permission:LEER REQUISITO');
-    Route::get('requirement/{requirement}', [RequirementController::class, 'show'])->middleware('permission:LEER REQUISITO');
+    Route::get('requirement', [RequirementController::class, 'index']);
+    Route::get('requirement/{requirement}', [RequirementController::class, 'show']);
     Route::post('requirement', [RequirementController::class, 'store'])->middleware('permission:CREAR REQUISITO');
     Route::patch('requirement/{requirement}', [RequirementController::class, 'update'])->middleware('permission:EDITAR REQUISITO');
     Route::delete('requirement/{requirement}', [RequirementController::class, 'destroy'])->middleware('permission:ELIMINAR REQUISITO');
@@ -67,6 +69,15 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::post('procedure', [ProcedureController::class, 'store'])->middleware('permission:CREAR TRÁMITE');
     Route::patch('procedure/{procedure}', [ProcedureController::class, 'update']);
     Route::delete('procedure/{procedure}', [ProcedureController::class, 'destroy'])->middleware('permission:ELIMINAR TRÁMITE');
+
+    // Derivaciones
     Route::post('procedure/{procedure}/flow', [ProcedureController::class, 'flow'])->middleware('permission:DERIVAR TRÁMITE');
+
+    // Archivar trámite
     Route::post('procedure/{procedure}/archive', [ProcedureController::class, 'archive'])->middleware('permission:ARCHIVAR TRÁMITE');
+
+    // Archivos adjuntos a trámites
+    Route::get('procedure/{procedure}/file_upload', [FileUploadController::class, 'index'])->middleware('permission:LEER TRÁMITE');
+    Route::post('procedure/{procedure}/file_upload', [FileUploadController::class, 'store'])->middleware('permission:ADJUNTAR ARCHIVO');
+    Route::delete('procedure/{procedure}/file_upload/{file_upload}', [FileUploadController::class, 'destroy']);
 });

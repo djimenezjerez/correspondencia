@@ -39,6 +39,11 @@ class Procedure extends Model
         return $this->hasMany(ProcedureFlow::class);
     }
 
+    public function file_uploads()
+    {
+        return $this->morphMany(FileUpload::class, 'uploadable');
+    }
+
     public function setCodeAttribute($value)
     {
         $this->attributes['code'] = trim(mb_strtoupper($value));

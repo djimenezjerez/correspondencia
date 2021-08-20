@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Area;
 use App\Models\Procedure;
 use App\Models\ProcedureType;
+use Spatie\Permission\Models\Role;
 use App\Http\Requests\ProcedureRequest;
 use App\Http\Resources\ProcedureResource;
 use App\Http\Resources\ProcedureFlowResource;
+use App\Http\Resources\TimelineResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -257,5 +260,37 @@ class ProcedureController extends Controller
                 'message' => 'Error al archivar el trámite',
             ], 500);
         }
+    }
+
+    public function timeline(Procedure $procedure)
+    {
+        $role = Role::whereName('RECEPCIÓN')->firstOrFail();
+        $area = Area::where('role_id', $role->id)->first();
+        $created = [[
+            'to_area' => [
+                'name' => $area->name,
+            ],
+            'action' => 'CREADO',
+            'created_at' => $procedure->created_at,
+        ]];
+        $timeline = $procedure->procedure_flows()->select('to_area', 'created_at')->selectRaw("'DERIVADO' as action")->with(['to_area' => function($q) {
+            return $q->select('id', 'name');
+        }])->orderBy('created_at', 'DESC')->get()->toArray();
+        $archived = [];
+        if ($procedure->archived) {
+            $archived = [[
+                'to_area' => [
+                    'name' => $procedure->area->name,
+                ],
+                'action' => 'ARCHIVADO',
+                'created_at' => $procedure->updated_at,
+            ]];
+        }
+        return [
+            'message' => 'Historia del trámite',
+            'payload' => [
+                'timeline' => TimelineResource::collection(array_merge($archived, $timeline, $created)),
+            ],
+        ];
     }
 }

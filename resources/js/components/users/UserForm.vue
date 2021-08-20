@@ -75,6 +75,22 @@
               </validation-provider>
               <validation-provider
                 v-slot="{ errors }"
+                name="password"
+                :rules="edit ? '' : 'required|min:4'"
+              >
+                <v-text-field
+                  label="Contraseña"
+                  v-model="userForm.password"
+                  data-vv-name="password"
+                  :error-messages="errors"
+                  prepend-icon="mdi-lock"
+                  :append-icon="shadowPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                  @click:append="() => (shadowPassword = !shadowPassword)"
+                  :type="shadowPassword ? 'password' : 'text'"
+                ></v-text-field>
+              </validation-provider>
+              <validation-provider
+                v-slot="{ errors }"
                 name="document_type_id"
                 rules="required"
               >
@@ -100,22 +116,6 @@
                   data-vv-name="identity_card"
                   :error-messages="errors"
                   prepend-icon="mdi-card-account-details"
-                ></v-text-field>
-              </validation-provider>
-              <validation-provider
-                v-slot="{ errors }"
-                name="password"
-                :rules="edit ? '' : 'required|min:4'"
-              >
-                <v-text-field
-                  label="Contraseña"
-                  v-model="userForm.password"
-                  data-vv-name="password"
-                  :error-messages="errors"
-                  prepend-icon="mdi-lock"
-                  :append-icon="shadowPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                  @click:append="() => (shadowPassword = !shadowPassword)"
-                  :type="shadowPassword ? 'password' : 'text'"
                 ></v-text-field>
               </validation-provider>
               <validation-provider

@@ -49,28 +49,40 @@
                 <v-row justify="center">
                   <v-col cols="6">
                     <v-tooltip bottom>
-                      <template #activator="{ on }">
-                        <v-icon
-                          color="info"
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
                           v-on="on"
+                          v-bind="attrs"
+                          text
+                          icon
                           @click="$refs.dialogProcedureTypeForm.showDialog(item)"
                         >
-                          mdi-pencil
-                        </v-icon>
+                          <v-icon
+                            color="info"
+                          >
+                            mdi-pencil
+                          </v-icon>
+                        </v-btn>
                       </template>
                       <span>Editar</span>
                     </v-tooltip>
                   </v-col>
                   <v-col cols="6" v-if="item.total_procedures == 0">
                     <v-tooltip bottom>
-                      <template #activator="{ on }">
-                        <v-icon
-                          color="error"
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
                           v-on="on"
+                          v-bind="attrs"
+                          text
+                          icon
                           @click="$refs.dialogProcedureTypeDelete.showDialog(item)"
                         >
-                          mdi-close
-                        </v-icon>
+                          <v-icon
+                            color="error"
+                          >
+                            mdi-close
+                          </v-icon>
+                        </v-btn>
                       </template>
                       <span>Eliminar</span>
                     </v-tooltip>

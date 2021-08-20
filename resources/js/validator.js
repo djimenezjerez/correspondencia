@@ -31,6 +31,7 @@ localize({
       code: 'código',
       origin: 'procedencia',
       detail: 'detalle',
+      attachments: 'archivos',
     }
   },
 })
