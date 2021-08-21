@@ -7,9 +7,7 @@
             color="secondary"
             dark
           >
-            <v-toolbar-title>
-              Usuarios
-            </v-toolbar-title>
+            <ToolBarTitle title="Usuarios"/>
             <v-spacer></v-spacer>
             <v-divider class="mx-5" vertical></v-divider>
             <AddButton text="Agregar usuario" @click="$refs.dialogUserForm.showDialog()"/>
@@ -45,13 +43,14 @@
                 {{ item.is_active ? 'ACTIVO' : 'INACTIVO' }}
               </template>
               <template v-slot:[`item.actions`]="{ item }">
-                <v-container style="width: 25em;">
-                  <v-row dense justify="space-around">
+                <v-container style="width: 19em;">
+                  <v-row dense no-gutters justify="space-around">
                     <v-col cols="auto" v-if="item.is_active">
                       <v-btn
                         dark
                         color="blue"
                         @click="$refs.dialogUserForm.showDialog(item)"
+                        small
                       >
                         Editar
                         <v-icon right>
@@ -64,6 +63,7 @@
                         dark
                         :color="item.is_active ? 'error' : 'success'"
                         @click="$refs.dialogUserSwitch.showDialog(item)"
+                        small
                       >
                         <span v-if="item.is_active">Desactivar</span>
                         <span v-else>Reactivar</span>
@@ -169,7 +169,6 @@ export default {
           align: 'center',
           value: 'actions',
           sortable: false,
-          width: '25em',
         },
       ],
     }

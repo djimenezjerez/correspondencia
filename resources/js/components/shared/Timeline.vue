@@ -16,13 +16,13 @@
             class="rounded-card"
           >
             <v-card-text>
-              <div class="font-weight-bold">
+              <div class="font-weight-bold text-xs-caption text-sm-caption text-md-body-2 text-lg-body-2 text-xl-body-1">
                 {{ flow.to_area }}
               </div>
-              <div class="font-weight-medium">
+              <div class="font-weight-medium text-xs-caption text-sm-caption text-md-body-2 text-lg-body-2 text-xl-body-1">
                 {{ flow.action }}
               </div>
-              <div class="font-weight-normal">
+              <div class="font-weight-normal text-xs-caption text-sm-caption text-md-body-2 text-lg-body-2 text-xl-body-1">
                 {{ flow.date | moment('L LT') }}
               </div>
             </v-card-text>

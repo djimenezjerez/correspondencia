@@ -7,9 +7,7 @@
             color="secondary"
             dark
           >
-            <v-toolbar-title>
-              Libro de registro de correspondencia
-            </v-toolbar-title>
+            <ToolBarTitle title="Libro de registro de correspondencia"/>
             <v-spacer></v-spacer>
             <v-divider class="mx-5" vertical v-if="$store.getters.user.permissions.includes('CREAR TRÁMITE')"></v-divider>
             <AddButton text="Agregar hoja de ruta" @click="$refs.dialogProcedureForm.showDialog()" v-if="$store.getters.user.permissions.includes('CREAR TRÁMITE')"/>
@@ -34,13 +32,14 @@
               :footer-props="{
                 itemsPerPageOptions: [8, 15, 30]
               }"
+              :mobile="false"
               id="datatable"
             >
               <template v-slot:[`item.to_area`]="{ item }">
                 <v-row justify="center">
                   <div v-if="item.archived">
                     <v-col cols="auto">
-                      <div>
+                      <div class="text-xs-caption text-sm-caption text-sm-body-2 text-md-body-2 text-lg-body-2 text-xl-body-1">
                         ARCHIVADO
                       </div>
                     </v-col>
@@ -53,6 +52,7 @@
                           rounded
                           color="green darken-1"
                           @click="$refs.dialogProcedureFlow.showDialog(item, procedureType(item.procedure_type_id))"
+                          small
                         >
                           Derivar
                         </v-btn>
@@ -63,45 +63,70 @@
                           rounded
                           color="orange darken-1"
                           @click="$refs.dialogProcedureRequirements.showDialog(item)"
+                          small
                         >
                           Requisitos
                         </v-btn>
                       </div>
                     </v-col>
                     <v-col cols="autp" v-else>
-                      {{ area(item.to_area) }}
+                      <div class="text-xs-caption text-sm-caption text-sm-body-2 text-md-body-2 text-lg-body-2 text-xl-body-1">
+                        {{ area(item.to_area) }}
+                      </div>
                     </v-col>
                   </div>
                 </v-row>
               </template>
               <template v-slot:[`item.incoming_at`]="{ item }">
-                {{ item.incoming_at ? item.incoming_at : item.created_at | moment('L LT') }}
+                <div class="text-xs-caption text-sm-caption text-sm-body-2 text-md-body-2 text-lg-body-2 text-xl-body-1">
+                  {{ item.incoming_at ? item.incoming_at : item.created_at | moment('L LT') }}
+                </div>
               </template>
               <template v-slot:[`item.outgoing_at`]="{ item }">
-                <div v-if="item.archived">
+                <div v-if="item.archived" class="text-xs-caption text-sm-caption text-sm-body-2 text-md-body-2 text-lg-body-2 text-xl-body-1">
                   {{ item.updated_at | moment('L LT') }}
                 </div>
-                <div v-else-if="!item.outgoing_at">
+                <div v-else-if="!item.outgoing_at" class="text-xs-caption text-sm-caption text-sm-body-2 text-md-body-2 text-lg-body-2 text-xl-body-1">
                   -
                 </div>
-                <div v-else>
+                <div v-else class="text-xs-caption text-sm-caption text-sm-body-2 text-md-body-2 text-lg-body-2 text-xl-body-1">
                   {{ item.outgoing_at | moment('L LT') }}
                 </div>
               </template>
               <template v-slot:[`item.from_area`]="{ item }" v-if="$store.getters.user.role != 'RECEPCIÓN'">
-                {{ area(item.from_area ? item.from_area : 0) }}
+                <div class="text-xs-caption text-sm-caption text-sm-body-2 text-md-body-2 text-lg-body-2 text-xl-body-1">
+                  {{ area(item.from_area ? item.from_area : 0) }}
+                </div>
+              </template>
+              <template v-slot:[`item.code`]="{ item }">
+                <div class="text-xs-caption text-sm-caption text-sm-body-2 text-md-body-2 text-lg-body-2 text-xl-body-1">
+                  {{ item.code }}
+                </div>
+              </template>
+              <template v-slot:[`item.origin`]="{ item }">
+                <div class="text-xs-caption text-sm-caption text-sm-body-2 text-md-body-2 text-lg-body-2 text-xl-body-1">
+                  {{ item.origin }}
+                </div>
+              </template>
+              <template v-slot:[`item.detail`]="{ item }">
+                <div class="text-xs-caption text-sm-caption text-sm-body-2 text-md-body-2 text-lg-body-2 text-xl-body-1">
+                  {{ item.detail }}
+                </div>
               </template>
               <template v-slot:[`item.procedure_type_id`]="{ item }">
-                {{ procedureType(item.procedure_type_id) }}
+                <div class="text-xs-caption text-sm-caption text-sm-body-2 text-md-body-2 text-lg-body-2 text-xl-body-1">
+                  {{ procedureType(item.procedure_type_id) }}
+                </div>
               </template>
               <template v-slot:[`item.actions`]="{ item }">
-                <v-container style="width: 35em;">
-                  <v-row dense justify="space-around">
+                <v-container style="width: 30em;">
+                  <v-row dense no-gutters justify="space-around">
                     <v-col cols="auto" v-if="!item.has_flowed && item.owner && !item.archived && $store.getters.user.permissions.includes('EDITAR TRÁMITE')">
                       <v-btn
                         dark
                         color="blue"
                         @click="$refs.dialogProcedureForm.showDialog(item)"
+                        small
                       >
                         Editar
                         <v-icon right>
@@ -113,8 +138,9 @@
                       <v-btn
                         color="amber"
                         @click="$refs.dialogProcedureAttachments.showDialog(item, procedureType(item.procedure_type_id))"
+                        small
                       >
-                        <div>
+                        <div style="font-size: 10px;">
                           <div>
                             Archivos
                           </div>
@@ -132,6 +158,7 @@
                         dark
                         color="green"
                         @click="$refs.dialogProcedureTimeline.showDialog(item)"
+                        small
                       >
                         Derivaciones
                         <v-icon right>
@@ -144,6 +171,7 @@
                         dark
                         color="red"
                         @click="$refs.dialogProcedureArchive.showDialog(item)"
+                        small
                       >
                         Archivar
                         <v-icon right>
@@ -156,6 +184,7 @@
                         dark
                         color="red"
                         @click="$refs.dialogProcedureDelete.showDialog(item)"
+                        small
                       >
                         Eliminar
                         <v-icon right>
@@ -230,47 +259,54 @@ export default {
           align: 'center',
           sortable: false,
           value: 'incoming_at',
+          width: '12em',
         }, {
           text: 'Sección/Origen',
           align: 'center',
           sortable: false,
           value: 'from_area',
+          width: '14em',
         }, {
           text: 'Código de hoja de ruta',
           align: 'center',
           sortable: false,
           value: 'code',
+          width: '14em',
         }, {
           text: 'Tipo de trámite',
           align: 'center',
           sortable: false,
           value: 'procedure_type_id',
+          width: '14em',
         }, {
           text: 'Procedencia',
           align: 'center',
           sortable: false,
           value: 'origin',
+          width: '18em',
         }, {
           text: 'Detalle/Asunto',
           align: 'center',
           sortable: false,
           value: 'detail',
+          width: '25em',
         }, {
           text: 'Sección/Destino',
           align: 'center',
           sortable: false,
           value: 'to_area',
+          width: '14em',
         }, {
           text: 'Fecha de derivación',
           align: 'center',
           sortable: false,
           value: 'outgoing_at',
+          width: '12em',
         }, {
           text: 'Acciones',
           align: 'center',
           sortable: false,
           value: 'actions',
-          width: '35em',
         },
       ]
       if (this.$store.getters.user.role == 'RECEPCIÓN') {

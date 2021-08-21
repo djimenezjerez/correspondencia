@@ -16,9 +16,7 @@
         ></v-progress-linear>
       </template>
       <v-toolbar dense dark color="secondary">
-        <v-toolbar-title>
-          {{ this.edit ? 'Editar Trámite' : 'Agregar Trámite' }}
-        </v-toolbar-title>
+        <ToolBarTitle :title="edit ? 'Editar Trámite' : 'Agregar Trámite'"/>
         <v-spacer></v-spacer>
         <v-btn
           icon

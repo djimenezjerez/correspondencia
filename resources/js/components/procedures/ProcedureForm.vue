@@ -16,9 +16,7 @@
         ></v-progress-linear>
       </template>
       <v-toolbar dense dark color="secondary">
-        <v-toolbar-title>
-          {{ this.edit ? 'Editar hoja de ruta' : 'Agregar hoja de ruta' }}
-        </v-toolbar-title>
+        <ToolBarTitle :title="edit ? 'Editar hoja de ruta' : 'Agregar hoja de ruta'"/>
         <v-spacer></v-spacer>
         <v-btn
           icon

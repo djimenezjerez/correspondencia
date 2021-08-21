@@ -19,9 +19,7 @@
               color="secondary"
               dark
             >
-              <v-toolbar-title>
-                Datos del usuario
-              </v-toolbar-title>
+              <ToolBarTitle title="Datos del usuario"/>
             </v-toolbar>
             <v-card-text>
               <v-simple-table>
@@ -86,9 +84,7 @@
               color="secondary"
               dark
             >
-              <v-toolbar-title>
-                Cambiar contraseña
-              </v-toolbar-title>
+              <ToolBarTitle title="Cambiar contraseña"/>
             </v-toolbar>
             <div class="px-5 pb-5">
               <validation-observer ref="passwordObserver" v-slot="{ invalid }">

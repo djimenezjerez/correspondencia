@@ -7,9 +7,7 @@
             color="secondary"
             dark
           >
-            <v-toolbar-title>
-              Requisitos
-            </v-toolbar-title>
+            <ToolBarTitle title="Requisitos"/>
             <v-spacer></v-spacer>
             <v-divider class="mx-5" vertical></v-divider>
             <AddButton text="Agregar requisito" @click="$refs.dialogRequirementForm.showDialog()"/>
@@ -36,13 +34,14 @@
               id="datatable"
             >
               <template v-slot:[`item.actions`]="{ item }">
-                <v-container style="width: 20em;">
-                  <v-row dense justify="space-around">
+                <v-container style="width: 18em;">
+                  <v-row dense no-gutters justify="space-around">
                     <v-col cols="auto">
                       <v-btn
                         dark
                         color="blue"
                         @click="$refs.dialogRequirementForm.showDialog(item)"
+                        small
                       >
                         Editar
                         <v-icon right>
@@ -55,6 +54,7 @@
                         dark
                         color="red"
                         @click="$refs.dialogRequirementDelete.showDialog(item)"
+                        small
                       >
                         Eliminar
                         <v-icon right>

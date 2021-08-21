@@ -22,7 +22,7 @@
               ¿Seguro que desea {{ user.is_active ? 'desactivar' : 'reactivar' }} al usuario:
             </div>
             <div>
-              {{ user.name }}?
+              {{ [user.name, user.last_name].join(' ') }}?
             </div>
           </div>
         </v-card-text>

@@ -16,9 +16,7 @@
         ></v-progress-linear>
       </template>
       <v-toolbar dense dark color="secondary">
-        <v-toolbar-title>
-          Registro de derivaciones
-        </v-toolbar-title>
+        <ToolBarTitle title="Registro de derivaciones"/>
         <v-spacer></v-spacer>
         <v-btn
           icon

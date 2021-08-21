@@ -16,7 +16,7 @@
         ></v-progress-linear>
       </template>
       <v-toolbar dense dark color="secondary">
-        <v-toolbar-title>Seguimiento de hoja de ruta</v-toolbar-title>
+        <ToolBarTitle title="Seguimiento de hoja de ruta"/>
         <v-spacer></v-spacer>
         <v-btn
           icon
@@ -28,101 +28,124 @@
         </v-btn>
       </v-toolbar>
       <div class="px-5 pb-5">
-        <v-container>
-          <v-row
-            justify="center"
-            no-gutters
+        <v-row
+          justify="center"
+          no-gutters
+        >
+          <v-col
+            cols="auto"
+            xl="5"
+            lg="5"
+            md="5"
+            sm="5"
+            xs="12"
+            offset="1"
+            offset-xs="0"
           >
-            <v-col
-              cols="12"
-            >
-              <v-img
-                class="mt-4"
-                contain
-                :max-height="imageHeight"
-                :height="imageHeight"
-                src="/img/logo.png"
-              ></v-img>
-            </v-col>
-            <v-col cols="12">
-
-              <validation-observer ref="searchbserver" v-slot="{ invalid }">
-                <form v-on:submit.prevent="submit">
-                  <v-card-text>
-                    <validation-provider
-                      v-slot="{ errors }"
-                      name="code"
-                      rules="required|min:3"
-                    >
-                      <v-text-field
-                        label="Código de hoja de ruta"
-                        v-model="searchForm.code"
-                        data-vv-name="code"
-                        :error-messages="errors"
-                        prepend-icon="mdi-barcode-scan"
-                        autofocus
-                        v-if="timeline.length == 0"
-                      ></v-text-field>
-                      <v-simple-table class="mt-3" v-else>
-                        <template v-slot:default>
-                          <tbody>
-                            <tr>
-                              <td class="text-right text-body-1">Hoja de ruta: </td>
-                              <td class="font-weight-bold text-body-1">{{ procedure.code }}</td>
-                            </tr>
-                            <tr>
-                              <td class="text-right text-body-1">Tipo de trámite: </td>
-                              <td class="font-weight-bold text-body-1">{{ procedure.procedure_type.name }}</td>
-                            </tr>
-                            <tr>
-                              <td class="text-right text-body-1">Nombre: </td>
-                              <td class="font-weight-bold text-body-1">{{ procedure.origin }}</td>
-                            </tr>
-                            <tr>
-                              <td class="text-right text-body-1">Su trámite se encuentra en: </td>
-                              <td class="font-weight-bold text-body-1">{{ timeline[0].to_area }}</td>
-                            </tr>
-                          </tbody>
-                        </template>
-                      </v-simple-table>
-                    </validation-provider>
-                    <v-divider></v-divider>
-                    <div class="text-center mt-6 text-h6" v-show="timeline.length > 0">
-                      Detalle de derivaciones
-                    </div>
-                    <Timeline :timeline="timeline" v-show="timeline.length > 0"/>
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-btn
-                      block
-                      type="submit"
-                      color="primary"
-                      :disabled="invalid || loading"
+            <v-img
+              class="mt-4"
+              contain
+              :max-height="imageHeight"
+              :height="imageHeight"
+              src="/img/logo.png"
+            ></v-img>
+          </v-col>
+          <v-col
+            cols="auto"
+            xl="5"
+            lg="5"
+            md="5"
+            sm="5"
+            xs="12"
+            :class="$vuetify.breakpoint.xs ? '' : 'mt-10 pr-6'"
+          >
+            <div class="text-center text-md-body-2 text-lg-body-2 text-xl-body-2 font-weight-normal black--text font-weight-medium" :style="{ 'font-size': $vuetify.breakpoint.sm ? '10px' : ($vuetify.breakpoint.xs ? '10px' : '10px') }">
+              <div>
+                Asociacion Nacional de Suboficiales y Sargentos de las Fuerzas Armadas del Estado
+              </div>
+              <div>
+                &quot;ASCINALSS&quot;
+              </div>
+            </div>
+          </v-col>
+          <v-col cols="1" v-if="!$vuetify.breakpoint.xs"></v-col>
+          <v-col cols="12" class="pt-0">
+            <validation-observer ref="searchbserver" v-slot="{ invalid }">
+              <form v-on:submit.prevent="submit">
+                <v-card-text>
+                  <validation-provider
+                    v-slot="{ errors }"
+                    name="code"
+                    rules="required|min:3"
+                  >
+                    <v-text-field
+                      label="Código de hoja de ruta"
+                      v-model="searchForm.code"
+                      data-vv-name="code"
+                      :error-messages="errors"
+                      prepend-icon="mdi-barcode-scan"
+                      autofocus
                       v-if="timeline.length == 0"
-                    >
-                      <v-icon class="mr-2">
-                        mdi-magnify
-                      </v-icon>
-                      Buscar
-                    </v-btn>
-                    <v-btn
-                      block
-                      color="primary"
-                      :disabled="loading"
-                      v-else
-                      @click.stop="showDialog"
-                    >
-                      <v-icon class="mr-2">
-                        mdi-autorenew
-                      </v-icon>
-                      Nueva búsqueda
-                    </v-btn>
-                  </v-card-actions>
-                </form>
-              </validation-observer>
-            </v-col>
-          </v-row>
-        </v-container>
+                    ></v-text-field>
+                    <v-simple-table class="mt-3" v-else>
+                      <template v-slot:default>
+                        <tbody>
+                          <tr>
+                            <td class="text-right text-xs-caption text-sm-caption text-md-body-2 text-lg-body-1 text-xl-body-1">Hoja de ruta: </td>
+                            <td class="font-weight-bold text-xs-caption text-sm-caption text-md-body-2 text-lg-body-1 text-xl-body-1">{{ procedure.code }}</td>
+                          </tr>
+                          <tr>
+                            <td class="text-right text-xs-caption text-sm-caption text-md-body-2 text-lg-body-1 text-xl-body-1">Tipo de trámite: </td>
+                            <td class="font-weight-bold text-xs-caption text-sm-caption text-md-body-2 text-lg-body-1 text-xl-body-1">{{ procedure.procedure_type.name }}</td>
+                          </tr>
+                          <tr>
+                            <td class="text-right text-xs-caption text-sm-caption text-md-body-2 text-lg-body-1 text-xl-body-1">Nombre: </td>
+                            <td class="font-weight-bold text-xs-caption text-sm-caption text-md-body-2 text-lg-body-1 text-xl-body-1">{{ procedure.origin }}</td>
+                          </tr>
+                          <tr>
+                            <td class="text-right text-xs-caption text-sm-caption text-md-body-2 text-lg-body-1 text-xl-body-1">Su trámite se encuentra en: </td>
+                            <td class="font-weight-bold text-xs-caption text-sm-caption text-md-body-2 text-lg-body-1 text-xl-body-1">{{ timeline[0].to_area }}</td>
+                          </tr>
+                        </tbody>
+                      </template>
+                    </v-simple-table>
+                  </validation-provider>
+                  <v-divider></v-divider>
+                  <div class="text-center mt-6 text-xs-subtitle-2 text-sm-subtitle-2 text-sm-subtitle-1 text-lg-h6 text-xl-h6" v-show="timeline.length > 0">
+                    Detalle de derivaciones
+                  </div>
+                  <Timeline :timeline="timeline" v-show="timeline.length > 0"/>
+                </v-card-text>
+                <v-card-actions>
+                  <v-btn
+                    block
+                    type="submit"
+                    color="primary"
+                    :disabled="invalid || loading"
+                    v-if="timeline.length == 0"
+                  >
+                    <v-icon class="mr-2">
+                      mdi-magnify
+                    </v-icon>
+                    Buscar
+                  </v-btn>
+                  <v-btn
+                    block
+                    color="primary"
+                    :disabled="loading"
+                    v-else
+                    @click.stop="showDialog"
+                  >
+                    <v-icon class="mr-2">
+                      mdi-autorenew
+                    </v-icon>
+                    Nueva búsqueda
+                  </v-btn>
+                </v-card-actions>
+              </form>
+            </validation-observer>
+          </v-col>
+        </v-row>
       </div>
     </v-card>
   </v-dialog>
@@ -199,3 +222,18 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+tbody {
+  tr:hover {
+    background-color: transparent !important;
+  }
+};
+// table {
+//   table-layout: fixed;
+//   width: 100%;
+// };
+// td {
+//   width: 50%;
+// };
+</style>

@@ -16,9 +16,7 @@
         ></v-progress-linear>
       </template>
       <v-toolbar dense dark color="secondary">
-        <v-toolbar-title>
-          Revisión de requisitos
-        </v-toolbar-title>
+        <ToolBarTitle title="Revisión de requisitos"/>
         <v-spacer></v-spacer>
         <v-btn
           icon

@@ -7,9 +7,7 @@
             color="secondary"
             dark
           >
-            <v-toolbar-title>
-              Trámites
-            </v-toolbar-title>
+            <ToolBarTitle title="Trámites"/>
             <v-spacer></v-spacer>
             <v-divider class="mx-5" vertical></v-divider>
             <AddButton text="Agregar trámite" @click="$refs.dialogProcedureTypeForm.showDialog()"/>
@@ -46,13 +44,14 @@
                 </ol>
               </template>
               <template v-slot:[`item.actions`]="{ item }">
-                <v-container style="width: 20em;">
-                  <v-row dense justify="space-around">
+                <v-container style="width: 18em;">
+                  <v-row dense no-gutters justify="space-around">
                     <v-col cols="auto">
                       <v-btn
                         dark
                         color="blue"
                         @click="$refs.dialogProcedureTypeForm.showDialog(item)"
+                        small
                       >
                         Editar
                         <v-icon right>
@@ -65,6 +64,7 @@
                         dark
                         color="red"
                         @click="$refs.dialogProcedureTypeDelete.showDialog(item)"
+                        small
                       >
                         Eliminar
                         <v-icon right>

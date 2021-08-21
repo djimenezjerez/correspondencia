@@ -16,7 +16,7 @@
         ></v-progress-linear>
       </template>
       <v-toolbar dense dark color="secondary">
-        <v-toolbar-title>Bienvenido</v-toolbar-title>
+        <ToolBarTitle title="Bienvenido"/>
         <v-spacer></v-spacer>
         <v-btn
           icon
@@ -33,7 +33,14 @@
           no-gutters
         >
           <v-col
-            cols="12"
+            cols="auto"
+            xl="5"
+            lg="5"
+            md="5"
+            sm="5"
+            xs="12"
+            offset="1"
+            offset-xs="0"
           >
             <v-img
               class="mt-4"
@@ -43,7 +50,26 @@
               src="/img/logo.png"
             ></v-img>
           </v-col>
-          <v-col cols="12">
+          <v-col
+            cols="auto"
+            xl="5"
+            lg="5"
+            md="5"
+            sm="5"
+            xs="12"
+            :class="$vuetify.breakpoint.xs ? '' : 'mt-10 pr-6'"
+          >
+            <div class="text-center text-md-body-2 text-lg-body-2 text-xl-body-2 font-weight-normal black--text font-weight-medium" :style="{ 'font-size': $vuetify.breakpoint.sm ? '10px' : ($vuetify.breakpoint.xs ? '10px' : '10px') }">
+              <div>
+                Asociacion Nacional de Suboficiales y Sargentos de las Fuerzas Armadas del Estado
+              </div>
+              <div>
+                &quot;ASCINALSS&quot;
+              </div>
+            </div>
+          </v-col>
+          <v-col cols="1" v-if="!$vuetify.breakpoint.xs"></v-col>
+          <v-col cols="12" class="pt-0">
             <validation-observer ref="loginObserver" v-slot="{ invalid }">
               <form v-on:submit.prevent="submit">
                 <v-card-text>
@@ -114,10 +140,10 @@ export default {
   computed: {
     imageHeight() {
       switch (this.$vuetify.breakpoint.name) {
-        case 'xs': return '80px'
+        case 'xs': return '70px'
         case 'sm': return '110px'
-        case 'md': return '140px'
-        default: return '150'
+        case 'md': return '130px'
+        default: return '140'
       }
     },
   },

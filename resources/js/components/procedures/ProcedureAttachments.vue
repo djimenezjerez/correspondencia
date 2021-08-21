@@ -16,9 +16,7 @@
         ></v-progress-linear>
       </template>
       <v-toolbar dense dark color="secondary">
-        <v-toolbar-title>
-          Archivos adjuntos
-        </v-toolbar-title>
+        <ToolBarTitle title="Archivos adjuntos"/>
         <v-spacer></v-spacer>
         <v-btn
           icon
