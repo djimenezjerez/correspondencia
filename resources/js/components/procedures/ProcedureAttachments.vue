@@ -66,6 +66,7 @@
                           <v-btn
                             icon
                             :disabled="loading"
+                            v-if="procedure.owner && $store.getters.user.permissions.includes('ADJUNTAR ARCHIVO')"
                             @click="deleteAttachment(file)"
                           >
                             <v-icon color="error">
@@ -105,6 +106,7 @@
                       v-model="files"
                       data-vv-name="attachments"
                       :error-messages="errors"
+                      color="green darken-1"
                     ></v-file-input>
                   </validation-provider>
                 </v-col>
@@ -123,6 +125,7 @@
                   </v-btn>
                 </v-col>
               </v-row>
+              <div v-show="error" class="text-center red--text text-xl-h6 text-lg-subtitle-1 text-md-subtitle-1 text-sm-subtitle-2 text-xs-body-1 mt-2">{{ errorMessage }}</div>
             </v-card-text>
           </form>
         </validation-observer>
@@ -151,6 +154,8 @@ export default {
     return {
       dialog: false,
       loading: true,
+      error: false,
+      errorMessage: '',
       procedure: {
         id: null,
       },
@@ -211,7 +216,8 @@ export default {
     },
     async deleteAttachment(file) {
       if (file.user_id != this.$store.getters.user.id) {
-        this.$toast.error('El archivo fue cargado por otro usuario, no se puede eliminar')
+        this.error = true
+        this.errorMessage = 'El archivo fue cargado por otro usuario, no se puede eliminar'
       } else {
         try {
           this.loading = true
@@ -238,6 +244,8 @@ export default {
       this.procedure = {
         ...procedure
       }
+      this.error = false
+      this.errorMessage = ''
       this.fetchAttachments(procedure.id)
       this.files = null
       this.procedureFiles = []
@@ -260,6 +268,8 @@ export default {
     },
     async submit() {
       try {
+        this.error = false
+        this.errorMessage = ''
         let valid = await this.$refs.procedureFilesObserver.validate()
         if (valid) {
           this.loading = true
@@ -274,17 +284,16 @@ export default {
             formData.append('attachments[]', file, file.name)
           })
           let response = await axios.post(`procedure/${this.procedure.id}/attachment`, formData, settings)
-          this.files = null
+          this.files = []
           this.$nextTick(() => {
             this.$refs.procedureFilesObserver.reset()
           })
           this.$toast.info(response.data.message)
-          if (response.data.payload.files.some(o => o.success)) {
-            this.fetchAttachments(this.procedure.id)
-          }
+          this.fetchAttachments(this.procedure.id)
         }
       } catch(error) {
-        this.$toast.error(error.response.data.message)
+        this.error = true
+        this.errorMessage = error.response.data.message
         this.$refs.procedureFilesObserver.reset()
         if ('errors' in error.response.data) {
           if (!('attachments' in error.response.data.errors) || error.response.data.errors.length > 1) {
@@ -304,16 +313,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  tbody {
-    tr:hover {
-      background-color: transparent !important;
-    }
-  };
-  // table {
-  //   table-layout: fixed;
-  //   width: 100%;
-  // };
-  // td {
-  //   width: 50%;
+tbody {
+  tr:hover {
+    background-color: transparent !important;
+  }
+};
+// table {
+//   table-layout: fixed;
+//   width: 100%;
+// };
+// td {
+//   width: 50%;
   // };
 </style>
