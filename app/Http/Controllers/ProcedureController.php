@@ -100,7 +100,7 @@ class ProcedureController extends Controller
             return response()->json([
                 'message' => 'Hoja de ruta inválida',
                 'errors' => [
-                    'code' => ['La hoja de ruta ya existe, sugerencia: '.ProcedureType::find($request->procedure_type_id)->next_code]
+                    'code' => ['La hoja de ruta ya existe']
                 ]
             ], 400);
         }
@@ -161,7 +161,7 @@ class ProcedureController extends Controller
             return response()->json([
                 'message' => 'Hoja de ruta inválida',
                 'errors' => [
-                    'code' => ['La hoja de ruta ya existe, sugerencia: '.ProcedureType::find($procedure->procedure_type_id)->next_code]
+                    'code' => ['La hoja de ruta ya existe']
                 ]
             ], 400);
         }
