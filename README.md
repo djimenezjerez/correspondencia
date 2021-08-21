@@ -28,11 +28,11 @@ Los usuarios tienen acceso a una o más funciones de los módulos listados anter
     * Editar Trámites (recién creados y sin derivar)
     * Eliminar Trámites (recién creados y sin derivar)
     * Derivar Trámites (hacia todas las secciones)
-    * Adjuntar Archivos (solo si el trámite se encuentra en su bandeja)
+    * Adjuntar Archivos (solo si el trámite se encuentra en su bandeja y no existe otro archivo con el mismo nombre asociado al trámite)
 3. El rol de VERIFICADOR cuenta con permisos para:
     * Derivar Trámites (hacia secciones predefinidas)
     * Archivar Trámites
-    * Adjuntar Archivos (solo si el trámite se encuentra en su bandeja)
+    * Adjuntar Archivos (solo si el trámite se encuentra en su bandeja y no existe otro archivo con el mismo nombre asociado al trámite)
 4. Y por último el rol SECRETARÍA cuenta con permisos para:
     * Derivar Trámite (hacia secciones predefinidas)
     * Archivar Trámite
@@ -56,6 +56,7 @@ El encargado de administrar usuarios, para el caso sea el usuario que cuenta con
 * Cuando se crean usuarios el sistema asigna un nombre de usuario parcial que se valida al momento de enviar el formulario para evitar duplicidad de nombres de usuarios, sin embaro este campo es editable.
 * La primera contraseña de cada usuario es el dato del documento de identidad, siendo posible el cambio de contraseña por cada usuario en la vista de PERFIL o por medio de un usuario administrador en el formulario de edición de usuarios.
 * Cuando se crean hojas de ruta el sistema asigna una hoja de ruta parcial que se valida al momento de enviar el formulario para evitar duplicidad de códigos de hojas de ruta, sin embargo este campo es editable.
+* Los contadores que el sistema utiliza para generar códigos de hojas de ruta se reinician anualmente siempre y cuando el servidor tenga habilitada las tareas programadas de Cron y se hayan seguido los pasos indicados en la [documentación de Laravel](https://laravel.com/docs/8.x/scheduling#running-the-scheduler).
 
 ## REQUISITOS DEL SERVIDOR
 
@@ -109,4 +110,4 @@ $ yarn prod
 $ php artisan db:seed --class=DatabaseSeeder
 ```
 
-Con ello ya se puede ingresar al navegador y apuntar la URL a la dirección del dominio del servidor donde se instaló el sistema.
+Concluyendo estos pasos, se puede ingresar al navegador y apuntar la URL a la dirección del dominio del servidor donde se instaló el sistema.
