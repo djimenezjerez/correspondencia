@@ -116,12 +116,12 @@ export default {
       headers: [
         {
           text: 'Nombre',
-          align: 'start',
+          align: 'center',
           sortable: true,
           value: 'name',
         }, {
           text: 'Apellido',
-          align: 'start',
+          align: 'center',
           sortable: true,
           value: 'last_name',
         }, {
@@ -156,7 +156,7 @@ export default {
           value: 'phone',
         }, {
           text: 'Email',
-          align: 'start',
+          align: 'center',
           sortable: false,
           value: 'email',
         }, {

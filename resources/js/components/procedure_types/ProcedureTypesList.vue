@@ -115,12 +115,12 @@ export default {
       headers: [
         {
           text: 'Nombre',
-          align: 'start',
+          align: 'center',
           sortable: true,
           value: 'name',
         }, {
           text: 'Requisitos',
-          align: 'start',
+          align: 'center',
           sortable: false,
           value: 'requirements',
         }, {

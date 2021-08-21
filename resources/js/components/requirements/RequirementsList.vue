@@ -104,7 +104,7 @@ export default {
       headers: [
         {
           text: 'Nombre',
-          align: 'start',
+          align: 'center',
           sortable: true,
           value: 'name',
         }, {
