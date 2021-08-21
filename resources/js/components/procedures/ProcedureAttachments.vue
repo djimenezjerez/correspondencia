@@ -48,17 +48,33 @@
                     SIN ARCHIVOS ADJUNTOS
                   </li>
                   <li v-for="(file, index) in procedureFiles" :key="index">
-                    <v-btn
-                      text
-                      :disabled="loading"
-                      @click="downloadFile(file)"
-                      @contextmenu="showOptions($event, file.id)"
-                    >
-                      <v-icon class="mr-1" :color="getExtension(file.filename).color">
-                        {{ getExtension(file.filename).icon }}
-                      </v-icon>
-                      {{ file.filename }}
-                    </v-btn>
+                    <v-container>
+                      <v-row no-gutters>
+                        <v-col cols="10" class="text-left">
+                          <v-btn
+                            text
+                            :disabled="loading"
+                            @click="downloadFile(file)"
+                          >
+                            <v-icon class="mr-1" :color="getExtension(file.filename).color">
+                              {{ getExtension(file.filename).icon }}
+                            </v-icon>
+                            {{ file.filename }}
+                          </v-btn>
+                        </v-col>
+                        <v-col cols="2" class="text-right">
+                          <v-btn
+                            icon
+                            :disabled="loading"
+                            @click="deleteAttachment(file)"
+                          >
+                            <v-icon color="error">
+                              mdi-delete
+                            </v-icon>
+                          </v-btn>
+                        </v-col>
+                      </v-row>
+                    </v-container>
                   </li>
                 </ul>
               </td>
@@ -96,13 +112,14 @@
                   <v-btn
                     type="submit"
                     color="warning"
-                    :x-small="$vuetify.breakpoint.xs || $vuetify.breakpoint.sm"
+                    :small="$vuetify.breakpoint.sm"
+                    :x-small="$vuetify.breakpoint.xs"
                     :disabled="invalid || loading"
                   >
-                    <v-icon left>
-                      mdi-upload
+                    Subir
+                    <v-icon right size="25">
+                      mdi-file-pdf
                     </v-icon>
-                    Enviar
                   </v-btn>
                 </v-col>
               </v-row>
@@ -124,26 +141,6 @@
         </v-card-actions>
       </div>
     </v-card>
-    <v-menu
-      v-model="showMenu"
-      :position-x="x"
-      :position-y="y"
-      absolute
-      offset-y
-    >
-      <v-list dense>
-        <v-list-item @click="deleteAttachment" :disabled="loading">
-          <v-icon
-            color="error"
-            class="mr-1"
-            :x-small="$vuetify.breakpoint.xs || $vuetify.breakpoint.sm"
-          >
-            mdi-close
-          </v-icon>
-          <div class="text-md-body-2 text-sm-body-1 text-xs-caption">ELIMINAR</div>
-        </v-list-item>
-      </v-list>
-    </v-menu>
   </v-dialog>
 </template>
 
@@ -161,7 +158,6 @@ export default {
       procedureFiles: [],
       files: null,
       showMenu: false,
-      fileSelected: null,
       x: 0,
       y: 0,
     }
@@ -213,28 +209,20 @@ export default {
           }
       }
     },
-    async deleteAttachment() {
-      try {
-        this.loading = true
-        const response = await axios.delete(`procedure/${this.procedure.id}/attachment/${this.fileSelected}`)
-        this.$toast.info(response.data.message)
-        this.fetchAttachments(this.procedure.id)
-      } catch (error) {
-        this.$toast.error(error.response.data.message)
-      } finally {
-        this.loading = false
-      }
-    },
-    showOptions(e, fileSelected) {
-      if (!this.procedure.archived && this.procedure.owner && this.$store.getters.user.permissions.includes('ADJUNTAR ARCHIVO')) {
-        e.preventDefault()
-        this.fileSelected = fileSelected
-        this.showMenu = false
-        this.x = e.clientX
-        this.y = e.clientY
-        this.$nextTick(() => {
-          this.showMenu = true
-        })
+    async deleteAttachment(file) {
+      if (file.user_id != this.$store.getters.user.id) {
+        this.$toast.error('El archivo fue cargado por otro usuario, no se puede eliminar')
+      } else {
+        try {
+          this.loading = true
+          const response = await axios.delete(`procedure/${this.procedure.id}/attachment/${file.id}`)
+          this.$toast.info(response.data.message)
+          this.fetchAttachments(this.procedure.id)
+        } catch (error) {
+          this.$toast.error(error.response.data.message)
+        } finally {
+          this.loading = false
+        }
       }
     },
     closeDialog() {
@@ -251,7 +239,6 @@ export default {
         ...procedure
       }
       this.fetchAttachments(procedure.id)
-      this.fileSelected = null
       this.files = null
       this.procedureFiles = []
       this.procedureType = procedureType
@@ -297,6 +284,7 @@ export default {
           }
         }
       } catch(error) {
+        this.$toast.error(error.response.data.message)
         this.$refs.procedureFilesObserver.reset()
         if ('errors' in error.response.data) {
           if (!('attachments' in error.response.data.errors) || error.response.data.errors.length > 1) {

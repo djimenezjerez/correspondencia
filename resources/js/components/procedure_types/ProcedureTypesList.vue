@@ -33,7 +33,7 @@
               :footer-props="{
                 itemsPerPageOptions: [8, 15, 30]
               }"
-              class="elevation-1"
+              id="datatable"
             >
               <template v-slot:[`item.requirements`]="{ item }" v-if="requirements.length">
                 <ol class="my-2">
@@ -46,48 +46,35 @@
                 </ol>
               </template>
               <template v-slot:[`item.actions`]="{ item }">
-                <v-row justify="center">
-                  <v-col cols="6">
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                          v-on="on"
-                          v-bind="attrs"
-                          text
-                          icon
-                          @click="$refs.dialogProcedureTypeForm.showDialog(item)"
-                        >
-                          <v-icon
-                            color="info"
-                          >
-                            mdi-pencil
-                          </v-icon>
-                        </v-btn>
-                      </template>
-                      <span>Editar</span>
-                    </v-tooltip>
-                  </v-col>
-                  <v-col cols="6" v-if="item.total_procedures == 0">
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                          v-on="on"
-                          v-bind="attrs"
-                          text
-                          icon
-                          @click="$refs.dialogProcedureTypeDelete.showDialog(item)"
-                        >
-                          <v-icon
-                            color="error"
-                          >
-                            mdi-close
-                          </v-icon>
-                        </v-btn>
-                      </template>
-                      <span>Eliminar</span>
-                    </v-tooltip>
-                  </v-col>
-                </v-row>
+                <v-container>
+                  <v-row dense justify="center">
+                    <v-col cols="auto">
+                      <v-btn
+                        dark
+                        color="blue"
+                        @click="$refs.dialogProcedureTypeForm.showDialog(item)"
+                      >
+                        Editar
+                        <v-icon right>
+                          mdi-pencil
+                        </v-icon>
+                      </v-btn>
+                    </v-col>
+                    <v-col cols="auto">
+                      <v-btn
+                        dark
+                        color="red"
+                        @click="$refs.dialogProcedureTypeDelete.showDialog(item)"
+                        v-if="item.total_procedures == 0"
+                      >
+                        Eliminar
+                        <v-icon right>
+                          mdi-delete
+                        </v-icon>
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                </v-container>
               </template>
             </v-data-table>
           </v-card-text>
@@ -150,6 +137,10 @@ export default {
         },
       ],
     }
+  },
+  mounted() {
+    const table = document.getElementById('datatable').getElementsByTagName('table')[0]
+    table.setAttribute('class', 'datatables')
   },
   created() {
     this.fetchProcedureTypes()

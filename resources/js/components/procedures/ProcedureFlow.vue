@@ -97,7 +97,7 @@ export default {
   data: function() {
     return {
       dialog: false,
-      loading: true,
+      loading: false,
       procedure: {},
       selectedArea: null,
       procedureType: null,

@@ -33,7 +33,10 @@ const vuetify = new Vuetify({
 })
 
 Vue.use(VuetifyToast, {
-  $vuetify: vuetify.framework
+  $vuetify: vuetify.framework,
+  timeout: 5000,
+  x: 'right',
+  y: 'bottom',
 })
 
 export default vuetify

@@ -34,33 +34,27 @@ class AttachmentController extends Controller
      */
     public function store(AttachmentRequest $request, Procedure $procedure)
     {
-        try {
-            $files = [];
-            foreach ($request->file('attachments') as $file) {
-                $name = trim(mb_strtoupper($file->getClientOriginalName()));
-                $path = 'uploads/procedures/'.$procedure->id.'/attachments';
-                $file_stored = $procedure->attachments()->where('filename', $name)->where('path', $path)->first();
-                if ($file_stored) {
-                    $files[] = $file_stored->setAttribute('success', false);
-                } else {
-                    $file->storeAs($path, $name);
-                    $file = $procedure->attachments()->create([
-                        'filename' => $name,
-                        'path' => $path,
-                        'user_id' => auth()->user()->id,
-                    ]);
-                    $files[] = $file->setAttribute('success', true);
-                }
+        foreach ($request->file('attachments') as $file) {
+            $name = trim(mb_strtoupper($file->getClientOriginalName()));
+            $path = 'uploads/procedures/'.$procedure->id.'/attachments';
+            $file_stored = $procedure->attachments()->where('filename', $name)->where('path', $path)->first();
+            if ($file_stored) {
+                abort(422, 'Error al cargar el archivo '.$name.' porque ya se encuentra cargado');
             }
-            return [
-                'message' => 'Archivos cargados correctamente',
-                'payload' => [
-                    'files' => $files,
-                ],
-            ];
-        } catch(\Exception $e) {
-            abort(500, 'Error al cargar los archivos');
         }
+        foreach ($request->file('attachments') as $file) {
+            $name = trim(mb_strtoupper($file->getClientOriginalName()));
+            $path = 'uploads/procedures/'.$procedure->id.'/attachments';
+            $file->storeAs($path, $name);
+            $file = $procedure->attachments()->create([
+                'filename' => $name,
+                'path' => $path,
+                'user_id' => auth()->user()->id,
+            ]);
+        }
+        return [
+            'message' => 'Archivos cargados correctamente',
+        ];
     }
 
     /**

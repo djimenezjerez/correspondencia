@@ -341,6 +341,7 @@ class ProcedureController extends Controller
     public function code(CodeRequest $request)
     {
         $procedure = Procedure::where('code', $request->code)->first();
+        $procedure->procedure_type;
         return [
             'message' => 'Datos del trámite de acuerdo a hoja de ruta',
             'payload' => [

@@ -28,55 +28,101 @@
         </v-btn>
       </v-toolbar>
       <div class="px-5 pb-5">
-        <validation-observer ref="searchbserver" v-slot="{ invalid }">
-          <form v-on:submit.prevent="submit">
-            <v-card-text>
-              <validation-provider
-                v-slot="{ errors }"
-                name="code"
-                rules="required|min:3"
-              >
-                <v-text-field
-                  label="Código de hoja de ruta"
-                  v-model="searchForm.code"
-                  data-vv-name="code"
-                  :error-messages="errors"
-                  prepend-icon="mdi-barcode-scan"
-                  :readonly="timeline.length > 0"
-                  autofocus
-                ></v-text-field>
-              </validation-provider>
-              <v-divider></v-divider>
-              <Timeline :timeline="timeline" v-show="timeline.length > 0"/>
-            </v-card-text>
-            <v-card-actions>
-              <v-btn
-                block
-                type="submit"
-                color="primary"
-                :disabled="invalid || loading"
-                v-if="timeline.length == 0"
-              >
-                <v-icon class="mr-2">
-                  mdi-magnify
-                </v-icon>
-                Buscar
-              </v-btn>
-              <v-btn
-                block
-                color="primary"
-                :disabled="loading"
-                v-else
-                @click.stop="showDialog"
-              >
-                <v-icon class="mr-2">
-                  mdi-autorenew
-                </v-icon>
-                Nueva búsqueda
-              </v-btn>
-            </v-card-actions>
-          </form>
-        </validation-observer>
+        <v-container>
+          <v-row
+            justify="center"
+            no-gutters
+          >
+            <v-col
+              cols="12"
+            >
+              <v-img
+                class="mt-4"
+                contain
+                :max-height="imageHeight"
+                :height="imageHeight"
+                src="/img/logo.png"
+              ></v-img>
+            </v-col>
+            <v-col cols="12">
+
+              <validation-observer ref="searchbserver" v-slot="{ invalid }">
+                <form v-on:submit.prevent="submit">
+                  <v-card-text>
+                    <validation-provider
+                      v-slot="{ errors }"
+                      name="code"
+                      rules="required|min:3"
+                    >
+                      <v-text-field
+                        label="Código de hoja de ruta"
+                        v-model="searchForm.code"
+                        data-vv-name="code"
+                        :error-messages="errors"
+                        prepend-icon="mdi-barcode-scan"
+                        autofocus
+                        v-if="timeline.length == 0"
+                      ></v-text-field>
+                      <v-simple-table class="mt-3" v-else>
+                        <template v-slot:default>
+                          <tbody>
+                            <tr>
+                              <td class="text-right text-body-1">Hoja de ruta: </td>
+                              <td class="font-weight-bold text-body-1">{{ procedure.code }}</td>
+                            </tr>
+                            <tr>
+                              <td class="text-right text-body-1">Tipo de trámite: </td>
+                              <td class="font-weight-bold text-body-1">{{ procedure.procedure_type.name }}</td>
+                            </tr>
+                            <tr>
+                              <td class="text-right text-body-1">Nombre: </td>
+                              <td class="font-weight-bold text-body-1">{{ procedure.origin }}</td>
+                            </tr>
+                            <tr>
+                              <td class="text-right text-body-1">Su trámite se encuentra en: </td>
+                              <td class="font-weight-bold text-body-1">{{ timeline[0].to_area }}</td>
+                            </tr>
+                          </tbody>
+                        </template>
+                      </v-simple-table>
+                    </validation-provider>
+                    <v-divider></v-divider>
+                    <div class="text-center mt-6 text-h6" v-show="timeline.length > 0">
+                      Detalle de derivaciones
+                    </div>
+                    <Timeline :timeline="timeline" v-show="timeline.length > 0"/>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-btn
+                      block
+                      type="submit"
+                      color="primary"
+                      :disabled="invalid || loading"
+                      v-if="timeline.length == 0"
+                    >
+                      <v-icon class="mr-2">
+                        mdi-magnify
+                      </v-icon>
+                      Buscar
+                    </v-btn>
+                    <v-btn
+                      block
+                      color="primary"
+                      :disabled="loading"
+                      v-else
+                      @click.stop="showDialog"
+                    >
+                      <v-icon class="mr-2">
+                        mdi-autorenew
+                      </v-icon>
+                      Nueva búsqueda
+                    </v-btn>
+                  </v-card-actions>
+                </form>
+              </validation-observer>
+            </v-col>
+          </v-row>
+        </v-container>
       </div>
     </v-card>
   </v-dialog>
@@ -94,15 +140,31 @@ export default {
     return {
       dialog: false,
       timeline: [],
+      procedure: {
+        id: null
+      },
       searchForm: {
         code: '',
       },
       loading: false,
     }
   },
+  computed: {
+    imageHeight() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs': return '80px'
+        case 'sm': return '110px'
+        case 'md': return '140px'
+        default: return '150'
+      }
+    },
+  },
   methods: {
     showDialog() {
       this.timeline = []
+      this.procedure = {
+        id: null
+      }
       this.searchForm = {
         code: '',
       }
@@ -122,6 +184,7 @@ export default {
               code: this.searchForm.code
             }
           })
+          this.procedure = response.data.payload.procedure
           response = await axios.get(`procedure/${response.data.payload.procedure.id}/flow`)
           this.timeline = response.data.payload.timeline
         }

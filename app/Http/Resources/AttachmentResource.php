@@ -18,7 +18,7 @@ class AttachmentResource extends JsonResource
             'id' => $this->id,
             'filename' => $this->filename,
             'user_id' => $this->user_id,
-            'user' => $this->user->last_name,
+            'user' => $this->user ? $this->user->last_name : '',
             'created_at' => $this->created_at,
         ];
     }

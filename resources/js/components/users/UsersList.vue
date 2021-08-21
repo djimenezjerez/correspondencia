@@ -33,6 +33,7 @@
               :footer-props="{
                 itemsPerPageOptions: [8, 15, 30]
               }"
+              id="datatable"
             >
               <template v-slot:[`item.document_type_id`]="{ item }">
                 {{ documentType(item.document_type_id) }}
@@ -44,49 +45,36 @@
                 {{ item.is_active ? 'ACTIVO' : 'INACTIVO' }}
               </template>
               <template v-slot:[`item.actions`]="{ item }">
-                <v-row justify="center">
-                  <v-col cols="6" v-if="item.is_active">
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                          v-on="on"
-                          v-bind="attrs"
-                          text
-                          icon
-                          @click="$refs.dialogUserForm.showDialog(item)"
-                        >
-                          <v-icon
-                            color="info"
-                          >
-                            mdi-pencil
-                          </v-icon>
-                        </v-btn>
-                      </template>
-                      <span>Editar</span>
-                    </v-tooltip>
-                  </v-col>
-                  <v-col cols="6">
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                          v-on="on"
-                          v-bind="attrs"
-                          text
-                          icon
-                          @click="$refs.dialogUserSwitch.showDialog(item)"
-                        >
-                          <v-icon
-                            :color="item.is_active ? 'error' : 'success'"
-                          >
-                            {{ item.is_active ? 'mdi-close' : 'mdi-restore' }}
-                          </v-icon>
-                        </v-btn>
-                      </template>
-                      <span v-if="item.is_active">Desactivar</span>
-                      <span v-else>Reactivar</span>
-                    </v-tooltip>
-                  </v-col>
-                </v-row>
+                <v-container>
+                  <v-row dense justify="center">
+                    <v-col cols="auto">
+                      <v-btn
+                        dark
+                        color="blue"
+                        @click="$refs.dialogUserForm.showDialog(item)"
+                        v-if="item.is_active"
+                      >
+                        Editar
+                        <v-icon right>
+                          mdi-pencil
+                        </v-icon>
+                      </v-btn>
+                    </v-col>
+                    <v-col cols="auto">
+                      <v-btn
+                        dark
+                        :color="item.is_active ? 'error' : 'success'"
+                        @click="$refs.dialogUserSwitch.showDialog(item)"
+                      >
+                        <span v-if="item.is_active">Desactivar</span>
+                        <span v-else>Reactivar</span>
+                        <v-icon right>
+                          {{ item.is_active ? 'mdi-close' : 'mdi-restore' }}
+                        </v-icon>
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                </v-container>
               </template>
             </v-data-table>
           </v-card-text>
@@ -185,6 +173,10 @@ export default {
         },
       ],
     }
+  },
+  mounted() {
+    const table = document.getElementById('datatable').getElementsByTagName('table')[0]
+    table.setAttribute('class', 'datatables')
   },
   created() {
     this.fetchUsers()

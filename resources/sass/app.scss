@@ -19,3 +19,5 @@ $font-dir: "/fonts/";
     url('#{$font-dir}/Roboto/Roboto-Thin.ttf') format("truetype")
     url('#{$font-dir}/Roboto/Roboto-ThinItalic.ttf') format("truetype");
 }
+
+@import "../css/app.css"

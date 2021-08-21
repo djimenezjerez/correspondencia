@@ -1,0 +1,15 @@
+.datatables {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.datatables td, .datatables th {
+    border: 1px solid #ccc;
+    border-top: 2px solid #aaa;
+    border-bottom: 2px solid #aaa;
+}
+
+.datatables th {
+    background-color: #666;
+    color: #fff !important;
+}

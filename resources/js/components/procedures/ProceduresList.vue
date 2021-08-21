@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row>
-      <v-col cols="12">
+      <v-col cols="auto">
         <v-card>
           <v-toolbar
             color="secondary"
@@ -34,7 +34,7 @@
               :footer-props="{
                 itemsPerPageOptions: [8, 15, 30]
               }"
-              class="elevation-1"
+              id="datatable"
             >
               <template v-slot:[`item.to_area`]="{ item }">
                 <v-row justify="center">
@@ -46,7 +46,7 @@
                     </v-col>
                   </div>
                   <div v-else>
-                    <v-col cols="auto" v-if="$store.getters.user.permissions.includes('DERIVAR TRÁMITE') && item.owner && procedureTypes.length > 0">
+                    <v-col cols="6" v-if="$store.getters.user.permissions.includes('DERIVAR TRÁMITE') && item.owner && procedureTypes.length > 0">
                       <div v-if="item.validated || $store.getters.user.role != 'VERIFICADOR'">
                         <v-btn
                           outlined
@@ -88,115 +88,80 @@
                   {{ item.outgoing_at | moment('L LT') }}
                 </div>
               </template>
-              <template v-slot:[`item.from_area`]="{ item }">
+              <template v-slot:[`item.from_area`]="{ item }" v-if="$store.getters.user.role != 'RECEPCIÓN'">
                 {{ area(item.from_area ? item.from_area : 0) }}
               </template>
               <template v-slot:[`item.procedure_type_id`]="{ item }">
                 {{ procedureType(item.procedure_type_id) }}
               </template>
               <template v-slot:[`item.actions`]="{ item }">
-                <v-row justify="space-around">
-                  <v-col cols="2" v-if="!item.has_flowed && item.owner && !item.archived && $store.getters.user.permissions.includes('EDITAR TRÁMITE')">
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                          v-on="on"
-                          v-bind="attrs"
-                          text
-                          icon
-                          @click="$refs.dialogProcedureForm.showDialog(item)"
-                        >
-                          <v-icon
-                            color="info"
-                          >
-                            mdi-pencil
-                          </v-icon>
-                        </v-btn>
-                      </template>
-                      <span>Editar</span>
-                    </v-tooltip>
-                  </v-col>
-                  <v-col cols="2">
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                          v-on="on"
-                          v-bind="attrs"
-                          text
-                          icon
-                          @click="$refs.dialogProcedureAttachments.showDialog(item, procedureType(item.procedure_type_id))"
-                        >
-                          <v-icon
-                            color="grey darken-3"
-                          >
-                            mdi-content-save
-                          </v-icon>
-                        </v-btn>
-                      </template>
-                      <span>Adjuntar archivos</span>
-                    </v-tooltip>
-                  </v-col>
-                  <v-col cols="2" v-if="item.has_flowed">
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                          v-on="on"
-                          v-bind="attrs"
-                          text
-                          icon
-                          @click="$refs.dialogProcedureTimeline.showDialog(item)"
-                        >
-                          <v-icon
-                            color="info"
-                          >
-                            mdi-chart-timeline-variant
-                          </v-icon>
-                        </v-btn>
-                      </template>
-                      <span>Historial</span>
-                    </v-tooltip>
-                  </v-col>
-                  <v-col cols="2" v-if="$store.getters.user.permissions.includes('ARCHIVAR TRÁMITE') && item.has_flowed && item.owner && !item.archived">
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                          v-on="on"
-                          v-bind="attrs"
-                          text
-                          icon
-                          @click="$refs.dialogProcedureArchive.showDialog(item)"
-                        >
-                          <v-icon
-                            color="warning"
-                          >
-                            mdi-tray-full
-                          </v-icon>
-                        </v-btn>
-                      </template>
-                      <span>Archivar</span>
-                    </v-tooltip>
-                  </v-col>
-                  <v-col cols="2" v-if="!item.has_flowed && item.owner && !item.archived && $store.getters.user.permissions.includes('ELIMINAR TRÁMITE')">
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                          v-on="on"
-                          v-bind="attrs"
-                          text
-                          icon
-                          @click="$refs.dialogProcedureDelete.showDialog(item)"
-                        >
-                          <v-icon
-                            color="error"
-                          >
-                            mdi-close
-                          </v-icon>
-                        </v-btn>
-                      </template>
-                      <span>Eliminar</span>
-                    </v-tooltip>
-                  </v-col>
-                </v-row>
+                <v-container>
+                  <v-row dense justify="center">
+                    <v-col cols="auto">
+                      <v-btn
+                        dark
+                        color="blue"
+                        @click="$refs.dialogProcedureForm.showDialog(item)"
+                        v-if="!item.has_flowed && item.owner && !item.archived && $store.getters.user.permissions.includes('EDITAR TRÁMITE')"
+                      >
+                        Editar
+                        <v-icon right>
+                          mdi-pencil
+                        </v-icon>
+                      </v-btn>
+                    </v-col>
+                    <v-col cols="auto">
+                      <v-btn
+                        color="amber"
+                        @click="$refs.dialogProcedureAttachments.showDialog(item, procedureType(item.procedure_type_id))"
+                      >
+                        Adjuntar archivos
+                        <v-icon right>
+                          mdi-file-pdf
+                        </v-icon>
+                      </v-btn>
+                    </v-col>
+                    <v-col cols="auto">
+                      <v-btn
+                        dark
+                        color="green"
+                        @click="$refs.dialogProcedureTimeline.showDialog(item)"
+                        v-if="item.has_flowed"
+                      >
+                        Derivaciones
+                        <v-icon right>
+                          mdi-chart-timeline-variant
+                        </v-icon>
+                      </v-btn>
+                    </v-col>
+                    <v-col cols="auto">
+                      <v-btn
+                        dark
+                        color="red"
+                        @click="$refs.dialogProcedureArchive.showDialog(item)"
+                        v-if="$store.getters.user.permissions.includes('ARCHIVAR TRÁMITE') && item.has_flowed && item.owner && !item.archived"
+                      >
+                        Archivar
+                        <v-icon right>
+                          mdi-tray-full
+                        </v-icon>
+                      </v-btn>
+                    </v-col>
+                    <v-col cols="auto">
+                      <v-btn
+                        dark
+                        color="red"
+                        @click="$refs.dialogProcedureDelete.showDialog(item)"
+                        v-if="!item.has_flowed && item.owner && !item.archived && $store.getters.user.permissions.includes('ELIMINAR TRÁMITE')"
+                      >
+                        Eliminar
+                        <v-icon right>
+                          mdi-delete
+                        </v-icon>
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                </v-container>
               </template>
             </v-data-table>
           </v-card-text>
@@ -252,7 +217,11 @@ export default {
       areas: [],
       procedures: [],
       requirements: [],
-      headers: [
+    }
+  },
+  computed: {
+    headers() {
+      let headers = [
         {
           text: 'Fecha de ingreso',
           align: 'center',
@@ -299,8 +268,17 @@ export default {
           sortable: false,
           value: 'actions',
         },
-      ],
+      ]
+      if (this.$store.getters.user.role == 'RECEPCIÓN') {
+        return headers.filter(o => o.value != 'from_area')
+      } else {
+        return headers
+      }
     }
+  },
+  mounted() {
+    const table = document.getElementById('datatable').getElementsByTagName('table')[0]
+    table.setAttribute('class', 'datatables')
   },
   created() {
     this.fetchAreas()
