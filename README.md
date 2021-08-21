@@ -1,49 +1,112 @@
-* Se debe disponer de una instalación de docker versión 20.10.7 o superior
+# SISTEMA de GESTIÓN DOCUMENTAL Y CONTROL de CORRESPONDENCIA
 
-* Se debe disponer de una instalación de docker-compose versión 1.29.2 o superior
+## DETALLES DEL SISTEMA
 
-* Establecer las variables de entorno, copiar el archivo ejemplo y editar el archivo **.env**
+Este sistema cuenta con 5 módulos:
+
+1. Módulo de gestión de usuarios
+2. Módulo de gestión de requisitos
+3. Módulo de gestión de tipo de trámite
+4. Módulo de gestión y derivación de trámites
+5. Módulo de gestión documental para documentos digitales
+
+Los usuarios tienen acceso a una o más funciones de los módulos listados anteriormente de acuerdo al rol asignado, para ello se epecifican 4 roles predefinidos:
+
+1. El rol de ADMINISTRADOR cuenta con permisos para:
+    * Crear Usuarios
+    * Editar Usuarios
+    * Desactivar Usuarios
+    * Reactivar Usuarios
+    * Crear Requisito
+    * Editar Requisito
+    * Eliminar Requisito (solo si no forma parte de un tipo de trámite)
+    * Crear Tipos de Trámites
+    * Editar Tipos de Trámites
+    * Eliminar Tipos de Trámites (solo si no existen trámites creados del tipo en cuestión)
+2. El rol de RECEPCIÓN cuenta con permisos para:
+    * Crear Trámites
+    * Editar Trámites (recién creados y sin derivar)
+    * Eliminar Trámites (recién creados y sin derivar)
+    * Derivar Trámites (hacia todas las secciones)
+    * Adjuntar Archivos (solo si el trámite se encuentra en su bandeja)
+3. El rol de VERIFICADOR cuenta con permisos para:
+    * Derivar Trámites (hacia secciones predefinidas)
+    * Archivar Trámites
+    * Adjuntar Archivos (solo si el trámite se encuentra en su bandeja)
+4. Y por último el rol SECRETARÍA cuenta con permisos para:
+    * Derivar Trámite (hacia secciones predefinidas)
+    * Archivar Trámite
+
+El encargado de administrar usuarios, para el caso sea el usuario que cuenta con el rol ADMINISTRADOR, es el que cuenta con la facultad de definir la sección para cada usuario usuario por medio. A cada sección se le asignó un rol predefinido:
+
+1. La sección ADMINISTRADOR tiene asociado el rol ADMINISTRADOR
+2. La sección SECRETARÍA GENERAL tiene asociado el rol RECEPCIÓN
+3. La sección SECRETARÍA HACIENDA tiene asociado el rol SECRETARÍA
+4. La sección RESPONSABLE DE PRESTACIONES tiene asociado el rol SECRETARÍA
+5. La sección ATENCION EN PLATAFORMA tiene asociado el rol VERIFICADOR
+6. La sección TESORERÍA tiene asociado el rol SECRETARÍA
+7. La sección SECRETARÍA PRESIDENCIA tiene asociado el rol SECRETARÍA
+8. La sección SECRETARÍA VICE PRESIDENCIA tiene asociado el rol SECRETARÍA
+9. La sección SECRETARÍA PERSONAL tiene asociado el rol SECRETARÍA
+10. La sección SECRETARÍA BIENESTAR SOCIAL Y VIVIENDA tiene asociado el rol SECRETARÍA
+11. La sección SECRETARÍA DE EDUCACIÓN tiene asociado el rol SECRETARÍA
+
+## CONSIDERACIONES DE USO
+
+* Cuando se crean usuarios el sistema asigna un nombre de usuario parcial que se valida al momento de enviar el formulario para evitar duplicidad de nombres de usuarios, sin embaro este campo es editable.
+* La primera contraseña de cada usuario es el dato del documento de identidad, siendo posible el cambio de contraseña por cada usuario en la vista de PERFIL o por medio de un usuario administrador en el formulario de edición de usuarios.
+* Cuando se crean hojas de ruta el sistema asigna una hoja de ruta parcial que se valida al momento de enviar el formulario para evitar duplicidad de códigos de hojas de ruta, sin embargo este campo es editable.
+
+## REQUISITOS DEL SERVIDOR
+
+* Se debe disponer de uno o más servidores con las siguientes aplicaciones instaladas y funcionales:
+    1. PHP versión 7.4.22
+    2. Apache versión 2.4.48 o Nginx versión 1.19.6
+    3. MariaDB versión 10.4.20
+    4. OpenSSL versión 1.1.1
+    5. NodeJS versión 14.17.3 o superior
+    6. Yarn versión 1.22.11 o superior
+
+## PASOS PARA LA INSTALACIÓN
+
+Para seguir los pasos listados continuación se debe tener abierta una consola con la ruta ubicada en la raíz del de la carpeta del proyecto.
+
+1. Establecer las variables de entorno, renombrar **.env.example** a **.env** y edita los datos de acuerdo a los datos extraidos del servidor donde funcionará el sistema:
 
 ```sh
-$ cp -f .env.example .env
+$ copy .env.example .env
 ```
 
-* Establecer datos de administrador
+2. Establecer datos del primer usuario administrador:
 
 ```sh
-$ cp -f admin_data.json.example storage/app/admin_data.json
+$ copy admin_data.json.example storage/app/admin_data.json
 ```
 
-* Editar los datos para el usuario administrador en el archivo **storage/admin_data.json**
+3. Editar los datos para el usuario administrador en el archivo recién copiado a **storage/app/admin_data.json**.
 
-* Editar el dominio en el archivo **sanctum.php**, dentro de la variable *stateful* reemplazar *localhost* por el dominio correcto
+4. Editar el dominio en el archivo **config/sanctum.php**, dentro de la variable *stateful*, reemplazar *localhost* por el dominio especificado por el servidor.
+
+5. Instalar las dependencias:
 
 ```sh
-$ cp -f docker/.env.example laradock/.env
-$ cp -f docker/docker-compose.yml laradock/docker-compose.yml
-$ cd laradock
+$ php artisan key:generate
+$ composer install
+$ yarn install
+$ php artisan migrate:install
+$ php artisan migrate
 ```
 
-* Editar los nombres de usuario, contraseñas y puertos a utilizar en el archivo **laradock/.env**
+6. Compilar el código:
 
 ```sh
-$ docker-compose build --parallel nginx php-fpm workspace mysql
-$ docker-compose up -d nginx php-fpm workspace mysql
+$ yarn prod
 ```
 
-* Compilar el código
+* Cargar datos iniciales:
 
 ```sh
-$ docker-compose exec --user laradock workspace php artisan key:generate
-$ docker-compose exec --user laradock workspace composer install
-$ docker-compose exec --user laradock workspace yarn install
-$ docker-compose exec --user laradock workspace yarn prod
-$ docker-compose exec --user laradock workspace php artisan migrate:install
-$ docker-compose exec --user laradock workspace php artisan migrate
+$ php artisan db:seed --class=DatabaseSeeder
 ```
 
-* Cargar datos iniciales
-
-```sh
-$ docker-compose exec --user laradock workspace php artisan db:seed --class=DatabaseSeeder
-```
+Con ello ya se puede ingresar al navegador y apuntar la URL a la dirección del dominio del servidor donde se instaló el sistema.

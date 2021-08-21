@@ -50,6 +50,9 @@ class UserController extends Controller
     public function store(UserRequest $request)
     {
         $area = Area::findOrFail($request->area_id);
+        $request->merge([
+            'password' => $request->identity_card,
+        ]);
         $user = User::create($request->all());
         $user->syncRoles([$area->role_id]);
         return [

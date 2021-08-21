@@ -77,6 +77,7 @@
                 v-slot="{ errors }"
                 name="password"
                 :rules="edit ? '' : 'required|min:4'"
+                v-if="edit"
               >
                 <v-text-field
                   label="Contraseña"

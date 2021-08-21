@@ -67,7 +67,7 @@
               ></v-img>
             </v-col>
             <v-col cols="12">
-              <div class="text-center text-md-caption text-lg-body-1 text-xl-h4 font-weight-normal white--text" :class="logoTextFont" :style="($vuetify.breakpoint.sm || $vuetify.breakpoint.xs) && 'font-size: 10px'">
+              <div class="text-center text-md-caption text-lg-body-1 text-xl-h5 font-weight-normal white--text" :class="logoTextFont" :style="($vuetify.breakpoint.sm || $vuetify.breakpoint.xs) && 'font-size: 10px'">
                 <div>
                   Asociacion Nacional de Suboficiales y Sargentos de las Fuerzas Armadas del Estado
                 </div>

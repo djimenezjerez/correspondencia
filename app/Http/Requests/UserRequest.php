@@ -33,7 +33,6 @@ class UserRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'password' => 'string|min:4',
             'name' => 'alpha_spaces|min:3',
             'last_name' => 'alpha_spaces|min:3',
             'identity_card' => 'alpha_dash|min:4',
@@ -55,7 +54,8 @@ class UserRequest extends FormRequest
             case 'PATCH': {
                 if (($this->id == auth()->user()->id)) {
                     $rules = [
-                        'old_password' => 'string|min:4'
+                        'old_password' => 'string|min:4',
+                        'password' => 'string|min:4',
                     ] + $rules;
                     $rules[] = [
                         'username' => '',
