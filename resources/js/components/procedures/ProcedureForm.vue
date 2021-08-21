@@ -145,16 +145,7 @@ export default {
   },
   watch: {
     procedureTypeSelected(value) {
-      if (this.procedureForm.code == null || this.procedureForm.code == '') {
-        this.fetchCode(value)
-        this.$nextTick(() => {
-          this.$refs.originField.$refs.input.focus()
-        })
-      } else {
-        this.$nextTick(() => {
-          this.$refs.codeField.$refs.input.focus()
-        })
-      }
+      this.$refs.codeField.$refs.input.focus()
     },
   },
   methods: {
@@ -179,19 +170,6 @@ export default {
       this.$nextTick(() => {
         this.$refs.procedureObserver.reset()
       })
-    },
-    async fetchCode(value) {
-      if (this.procedureForm.procedure_type_id) {
-        try {
-          this.loading = true
-          let response = await axios.get(`procedure_type/${value}/code`)
-          this.procedureForm.code = response.data.payload.code
-        } catch(error) {
-          console.log(error)
-        } finally {
-          this.loading = false
-        }
-      }
     },
     async submit() {
       try {

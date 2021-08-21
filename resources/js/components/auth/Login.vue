@@ -33,14 +33,7 @@
           no-gutters
         >
           <v-col
-            cols="auto"
-            xl="5"
-            lg="5"
-            md="5"
-            sm="5"
-            xs="12"
-            offset="1"
-            offset-xs="0"
+            cols="12"
           >
             <v-img
               class="mt-4"
@@ -50,25 +43,6 @@
               src="/img/logo.png"
             ></v-img>
           </v-col>
-          <v-col
-            cols="auto"
-            xl="5"
-            lg="5"
-            md="5"
-            sm="5"
-            xs="12"
-            :class="$vuetify.breakpoint.xs ? '' : 'mt-10 pr-6'"
-          >
-            <div class="text-center text-md-body-2 text-lg-body-2 text-xl-body-2 font-weight-normal black--text font-weight-medium" :style="{ 'font-size': $vuetify.breakpoint.sm ? '10px' : ($vuetify.breakpoint.xs ? '10px' : '10px') }">
-              <div>
-                Asociacion Nacional de Suboficiales y Sargentos de las Fuerzas Armadas del Estado
-              </div>
-              <div>
-                &quot;ASCINALSS&quot;
-              </div>
-            </div>
-          </v-col>
-          <v-col cols="1" v-if="!$vuetify.breakpoint.xs"></v-col>
           <v-col cols="12" class="pt-0">
             <validation-observer ref="loginObserver" v-slot="{ invalid }">
               <form v-on:submit.prevent="submit">

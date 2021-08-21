@@ -104,7 +104,7 @@ $ php artisan migrate
 $ yarn prod
 ```
 
-* Cargar datos iniciales:
+7. Cargar datos iniciales:
 
 ```sh
 $ php artisan db:seed --class=DatabaseSeeder
