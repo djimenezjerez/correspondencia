@@ -3,13 +3,14 @@
     <v-container :fill-height="!$vuetify.breakpoint.xs" fluid>
       <v-row
         justify="space-around"
-        align="end"
+        align="start"
       >
         <v-col
           cols="auto"
           sm="4"
           xs="12"
           class="text-center pb-xs-0 pb-sm-10"
+          :style="{ 'margin-top': marginTopColumn1 }"
         >
           <v-container>
             <v-row
@@ -52,6 +53,7 @@
           cols="auto"
           sm="4"
           xs="12"
+          :style="{ 'margin-top': marginTopColumn2 }"
         >
           <v-row
             justify="center"
@@ -83,6 +85,7 @@
           sm="4"
           xs="12"
           class="text-center pb-xs-0 pb-sm-10"
+          :style="{ 'margin-top': marginTopColumn3 }"
         >
           <v-container>
             <v-row
@@ -98,7 +101,7 @@
                   :x-small="$vuetify.breakpoint.xs"
                   @click.stop="$refs.dialogSearchCode.showDialog()"
                 >
-                  Consultar hoja de ruta
+                  Consultar trámite
                 </v-btn>
               </v-col>
             </v-row>
@@ -140,6 +143,36 @@ export default {
         case 'xs': return 'font-weight-light'
         case 'sm': return 'font-weight-light'
         default: return 'font-weight-normal'
+      }
+    },
+    marginTopColumn1() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs': return '0px'
+        case 'sm': return '60px'
+        case 'md': return '125px'
+        case 'lg': return '125px'
+        case 'xl': return '125px'
+        default: return '0px'
+      }
+    },
+    marginTopColumn2() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs': return '0px'
+        case 'sm': return '-35px'
+        case 'md': return '-25px'
+        case 'lg': return '-100px'
+        case 'xl': return '-100px'
+        default: return '0px'
+      }
+    },
+    marginTopColumn3() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs': return '0px'
+        case 'sm': return '184px'
+        case 'md': return '233px'
+        case 'lg': return '273px'
+        case 'xl': return '300px'
+        default: return '0px'
       }
     },
   },

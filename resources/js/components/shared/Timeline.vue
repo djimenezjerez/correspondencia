@@ -11,8 +11,9 @@
           <v-card
             :dark="index == 0"
             :color="index > 0 ? '' : '#666'"
-            class="rounded-card"
             elevation="5"
+            :class="index > 0 || 'pulse'"
+            class="rounded-card"
           >
             <v-card-text>
               <div class="font-weight-bold">
@@ -45,7 +46,29 @@ export default {
 </script>
 
 <style scoped>
-.rounded-card{
+.rounded-card {
   border-radius: 15px;
+}
+
+.pulse {
+	animation: pulse 5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+		transform: scale(1);
+	}
+	25% {
+		transform: scale(1.02);
+	}
+	50% {
+		transform: scale(1);
+	}
+	75% {
+		transform: scale(1.02);
+	}
+  100% {
+		transform: scale(1);
+	}
 }
 </style>

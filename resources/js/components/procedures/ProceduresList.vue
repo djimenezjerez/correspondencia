@@ -49,9 +49,9 @@
                     <v-col cols="6" v-if="$store.getters.user.permissions.includes('DERIVAR TRÁMITE') && item.owner && procedureTypes.length > 0">
                       <div v-if="item.validated || $store.getters.user.role != 'VERIFICADOR'">
                         <v-btn
-                          outlined
+                          dark
                           rounded
-                          color="info darken-2"
+                          color="green darken-1"
                           @click="$refs.dialogProcedureFlow.showDialog(item, procedureType(item.procedure_type_id))"
                         >
                           Derivar
@@ -59,9 +59,9 @@
                       </div>
                       <div v-else>
                         <v-btn
-                          outlined
+                          dark
                           rounded
-                          color="success darken-2"
+                          color="orange darken-1"
                           @click="$refs.dialogProcedureRequirements.showDialog(item)"
                         >
                           Requisitos
@@ -95,14 +95,13 @@
                 {{ procedureType(item.procedure_type_id) }}
               </template>
               <template v-slot:[`item.actions`]="{ item }">
-                <v-container>
-                  <v-row dense justify="center">
-                    <v-col cols="auto">
+                <v-container style="width: 35em;">
+                  <v-row dense justify="space-around">
+                    <v-col cols="auto" v-if="!item.has_flowed && item.owner && !item.archived && $store.getters.user.permissions.includes('EDITAR TRÁMITE')">
                       <v-btn
                         dark
                         color="blue"
                         @click="$refs.dialogProcedureForm.showDialog(item)"
-                        v-if="!item.has_flowed && item.owner && !item.archived && $store.getters.user.permissions.includes('EDITAR TRÁMITE')"
                       >
                         Editar
                         <v-icon right>
@@ -115,18 +114,24 @@
                         color="amber"
                         @click="$refs.dialogProcedureAttachments.showDialog(item, procedureType(item.procedure_type_id))"
                       >
-                        Adjuntar archivos
+                        <div>
+                          <div>
+                            Archivos
+                          </div>
+                          <div>
+                            adjuntos
+                          </div>
+                        </div>
                         <v-icon right>
                           mdi-file-pdf
                         </v-icon>
                       </v-btn>
                     </v-col>
-                    <v-col cols="auto">
+                    <v-col cols="auto" v-if="item.has_flowed">
                       <v-btn
                         dark
                         color="green"
                         @click="$refs.dialogProcedureTimeline.showDialog(item)"
-                        v-if="item.has_flowed"
                       >
                         Derivaciones
                         <v-icon right>
@@ -134,12 +139,11 @@
                         </v-icon>
                       </v-btn>
                     </v-col>
-                    <v-col cols="auto">
+                    <v-col cols="auto" v-if="$store.getters.user.permissions.includes('ARCHIVAR TRÁMITE') && item.has_flowed && item.owner && !item.archived">
                       <v-btn
                         dark
                         color="red"
                         @click="$refs.dialogProcedureArchive.showDialog(item)"
-                        v-if="$store.getters.user.permissions.includes('ARCHIVAR TRÁMITE') && item.has_flowed && item.owner && !item.archived"
                       >
                         Archivar
                         <v-icon right>
@@ -147,12 +151,11 @@
                         </v-icon>
                       </v-btn>
                     </v-col>
-                    <v-col cols="auto">
+                    <v-col cols="auto" v-if="!item.has_flowed && item.owner && !item.archived && $store.getters.user.permissions.includes('ELIMINAR TRÁMITE')">
                       <v-btn
                         dark
                         color="red"
                         @click="$refs.dialogProcedureDelete.showDialog(item)"
-                        v-if="!item.has_flowed && item.owner && !item.archived && $store.getters.user.permissions.includes('ELIMINAR TRÁMITE')"
                       >
                         Eliminar
                         <v-icon right>
@@ -267,6 +270,7 @@ export default {
           align: 'center',
           sortable: false,
           value: 'actions',
+          width: '35em',
         },
       ]
       if (this.$store.getters.user.role == 'RECEPCIÓN') {

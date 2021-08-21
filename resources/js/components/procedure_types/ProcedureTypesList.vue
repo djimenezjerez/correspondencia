@@ -46,8 +46,8 @@
                 </ol>
               </template>
               <template v-slot:[`item.actions`]="{ item }">
-                <v-container>
-                  <v-row dense justify="center">
+                <v-container style="width: 20em;">
+                  <v-row dense justify="space-around">
                     <v-col cols="auto">
                       <v-btn
                         dark
@@ -60,12 +60,11 @@
                         </v-icon>
                       </v-btn>
                     </v-col>
-                    <v-col cols="auto">
+                    <v-col cols="auto" v-if="item.total_procedures == 0">
                       <v-btn
                         dark
                         color="red"
                         @click="$refs.dialogProcedureTypeDelete.showDialog(item)"
-                        v-if="item.total_procedures == 0"
                       >
                         Eliminar
                         <v-icon right>
@@ -133,7 +132,8 @@ export default {
           text: 'Acciones',
           align: 'center',
           value: 'actions',
-          sortable: false
+          sortable: false,
+          width: '10em',
         },
       ],
     }

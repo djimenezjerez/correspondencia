@@ -45,14 +45,13 @@
                 {{ item.is_active ? 'ACTIVO' : 'INACTIVO' }}
               </template>
               <template v-slot:[`item.actions`]="{ item }">
-                <v-container>
-                  <v-row dense justify="center">
-                    <v-col cols="auto">
+                <v-container style="width: 25em;">
+                  <v-row dense justify="space-around">
+                    <v-col cols="auto" v-if="item.is_active">
                       <v-btn
                         dark
                         color="blue"
                         @click="$refs.dialogUserForm.showDialog(item)"
-                        v-if="item.is_active"
                       >
                         Editar
                         <v-icon right>
@@ -169,7 +168,8 @@ export default {
           text: 'Acciones',
           align: 'center',
           value: 'actions',
-          sortable: false
+          sortable: false,
+          width: '25em',
         },
       ],
     }

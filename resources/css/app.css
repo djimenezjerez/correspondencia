@@ -1,12 +1,25 @@
 .datatables {
-    border-collapse: collapse;
-    width: 100%;
+    border-collapse: collapse !important;
+    width: 100% !important;
 }
 
 .datatables td, .datatables th {
-    border: 1px solid #ccc;
-    border-top: 2px solid #aaa;
-    border-bottom: 2px solid #aaa;
+    border: 1px solid #ccc !important;
+    border-top: 1px solid #000 !important;
+    border-bottom: 1px solid #000 !important;
+}
+
+.datatables tbody tr:nth-child(odd) {
+    background-color: #f8f9fa !important;
+}
+
+.datatables tbody tr:nth-child(even) {
+    background-color: #e9ecef !important;
+}
+
+.datatables tbody tr:hover {
+    background:#6c757d !important;
+    color: #fff !important;
 }
 
 .datatables th {

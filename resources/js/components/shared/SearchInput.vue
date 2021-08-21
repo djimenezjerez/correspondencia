@@ -10,6 +10,7 @@
     v-model="searchValue"
     @input="inputUpdated($event)"
     v-on:keyup.enter="searchValue && $emit('input', searchValue)"
+    class="mr-4"
   ></v-text-field>
 </template>
 
