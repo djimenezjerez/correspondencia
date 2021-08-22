@@ -44,17 +44,16 @@
                 </ol>
               </template>
               <template v-slot:[`item.actions`]="{ item }">
-                <v-container style="width: 18em;">
+                <v-container style="width: 10em;">
                   <v-row dense no-gutters justify="space-around">
                     <v-col cols="auto">
                       <v-btn
-                        dark
-                        color="blue"
-                        @click="$refs.dialogProcedureTypeForm.showDialog(item)"
+                        color="yellow"
+                        class="py-6"
                         small
+                        @click="$refs.dialogProcedureTypeForm.showDialog(item)"
                       >
-                        Editar
-                        <v-icon right>
+                        <v-icon>
                           mdi-pencil
                         </v-icon>
                       </v-btn>
@@ -63,11 +62,11 @@
                       <v-btn
                         dark
                         color="red"
-                        @click="$refs.dialogProcedureTypeDelete.showDialog(item)"
+                        class="py-6"
                         small
+                        @click="$refs.dialogProcedureTypeDelete.showDialog(item)"
                       >
-                        Eliminar
-                        <v-icon right>
+                        <v-icon>
                           mdi-delete
                         </v-icon>
                       </v-btn>

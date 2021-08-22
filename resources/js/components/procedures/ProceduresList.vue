@@ -119,75 +119,67 @@
                 </div>
               </template>
               <template v-slot:[`item.actions`]="{ item }">
-                <v-container style="width: 30em;">
+                <v-container style="width: 15em;">
                   <v-row dense no-gutters justify="space-around">
                     <v-col cols="auto" v-if="!item.has_flowed && item.owner && !item.archived && $store.getters.user.permissions.includes('EDITAR TRÁMITE')">
                       <v-btn
-                        dark
-                        color="blue"
-                        @click="$refs.dialogProcedureForm.showDialog(item)"
+                        color="yellow"
+                        class="py-6"
                         small
+                        @click="$refs.dialogProcedureForm.showDialog(item)"
                       >
-                        Editar
-                        <v-icon right>
+                        <v-icon>
                           mdi-pencil
                         </v-icon>
                       </v-btn>
                     </v-col>
                     <v-col cols="auto">
                       <v-btn
-                        color="amber"
-                        @click="$refs.dialogProcedureAttachments.showDialog(item, procedureType(item.procedure_type_id))"
+                        color="#00C853"
+                        class="py-6"
                         small
+                        dark
+                        @click="$refs.dialogProcedureAttachments.showDialog(item, procedureType(item.procedure_type_id))"
                       >
-                        <div style="font-size: 10px;">
-                          <div>
-                            Archivos
-                          </div>
-                          <div>
-                            adjuntos
-                          </div>
-                        </div>
-                        <v-icon right>
+                        <v-icon>
                           mdi-file-pdf
                         </v-icon>
                       </v-btn>
                     </v-col>
                     <v-col cols="auto" v-if="item.has_flowed">
                       <v-btn
-                        dark
-                        color="green"
-                        @click="$refs.dialogProcedureTimeline.showDialog(item)"
+                        color="info"
+                        class="py-6"
                         small
+                        @click="$refs.dialogProcedureTimeline.showDialog(item)"
                       >
-                        Derivaciones
-                        <v-icon right>
+                        <v-icon>
                           mdi-chart-timeline-variant
                         </v-icon>
                       </v-btn>
                     </v-col>
                     <v-col cols="auto" v-if="$store.getters.user.permissions.includes('ARCHIVAR TRÁMITE') && item.has_flowed && item.owner && !item.archived">
                       <v-btn
-                        dark
-                        color="red"
-                        @click="$refs.dialogProcedureArchive.showDialog(item)"
+                        color="warning"
+                        class="py-6"
                         small
+                        dark
+                        @click="$refs.dialogProcedureArchive.showDialog(item)"
                       >
-                        Archivar
-                        <v-icon right>
-                          mdi-tray-full
+                        <v-icon>
+                          mdi-folder
                         </v-icon>
                       </v-btn>
                     </v-col>
                     <v-col cols="auto" v-if="!item.has_flowed && item.owner && !item.archived && $store.getters.user.permissions.includes('ELIMINAR TRÁMITE')">
                       <v-btn
-                        dark
                         color="red"
-                        @click="$refs.dialogProcedureDelete.showDialog(item)"
+                        class="py-6"
                         small
+                        dark
+                        @click="$refs.dialogProcedureDelete.showDialog(item)"
                       >
-                        Eliminar
-                        <v-icon right>
+                        <v-icon>
                           mdi-delete
                         </v-icon>
                       </v-btn>
@@ -259,54 +251,55 @@ export default {
           align: 'center',
           sortable: false,
           value: 'incoming_at',
-          width: '12em',
+          width: '8%',
         }, {
           text: 'Sección/Origen',
           align: 'center',
           sortable: false,
           value: 'from_area',
-          width: '14em',
+          width: '10%',
         }, {
           text: 'Código de hoja de ruta',
           align: 'center',
           sortable: false,
           value: 'code',
-          width: '14em',
+          width: '10%',
         }, {
           text: 'Tipo de trámite',
           align: 'center',
           sortable: false,
           value: 'procedure_type_id',
-          width: '14em',
+          width: '10%',
         }, {
           text: 'Procedencia',
           align: 'center',
           sortable: false,
           value: 'origin',
-          width: '18em',
+          width: '10%',
         }, {
           text: 'Detalle/Asunto',
           align: 'center',
           sortable: false,
           value: 'detail',
-          width: '25em',
+          width: '12%',
         }, {
           text: 'Sección/Destino',
           align: 'center',
           sortable: false,
           value: 'to_area',
-          width: '14em',
+          width: '10%',
         }, {
           text: 'Fecha de derivación',
           align: 'center',
           sortable: false,
           value: 'outgoing_at',
-          width: '12em',
+          width: '8%',
         }, {
           text: 'Acciones',
           align: 'center',
           sortable: false,
           value: 'actions',
+          width: '8%',
         },
       ]
       if (this.$store.getters.user.role == 'RECEPCIÓN') {

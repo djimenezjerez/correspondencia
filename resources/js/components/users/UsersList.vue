@@ -43,32 +43,30 @@
                 {{ item.is_active ? 'ACTIVO' : 'INACTIVO' }}
               </template>
               <template v-slot:[`item.actions`]="{ item }">
-                <v-container style="width: 19em;">
+                <v-container style="width: 10em;">
                   <v-row dense no-gutters justify="space-around">
                     <v-col cols="auto" v-if="item.is_active">
                       <v-btn
-                        dark
-                        color="blue"
-                        @click="$refs.dialogUserForm.showDialog(item)"
+                        color="yellow"
+                        class="py-6"
                         small
+                        @click="$refs.dialogUserForm.showDialog(item)"
                       >
-                        Editar
-                        <v-icon right>
+                        <v-icon>
                           mdi-pencil
                         </v-icon>
                       </v-btn>
                     </v-col>
                     <v-col cols="auto">
                       <v-btn
-                        dark
-                        :color="item.is_active ? 'error' : 'success'"
-                        @click="$refs.dialogUserSwitch.showDialog(item)"
+                        :color="item.is_active ? 'red' : 'success'"
+                        :dark="item.is_active"
+                        class="py-6"
                         small
+                        @click="$refs.dialogUserSwitch.showDialog(item)"
                       >
-                        <span v-if="item.is_active">Desactivar</span>
-                        <span v-else>Reactivar</span>
-                        <v-icon right>
-                          {{ item.is_active ? 'mdi-close' : 'mdi-restore' }}
+                        <v-icon>
+                          {{ item.is_active ? 'mdi-delete' : 'mdi-restore' }}
                         </v-icon>
                       </v-btn>
                     </v-col>

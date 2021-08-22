@@ -34,30 +34,29 @@
               id="datatable"
             >
               <template v-slot:[`item.actions`]="{ item }">
-                <v-container style="width: 18em;">
+                <v-container style="width: 10em;">
                   <v-row dense no-gutters justify="space-around">
                     <v-col cols="auto">
                       <v-btn
-                        dark
-                        color="blue"
-                        @click="$refs.dialogRequirementForm.showDialog(item)"
+                        color="yellow"
+                        class="py-6"
                         small
+                        @click="$refs.dialogRequirementForm.showDialog(item)"
                       >
-                        Editar
-                        <v-icon right>
+                        <v-icon>
                           mdi-pencil
                         </v-icon>
                       </v-btn>
                     </v-col>
                     <v-col cols="auto" v-if="!item.is_used">
                       <v-btn
-                        dark
                         color="red"
-                        @click="$refs.dialogRequirementDelete.showDialog(item)"
+                        class="py-6"
+                        dark
                         small
+                        @click="$refs.dialogRequirementDelete.showDialog(item)"
                       >
-                        Eliminar
-                        <v-icon right>
+                        <v-icon>
                           mdi-delete
                         </v-icon>
                       </v-btn>
@@ -112,7 +111,7 @@ export default {
           align: 'center',
           value: 'actions',
           sortable: false,
-          width: '20em',
+          width: '10em',
         },
       ],
     }
