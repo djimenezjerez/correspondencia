@@ -145,10 +145,32 @@ export default {
   },
   watch: {
     procedureTypeSelected(value) {
-      this.$refs.codeField.$refs.input.focus()
+      if (this.procedureForm.code == null || this.procedureForm.code == '') {
+        this.fetchCode(value)
+        this.$nextTick(() => {
+          this.$refs.originField.$refs.input.focus()
+        })
+      } else {
+        this.$nextTick(() => {
+          this.$refs.codeField.$refs.input.focus()
+        })
+      }
     },
   },
   methods: {
+    async fetchCode(value) {
+      if (this.procedureForm.procedure_type_id) {
+        try {
+          this.loading = true
+          let response = await axios.get(`procedure_type/${value}/code`)
+          this.procedureForm.code = response.data.payload.code
+        } catch(error) {
+          console.log(error)
+        } finally {
+          this.loading = false
+        }
+      }
+    },
     showDialog(procedure = null) {
       if (procedure) {
         this.edit = true
