@@ -120,7 +120,7 @@
                   <v-btn
                     block
                     type="submit"
-                    color="primary"
+                    color="info"
                     :disabled="invalid || loading"
                     v-if="timeline.length == 0"
                   >
@@ -131,7 +131,7 @@
                   </v-btn>
                   <v-btn
                     block
-                    color="primary"
+                    color="info"
                     :disabled="loading"
                     v-else
                     @click.stop="showDialog"
@@ -223,17 +223,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-tbody {
-  tr:hover {
-    background-color: transparent !important;
-  }
-};
-// table {
-//   table-layout: fixed;
-//   width: 100%;
-// };
-// td {
-//   width: 50%;
-// };
+<style lang="css" scoped>
+tr:hover {
+  background-color: transparent !important;
+}
 </style>

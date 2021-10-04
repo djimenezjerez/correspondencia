@@ -129,7 +129,7 @@
         </validation-observer>
         <v-card-actions>
           <v-btn
-            color="primary"
+            color="info"
             block
             :disabled="loading"
             @click="closeDialog"
@@ -220,7 +220,7 @@ export default {
         try {
           this.loading = true
           const response = await axios.delete(`procedure/${this.procedure.id}/attachment/${file.id}`)
-          this.$toast.info(response.data.message)
+          this.$toast.success(response.data.message)
           this.fetchAttachments(this.procedure.id)
         } catch (error) {
           this.$toast.error(error.response.data.message)
@@ -286,7 +286,7 @@ export default {
           this.$nextTick(() => {
             this.$refs.procedureFilesObserver.reset()
           })
-          this.$toast.info(response.data.message)
+          this.$toast.success(response.data.message)
           this.fetchAttachments(this.procedure.id)
         }
       } catch(error) {
@@ -310,17 +310,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-tbody {
-  tr:hover {
-    background-color: transparent !important;
-  }
-};
-// table {
-//   table-layout: fixed;
-//   width: 100%;
-// };
-// td {
-//   width: 50%;
-  // };
+<style lang="css" scoped>
+tr:hover {
+  background-color: transparent !important;
+}
 </style>

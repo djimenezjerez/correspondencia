@@ -50,7 +50,7 @@
               <v-btn
                 block
                 type="submit"
-                color="primary"
+                color="info"
                 :disabled="invalid || loading"
               >
                 Guardar
@@ -103,10 +103,10 @@ export default {
           this.loading = true
           if (this.edit) {
             const response = await axios.patch(`requirement/${this.requirementForm.id}`, Object.fromEntries(Object.entries(this.requirementForm).filter(([_, v]) => v != '')))
-            this.$toast.info(response.data.message)
+            this.$toast.success(response.data.message)
           } else {
             const response = await axios.post('requirement', this.requirementForm)
-            this.$toast.info(response.data.message)
+            this.$toast.success(response.data.message)
           }
           this.$emit('updateList')
           this.dialog = false

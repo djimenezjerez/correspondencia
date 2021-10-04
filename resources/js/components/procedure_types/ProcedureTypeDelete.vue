@@ -85,7 +85,7 @@ export default {
       try {
         this.loading = true
         const response = await axios.delete(`procedure_type/${this.procedure_type.id}`)
-        this.$toast.info(response.data.message)
+        this.$toast.success(response.data.message)
         this.$emit('updateList')
         this.dialog = false
       } catch(error) {

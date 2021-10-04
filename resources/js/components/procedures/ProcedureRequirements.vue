@@ -76,7 +76,7 @@
         <v-card-actions>
           <v-btn
             block
-            color="primary"
+            color="info"
             :disabled="loading || !validProcedure"
             @click="submit"
           >
@@ -151,7 +151,7 @@ export default {
             requirements: this.procedureRequirements,
           })
           if (response.data.payload.procedure.validated) {
-            this.$toast.info(response.data.message)
+            this.$toast.success(response.data.message)
             this.$emit('updateList')
             this.dialog = false
           }
@@ -166,17 +166,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-  tbody {
-    tr:hover {
-      background-color: transparent !important;
-    }
-  };
-  // table {
-  //   table-layout: fixed;
-  //   width: 100%;
-  // };
-  // td {
-  //   width: 50%;
-  // };
+<style lang="css" scoped>
+tr:hover {
+  background-color: transparent !important;
+}
 </style>

@@ -131,7 +131,7 @@ export default {
           const response = await axios.post(`procedure/${this.procedure.id}/flow`, {
             area_id: this.selectedArea
           })
-          this.$toast.info(response.data.message)
+          this.$toast.success(response.data.message)
           this.$emit('updateList')
           this.dialog = false
         }
@@ -149,17 +149,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-  tbody {
-    tr:hover {
-      background-color: transparent !important;
-    }
-  };
-  // table {
-  //   table-layout: fixed;
-  //   width: 100%;
-  // };
-  // td {
-  //   width: 50%;
-  // };
+<style lang="css" scoped>
+tr:hover {
+  background-color: transparent !important;
+}
 </style>

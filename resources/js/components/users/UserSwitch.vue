@@ -80,10 +80,10 @@ export default {
         this.loading = true
         if (this.user.is_active) {
           const response = await axios.delete(`user/${this.user.id}`)
-          this.$toast.info(response.data.message)
+          this.$toast.success(response.data.message)
         } else {
           const response = await axios.patch(`deleted/user/${this.user.id}`)
-          this.$toast.info(response.data.message)
+          this.$toast.success(response.data.message)
         }
         this.$emit('updateList')
         this.dialog = false

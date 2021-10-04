@@ -35,7 +35,7 @@
           <v-btn
             block
             type="submit"
-            color="primary"
+            color="info"
             :disabled="loading"
             @click="dialog = false"
           >

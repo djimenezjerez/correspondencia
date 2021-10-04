@@ -6,7 +6,7 @@
 $font-dir: "/fonts/";
 @font-face {
     font-family: "Roboto";
-    src: url('#{$font-dir}/Roboto/Roboto-Black.ttf') format("truetype"),
+    src: url('#{$font-dir}/Roboto/Roboto-Black.ttf') format("truetype")
     url('#{$font-dir}/Roboto/Roboto-BlackItalic.ttf') format("truetype")
     url('#{$font-dir}/Roboto/Roboto-Bold.ttf') format("truetype")
     url('#{$font-dir}/Roboto/Roboto-BoldItalic.ttf') format("truetype")
@@ -20,4 +20,4 @@ $font-dir: "/fonts/";
     url('#{$font-dir}/Roboto/Roboto-ThinItalic.ttf') format("truetype");
 }
 
-@import "../css/app.css"
+@import "../css/app.css";

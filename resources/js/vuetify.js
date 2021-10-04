@@ -5,7 +5,6 @@ import es from 'vuetify/src/locale/es.ts'
 
 Vue.use(Vuetify)
 
-
 const vuetify = new Vuetify({
   lang: {
     locales: { es },
@@ -35,8 +34,8 @@ const vuetify = new Vuetify({
 Vue.use(VuetifyToast, {
   $vuetify: vuetify.framework,
   timeout: 5000,
-  x: 'right',
-  y: 'bottom',
+  x: 'center',
+  y: 'top',
 })
 
 export default vuetify

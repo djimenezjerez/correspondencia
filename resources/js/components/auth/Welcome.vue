@@ -41,6 +41,7 @@
                     :large="$vuetify.breakpoint.md"
                     :small="$vuetify.breakpoint.sm"
                     :x-small="$vuetify.breakpoint.xs"
+                    color="info"
                   >
                     Ingresar
                   </v-btn>
@@ -100,6 +101,7 @@
                   :small="$vuetify.breakpoint.sm"
                   :x-small="$vuetify.breakpoint.xs"
                   @click.stop="$refs.dialogSearchCode.showDialog()"
+                  color="info"
                 >
                   Consultar trámite
                 </v-btn>

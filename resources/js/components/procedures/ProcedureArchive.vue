@@ -87,7 +87,7 @@ export default {
       try {
         this.loading = true
         const response = await axios.post(`procedure/${this.procedure.id}/archive`)
-        this.$toast.info(response.data.message)
+        this.$toast.success(response.data.message)
         this.$emit('updateList')
         this.dialog = false
       } catch(error) {

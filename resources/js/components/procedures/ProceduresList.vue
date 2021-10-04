@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row>
-      <v-col cols="auto">
+      <v-col cols="12">
         <v-card>
           <v-toolbar
             color="secondary"
@@ -13,16 +13,17 @@
             <AddButton text="Agregar hoja de ruta" @click="$refs.dialogProcedureForm.showDialog()" v-if="$store.getters.user.permissions.includes('CREAR TRÁMITE')"/>
           </v-toolbar>
           <v-row
-            class="mt-1 px-4"
+            class="mt-1 px-4 pb-0 mb-0"
+            dense
           >
-            <v-col xl="9" lg="9" md="9" sm="8" xs="12">
+            <v-col xl="9" lg="9" md="9" sm="8" xs="12" class="pb-0 mb-0">
               <div class="text-xl-h5 text-lg-h5 text-md-h6 text-sm-subtitle-1 text-xs-body-1">{{ area($store.getters.user.area_id) }}</div>
             </v-col>
-            <v-col xl="3" lg="3" md="3" sm="4" xs="12">
+            <v-col xl="3" lg="3" md="3" sm="4" xs="12" class="pb-0 mb-0">
               <SearchInput v-model="search"/>
             </v-col>
           </v-row>
-          <v-card-text>
+          <v-card-text class="pt-0 mt-0">
             <v-data-table
               :headers="headers"
               :items="procedures"
@@ -32,160 +33,218 @@
               :footer-props="{
                 itemsPerPageOptions: [8, 15, 30]
               }"
-              :mobile="false"
+              hide-default-header
+              mobile-breakpoint="0"
+              dense
               id="datatable"
             >
-              <template v-slot:[`item.to_area`]="{ item }">
-                <v-row justify="center">
-                  <div v-if="item.archived">
-                    <v-col cols="auto">
-                      <div class="text-xs-caption text-sm-caption text-sm-body-2 text-md-body-2 text-lg-body-2 text-xl-body-1">
-                        ARCHIVADO
+              <template v-slot:header>
+                <thead>
+                  <tr>
+                    <th v-for="(header, index) in tableHeaders" :key="index" class="text-center" :style="{ 'font-size': `${fontSize} !important` }">
+                      {{ header.text }}
+                    </th>
+                    <th width="15%" class="px-0 mx-0 text-center" :style="{ 'font-size': `${fontSize} !important` }">
+                      {{ actionHeader.text }}
+                    </th>
+                  </tr>
+                </thead>
+              </template>
+              <template v-slot:body="{ items }">
+                <tbody>
+                  <tr v-for="item in items" :key="item.id" :style="{ 'height': rowHeight }">
+                    <td>
+                      <div class="text-center" :style="{ 'font-size': `${fontSize} !important` }">
+                        {{ item.incoming_at ? item.incoming_at : item.created_at | moment('L LT') }}
                       </div>
-                    </v-col>
-                  </div>
-                  <div v-else>
-                    <v-col cols="6" v-if="$store.getters.user.permissions.includes('DERIVAR TRÁMITE') && item.owner && procedureTypes.length > 0">
-                      <div v-if="item.validated || $store.getters.user.role != 'VERIFICADOR'">
-                        <v-btn
-                          dark
-                          rounded
-                          color="green darken-1"
-                          @click="$refs.dialogProcedureFlow.showDialog(item, procedureType(item.procedure_type_id))"
-                          small
-                        >
-                          Derivar
-                        </v-btn>
+                    </td>
+                    <td v-if="$store.getters.user.role != 'RECEPCIÓN'">
+                      <div class="text-center" :style="{ 'font-size': `${fontSize} !important` }">
+                        {{ area(item.from_area ? item.from_area : 0) }}
                       </div>
-                      <div v-else>
-                        <v-btn
-                          dark
-                          rounded
-                          color="orange darken-1"
-                          @click="$refs.dialogProcedureRequirements.showDialog(item)"
-                          small
-                        >
-                          Requisitos
-                        </v-btn>
+                    </td>
+                    <td>
+                      <div class="text-center" :style="{ 'font-size': `${fontSize} !important` }">
+                        {{ item.code }}
                       </div>
-                    </v-col>
-                    <v-col cols="autp" v-else>
-                      <div class="text-xs-caption text-sm-caption text-sm-body-2 text-md-body-2 text-lg-body-2 text-xl-body-1">
-                        {{ area(item.to_area) }}
+                    </td>
+                    <td>
+                      <div class="text-center" :style="{ 'font-size': `${fontSize} !important` }">
+                        {{ procedureType(item.procedure_type_id) }}
                       </div>
-                    </v-col>
-                  </div>
-                </v-row>
-              </template>
-              <template v-slot:[`item.incoming_at`]="{ item }">
-                <div class="text-xs-caption text-sm-caption text-sm-body-2 text-md-body-2 text-lg-body-2 text-xl-body-1">
-                  {{ item.incoming_at ? item.incoming_at : item.created_at | moment('L LT') }}
-                </div>
-              </template>
-              <template v-slot:[`item.outgoing_at`]="{ item }">
-                <div v-if="item.archived" class="text-xs-caption text-sm-caption text-sm-body-2 text-md-body-2 text-lg-body-2 text-xl-body-1">
-                  {{ item.updated_at | moment('L LT') }}
-                </div>
-                <div v-else-if="!item.outgoing_at" class="text-xs-caption text-sm-caption text-sm-body-2 text-md-body-2 text-lg-body-2 text-xl-body-1">
-                  -
-                </div>
-                <div v-else class="text-xs-caption text-sm-caption text-sm-body-2 text-md-body-2 text-lg-body-2 text-xl-body-1">
-                  {{ item.outgoing_at | moment('L LT') }}
-                </div>
-              </template>
-              <template v-slot:[`item.from_area`]="{ item }" v-if="$store.getters.user.role != 'RECEPCIÓN'">
-                <div class="text-xs-caption text-sm-caption text-sm-body-2 text-md-body-2 text-lg-body-2 text-xl-body-1">
-                  {{ area(item.from_area ? item.from_area : 0) }}
-                </div>
-              </template>
-              <template v-slot:[`item.code`]="{ item }">
-                <div class="text-xs-caption text-sm-caption text-sm-body-2 text-md-body-2 text-lg-body-2 text-xl-body-1">
-                  {{ item.code }}
-                </div>
-              </template>
-              <template v-slot:[`item.origin`]="{ item }">
-                <div class="text-xs-caption text-sm-caption text-sm-body-2 text-md-body-2 text-lg-body-2 text-xl-body-1">
-                  {{ item.origin }}
-                </div>
-              </template>
-              <template v-slot:[`item.detail`]="{ item }">
-                <div class="text-xs-caption text-sm-caption text-sm-body-2 text-md-body-2 text-lg-body-2 text-xl-body-1">
-                  {{ item.detail }}
-                </div>
-              </template>
-              <template v-slot:[`item.procedure_type_id`]="{ item }">
-                <div class="text-xs-caption text-sm-caption text-sm-body-2 text-md-body-2 text-lg-body-2 text-xl-body-1">
-                  {{ procedureType(item.procedure_type_id) }}
-                </div>
-              </template>
-              <template v-slot:[`item.actions`]="{ item }">
-                <v-container style="width: 15em;">
-                  <v-row dense no-gutters justify="space-around">
-                    <v-col cols="auto" v-if="!item.has_flowed && item.owner && !item.archived && $store.getters.user.permissions.includes('EDITAR TRÁMITE')">
-                      <v-btn
-                        color="yellow"
-                        class="py-6"
-                        small
-                        @click="$refs.dialogProcedureForm.showDialog(item)"
-                      >
-                        <v-icon>
-                          mdi-pencil
-                        </v-icon>
-                      </v-btn>
-                    </v-col>
-                    <v-col cols="auto">
-                      <v-btn
-                        color="#00C853"
-                        class="py-6"
-                        small
-                        dark
-                        @click="$refs.dialogProcedureAttachments.showDialog(item, procedureType(item.procedure_type_id))"
-                      >
-                        <v-icon>
-                          mdi-file-pdf
-                        </v-icon>
-                      </v-btn>
-                    </v-col>
-                    <v-col cols="auto" v-if="item.has_flowed">
-                      <v-btn
-                        color="info"
-                        class="py-6"
-                        small
-                        @click="$refs.dialogProcedureTimeline.showDialog(item)"
-                      >
-                        <v-icon>
-                          mdi-chart-timeline-variant
-                        </v-icon>
-                      </v-btn>
-                    </v-col>
-                    <v-col cols="auto" v-if="$store.getters.user.permissions.includes('ARCHIVAR TRÁMITE') && item.has_flowed && item.owner && !item.archived">
-                      <v-btn
-                        color="warning"
-                        class="py-6"
-                        small
-                        dark
-                        @click="$refs.dialogProcedureArchive.showDialog(item)"
-                      >
-                        <v-icon>
-                          mdi-folder
-                        </v-icon>
-                      </v-btn>
-                    </v-col>
-                    <v-col cols="auto" v-if="!item.has_flowed && item.owner && !item.archived && $store.getters.user.permissions.includes('ELIMINAR TRÁMITE')">
-                      <v-btn
-                        color="red"
-                        class="py-6"
-                        small
-                        dark
-                        @click="$refs.dialogProcedureDelete.showDialog(item)"
-                      >
-                        <v-icon>
-                          mdi-delete
-                        </v-icon>
-                      </v-btn>
-                    </v-col>
-                  </v-row>
-                </v-container>
+                    </td>
+                    <td>
+                      <div class="text-center" :style="{ 'font-size': `${fontSize} !important` }">
+                        {{ item.origin }}
+                      </div>
+                    </td>
+                    <td>
+                      <div class="text-center" :style="{ 'font-size': `${fontSize} !important` }">
+                        {{ item.detail }}
+                      </div>
+                    </td>
+                    <td>
+                      <v-row justify="center">
+                        <div v-if="item.archived && item.owner">
+                          <v-col cols="auto">
+                            <div class="text-center" :style="{ 'font-size': `${fontSize} !important` }">
+                              ARCHIVADO
+                            </div>
+                          </v-col>
+                        </div>
+                        <div v-else>
+                          <v-col cols="6" v-if="$store.getters.user.permissions.includes('DERIVAR TRÁMITE') && item.owner && procedureTypes.length > 0">
+                            <div v-if="item.validated || $store.getters.user.role != 'VERIFICADOR'">
+                              <v-btn
+                                dark
+                                rounded
+                                color="green darken-1"
+                                @click="$refs.dialogProcedureFlow.showDialog(item, procedureType(item.procedure_type_id))"
+                                class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-xl-4 px-lg-4 px-md-2 px-sm-2 px-xs-0 mx-0"
+                                :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg || $vuetify.breakpoint.md"
+                                :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                              >
+                                <div class="text-center" :style="{ 'font-size': `${fontSize} !important` }">
+                                  Derivar
+                                </div>
+                              </v-btn>
+                            </div>
+                            <div v-else>
+                              <v-btn
+                                dark
+                                rounded
+                                color="orange darken-1"
+                                @click="$refs.dialogProcedureRequirements.showDialog(item)"
+                                class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-xl-4 px-lg-4 px-md-2 px-sm-2 px-xs-0 mx-0"
+                                :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg || $vuetify.breakpoint.md"
+                                :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                              >
+                              <div class="text-center" :style="{ 'font-size': `${fontSize} !important` }">
+                                Requisitos
+                              </div>
+                              </v-btn>
+                            </div>
+                          </v-col>
+                          <v-col cols="autp" v-else>
+                            <div class="text-center" :style="{ 'font-size': `${fontSize} !important` }">
+                              {{ area(item.to_area) }}
+                            </div>
+                          </v-col>
+                        </div>
+                      </v-row>
+                    </td>
+                    <td>
+                      <div class="text-center" :style="{ 'font-size': `${fontSize} !important` }">
+                        <div v-if="item.archived">
+                          {{ item.updated_at | moment('L LT') }}
+                        </div>
+                        <div v-else-if="!item.outgoing_at">
+                          -
+                        </div>
+                        <div v-else>
+                          {{ item.outgoing_at | moment('L LT') }}
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <v-row dense no-gutters justify="space-around">
+                        <v-col cols="auto" v-if="!item.has_flowed && item.owner && !item.archived && $store.getters.user.permissions.includes('EDITAR TRÁMITE')">
+                          <v-btn
+                            color="info"
+                            @click="$refs.dialogProcedureForm.showDialog(item)"
+                            class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-0 mx-0 my-1"
+                            :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
+                            :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                          >
+                            <v-icon
+                              dense
+                              :small="$vuetify.breakpoint.md"
+                              :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                              class="pa-0 ma-0"
+                            >
+                              mdi-pencil
+                            </v-icon>
+                          </v-btn>
+                        </v-col>
+                        <v-col cols="auto">
+                          <v-btn
+                            color="error"
+                            @click="$refs.dialogProcedureAttachments.showDialog(item, procedureType(item.procedure_type_id))"
+                            dark
+                            class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-0 mx-0 my-1"
+                            :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
+                            :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                          >
+                            <v-icon
+                              dense
+                              :small="$vuetify.breakpoint.md"
+                              :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                              class="pa-0 ma-0"
+                            >
+                              mdi-file-pdf
+                            </v-icon>
+                          </v-btn>
+                        </v-col>
+                        <v-col cols="auto" v-if="item.has_flowed">
+                          <v-btn
+                            color="info"
+                            @click="$refs.dialogProcedureTimeline.showDialog(item)"
+                            class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-0 mx-0 my-1"
+                            :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
+                            :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                          >
+                            <v-icon
+                              dense
+                              :small="$vuetify.breakpoint.md"
+                              :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                              class="pa-0 ma-0"
+                            >
+                              mdi-chart-timeline-variant
+                            </v-icon>
+                          </v-btn>
+                        </v-col>
+                        <v-col cols="auto" v-if="$store.getters.user.permissions.includes('ARCHIVAR TRÁMITE') && item.has_flowed && item.owner && !item.archived">
+                          <v-btn
+                            color="warning"
+                            @click="$refs.dialogProcedureArchive.showDialog(item)"
+                            dark
+                            class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-0 mx-0 my-1"
+                            :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
+                            :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                          >
+                            <v-icon
+                              dense
+                              :small="$vuetify.breakpoint.md"
+                              :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                              class="pa-0 ma-0"
+                            >
+                              mdi-folder
+                            </v-icon>
+                          </v-btn>
+                        </v-col>
+                        <v-col cols="auto" v-if="!item.has_flowed && item.owner && !item.archived && $store.getters.user.permissions.includes('ELIMINAR TRÁMITE')">
+                          <v-btn
+                            color="warning"
+                            @click="$refs.dialogProcedureDelete.showDialog(item)"
+                            dark
+                            class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-0 mx-0 my-1"
+                            :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
+                            :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                          >
+                            <v-icon
+                              dense
+                              :small="$vuetify.breakpoint.md"
+                              :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                              class="pa-0 ma-0"
+                            >
+                              mdi-delete
+                            </v-icon>
+                          </v-btn>
+                        </v-col>
+                      </v-row>
+                    </td>
+                  </tr>
+                </tbody>
               </template>
             </v-data-table>
           </v-card-text>
@@ -244,6 +303,35 @@ export default {
     }
   },
   computed: {
+    tableHeaders() {
+      const headers = this.headers.slice(0, -1)
+      return headers
+    },
+    actionHeader() {
+      const header = this.headers.splice(-1)
+      return header[0]
+    },
+    rowHeight() {
+      console.log(this.$vuetify.breakpoint.name)
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs': return '65px'
+        case 'sm': return '55px'
+        case 'md': return '45px'
+        case 'lg': return '80px'
+        case 'xl': return '90px'
+        default: return '45px'
+      }
+    },
+    fontSize() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs': return '8px'
+        case 'sm': return '8px'
+        case 'md': return '8px'
+        case 'lg': return '14px'
+        case 'xl': return '16px'
+        default: return '12px'
+      }
+    },
     headers() {
       let headers = [
         {
@@ -251,55 +339,55 @@ export default {
           align: 'center',
           sortable: false,
           value: 'incoming_at',
-          width: '8%',
+          // width: '8%',
         }, {
           text: 'Sección/Origen',
           align: 'center',
           sortable: false,
           value: 'from_area',
-          width: '10%',
+          // width: '10%',
         }, {
           text: 'Código de hoja de ruta',
           align: 'center',
           sortable: false,
           value: 'code',
-          width: '10%',
+          // width: '10%',
         }, {
           text: 'Tipo de trámite',
           align: 'center',
           sortable: false,
           value: 'procedure_type_id',
-          width: '10%',
+          // width: '10%',
         }, {
           text: 'Procedencia',
           align: 'center',
           sortable: false,
           value: 'origin',
-          width: '10%',
+          // width: '10%',
         }, {
           text: 'Detalle/Asunto',
           align: 'center',
           sortable: false,
           value: 'detail',
-          width: '12%',
+          // width: '12%',
         }, {
           text: 'Sección/Destino',
           align: 'center',
           sortable: false,
           value: 'to_area',
-          width: '10%',
+          // width: '10%',
         }, {
           text: 'Fecha de derivación',
           align: 'center',
           sortable: false,
           value: 'outgoing_at',
-          width: '8%',
+          // width: '8%',
         }, {
           text: 'Acciones',
           align: 'center',
           sortable: false,
           value: 'actions',
-          width: '8%',
+          // width: '8%',
         },
       ]
       if (this.$store.getters.user.role == 'RECEPCIÓN') {
@@ -312,6 +400,7 @@ export default {
   mounted() {
     const table = document.getElementById('datatable').getElementsByTagName('table')[0]
     table.setAttribute('class', 'datatables')
+    table.setAttribute('width', '100%')
   },
   created() {
     this.fetchAreas()

@@ -101,7 +101,7 @@
               <v-btn
                 block
                 type="submit"
-                color="primary"
+                color="info"
                 :disabled="invalid || loading"
               >
                 Guardar
@@ -200,10 +200,10 @@ export default {
           this.loading = true
           if (this.edit) {
             const response = await axios.patch(`procedure/${this.procedureForm.id}`, Object.fromEntries(Object.entries(this.procedureForm).filter(([_, v]) => v != '')))
-            this.$toast.info(response.data.message)
+            this.$toast.success(response.data.message)
           } else {
             const response = await axios.post('procedure', this.procedureForm)
-            this.$toast.info(response.data.message)
+            this.$toast.success(response.data.message)
           }
           this.$emit('updateList')
           this.dialog = false

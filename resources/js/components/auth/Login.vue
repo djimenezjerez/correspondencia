@@ -82,7 +82,7 @@
                   <v-btn
                     block
                     type="submit"
-                    color="primary"
+                    color="info"
                     :disabled="invalid || loading"
                   >
                     Ingresar

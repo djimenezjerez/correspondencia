@@ -125,7 +125,7 @@
                     <v-btn
                       block
                       type="submit"
-                      color="primary"
+                      color="info"
                       :disabled="invalid || loading"
                     >Enviar</v-btn>
                   </v-card-actions>
@@ -182,7 +182,7 @@ export default {
             const response = await axios.patch(`user/${this.$store.getters.user.id}`, this.passwordForm)
             await this.$store.dispatch('logout')
             this.loading = false
-            this.$toast.info(response.data.message)
+            this.$toast.success(response.data.message)
             this.$router.push({
               name: 'welcome',
             })
@@ -201,10 +201,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-  tbody {
-    tr:hover {
-      background-color: transparent !important;
-    }
-  }
+<style lang="css" scoped>
+tr:hover {
+  background-color: transparent !important;
+}
 </style>
