@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Salman\Mqtt\MqttClass\Mqtt;
 use Carbon\Carbon;
 use App\Models\Area;
 use App\Models\Procedure;
@@ -17,6 +18,7 @@ use App\Http\Resources\TimelineResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ProcedureController extends Controller
 {
@@ -31,6 +33,9 @@ class ProcedureController extends Controller
         $user = Auth::user();
         $area_id = $user->area_id;
         $owned_procedures = DB::table('procedures')->where('area_id', $area_id)->select('id');
+        if ($user->area->name != 'SECRETARÍA GENERAL') {
+            $owned_procedures = $owned_procedures->where('pending', false);
+        }
         // Tramites que se encuentran actualmente en la sección
         $current = DB::table('procedures as p')->select('p.id', 'pf.from_area', 'pf.created_at as incoming_at', 'pf.user_id as incoming_user', DB::raw('null as to_area'), DB::raw('null as outgoing_at'), DB::raw('null as outgoing_user'), DB::raw('TRUE as owner'), 'p.archived')->leftJoin('procedure_flows as pf', function($query) {
             $query->on('pf.procedure_id','=','p.id')->whereRaw('pf.id IN (select MAX(a.id) from procedure_flows as a join procedures as b on a.procedure_id = b.id group by b.id)');
@@ -244,6 +249,7 @@ class ProcedureController extends Controller
                 'id' => $procedure->id,
             ])->update([
                 'area_id' => $request->area_id,
+                'pending' => true,
             ]);
             DB::table('procedure_flows')->insert([
                 'procedure_id' => $procedure->id,
@@ -254,6 +260,11 @@ class ProcedureController extends Controller
                 'updated_at' => Carbon::now(),
             ]);
             DB::commit();
+            $mqtt = new Mqtt();
+            $notify = $mqtt->ConnectAndPublish('procedures/received/area/'.$request->area_id, Procedure::where('area_id', $request->area_id)->where('pending', true)->count());
+            if (!$notify) {
+                Log::error('Conexión perdida con el servidor de Websockets');
+            }
             return [
                 'message' => 'Trámite derivado',
                 'payload' => [
@@ -288,6 +299,7 @@ class ProcedureController extends Controller
                 'id' => $procedure->id,
             ])->update([
                 'archived' => true,
+                'pending' => false,
                 'updated_at' => Carbon::now(),
             ]);
             DB::commit();
@@ -362,6 +374,30 @@ class ProcedureController extends Controller
             'payload' => [
                 'procedure' => new ProcedureResource($procedure),
             ]
+        ];
+    }
+
+    public function pending(Request $request)
+    {
+        $user = Auth::user();
+        $area_id = $user->area_id;
+        return [
+            'message' => 'Trámites por ingresar',
+            'payload' => [
+                'badge' => Procedure::where('pending', true)->where('area_id', $area_id)->count(),
+            ],
+        ];
+    }
+
+    public function receive(Request $request)
+    {
+        $user = Auth::user();
+        $area_id = $user->area_id;
+        Procedure::where('pending', true)->where('area_id', $area_id)->update([
+            'pending' => false
+        ]);
+        return [
+            'message' => 'Trámites añadidos a la bandeja',
         ];
     }
 }

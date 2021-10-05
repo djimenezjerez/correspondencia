@@ -271,6 +271,7 @@ import ProcedureAttachments from '@/components/procedures/ProcedureAttachments'
 import ProcedureTimeline from '@/components/procedures/ProcedureTimeline'
 import SearchInput from '@/components/shared/SearchInput'
 import AddButton from '@/components/shared/AddButton'
+import { bus } from '@/app'
 
 export default {
   name: 'ProceduresList',
@@ -302,7 +303,20 @@ export default {
       requirements: [],
     }
   },
+  beforeDestroy() {
+    this.$mqtt.unsubscribe(this.topic)
+  },
+  mqtt: {
+    'procedures/received/area/+' (data, topic) {
+      if (topic == this.topic) {
+        bus.$emit('updateProcedureNotification', Number(String.fromCharCode.apply(null, data)))
+      }
+    }
+  },
   computed: {
+    topic() {
+      return `procedures/received/area/${this.$store.getters.user.area_id}`
+    },
     tableHeaders() {
       const headers = this.headers.slice(0, -1)
       return headers
@@ -312,7 +326,6 @@ export default {
       return header[0]
     },
     rowHeight() {
-      console.log(this.$vuetify.breakpoint.name)
       switch (this.$vuetify.breakpoint.name) {
         case 'xs': return '65px'
         case 'sm': return '55px'
@@ -401,6 +414,16 @@ export default {
     const table = document.getElementById('datatable').getElementsByTagName('table')[0]
     table.setAttribute('class', 'datatables')
     table.setAttribute('width', '100%')
+    this.$mqtt.subscribe(this.topic)
+    console.log(`Suscrito a socket: ${this.topic}`)
+    bus.$on('updateProcedureList', () => {
+      this.search = null
+      this.options = {
+        page: 1,
+        itemsPerPage: 8,
+      },
+      this.fetchProcedures()
+    })
   },
   created() {
     this.fetchAreas()
@@ -484,8 +507,6 @@ export default {
           params: {
             page: this.options.page,
             per_page: this.options.itemsPerPage,
-            sort_by: this.options.sortBy,
-            sort_desc: this.options.sortDesc,
             search: this.search,
           },
         })

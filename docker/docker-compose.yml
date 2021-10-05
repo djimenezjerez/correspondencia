@@ -15,6 +15,8 @@ volumes:
     driver: ${VOLUMES_DRIVER}
   redis:
     driver: ${VOLUMES_DRIVER}
+  mosquitto:
+    driver: ${VOLUMES_DRIVER}
 
 services:
 
@@ -150,6 +152,8 @@ services:
       networks:
         - frontend
         - backend
+      links:
+        - mosquitto
       logging:
         driver: none
       restart: always
@@ -254,6 +258,8 @@ services:
         - workspace
       networks:
         - backend
+      links:
+        - mosquitto
       logging:
         driver: none
       restart: always
@@ -498,4 +504,18 @@ services:
         - backend
       logging:
         driver: none
+      restart: always
+
+### MOSQUITTO Broker #########################################
+    mosquitto:
+      build:
+        context: ./mosquitto
+      volumes:
+        - ${DATA_PATH_HOST}/mosquitto/data:/mosquitto/data
+      ports:
+        - "${MOSQUITTO_PORT_MQTT}:1883"
+        - "${MOSQUITTO_PORT_WS}:9001"
+      networks:
+        - frontend
+        - backend
       restart: always

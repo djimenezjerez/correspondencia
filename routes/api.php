@@ -89,4 +89,8 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::get('procedure/{procedure}/attachment/{attachment}', [AttachmentController::class, 'show']);
     Route::post('procedure/{procedure}/attachment', [AttachmentController::class, 'store'])->middleware('permission:ADJUNTAR ARCHIVO');
     Route::delete('procedure/{procedure}/attachment/{attachment}', [AttachmentController::class, 'destroy']);
+
+    // Bandeja de trámites
+    Route::get('procedure/tray/pending', [ProcedureController::class, 'pending']);
+    Route::post('procedure/tray/receive', [ProcedureController::class, 'receive']);
 });

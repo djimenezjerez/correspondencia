@@ -34,6 +34,9 @@
         Inicio
       </v-btn>
       <v-spacer></v-spacer>
+      <div class="mr-10 mt-2">
+        <NotificationBadge/>
+      </div>
       <v-menu
         bottom
         offset-y
@@ -117,8 +120,13 @@
 </template>
 
 <script>
+import NotificationBadge from '@/components/shared/NotificationBadge'
+
 export default {
   name: 'Login',
+  components: {
+    NotificationBadge
+  },
   data: function() {
     return {
       drawer: false,
@@ -148,3 +156,11 @@ export default {
   }
 }
 </script>
+
+<style type="css" scoped>
+.v-tooltip__content {
+  font-size: 15px !important;
+  /* background-color: blue; */
+  /* opacity: 0.9 !important; */
+}
+</style>

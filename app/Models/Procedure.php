@@ -22,6 +22,7 @@ class Procedure extends Model
         'archived',
         'area_id',
         'procedure_type_id',
+        'pending',
     ];
 
     public $timestamps = true;
