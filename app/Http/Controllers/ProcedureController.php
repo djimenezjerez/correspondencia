@@ -407,6 +407,7 @@ class ProcedureController extends Controller
     {
         $selected_area = Area::find($request->area_id);
         try {
+            $procedure->detail = explode('\n', wordwrap($procedure->detail, 75, '\n'));
             $data = [
                 'filename' => 'Trámite ' . $procedure->code . '-' . Carbon::now()->format('d-m-Y H-i') . '.pdf',
                 'logo' => 'data:image/png;base64,' . base64_encode(file_get_contents(resource_path('img/logo_low.png'))),

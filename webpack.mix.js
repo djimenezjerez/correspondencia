@@ -16,6 +16,7 @@ mix
 .sass('resources/sass/app.scss', 'public/css')
 .copy('resources/fonts', 'public/fonts')
 .copy('resources/img', 'public/img')
+.copy('resources/audio', 'public/audio')
 .vuetify(
   'vuetify-loader',
   'resources/sass/variables.scss',

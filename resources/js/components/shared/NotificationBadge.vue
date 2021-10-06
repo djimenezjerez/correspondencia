@@ -1,5 +1,6 @@
 <template>
   <div>
+    <audio id="notification" src="/audio/notification.mp3" type="audio/mp3"></audio>
     <div v-if="badge > 0">
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
@@ -39,6 +40,7 @@ export default {
   },
   mounted() {
     bus.$on('updateProcedureNotification', (value) => {
+      document.getElementById('notification').play()
       this.badge = value
     })
     if (!this.$store.getters.user.permissions.includes('CREAR TRÁMITE')) {

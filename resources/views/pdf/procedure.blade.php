@@ -82,12 +82,12 @@
 									Referencia:
 								</td>
 								<td width="89%" style="height: 15px;" class="punteado overflow">
-									{{ mb_substr($procedure->detail, 0, 81) }}
+									{{ $procedure->detail[0] }}
 								</td>
 							</tr>
 							<tr>
 								<td colspan="2" width="100%" style="height: 15px;" class="punteado overflow">
-									{{ mb_substr($procedure->detail, 81) }}
+									{{ $procedure->detail[1] ?? '' }}
 								</td>
 							</tr>
 						</tbody>

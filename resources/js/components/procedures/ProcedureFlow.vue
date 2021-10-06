@@ -63,7 +63,7 @@
                 ></v-select>
               </validation-provider>
             </v-card-text>
-            <v-card-actions v-show="$store.getters.user.permissions.includes('CREAR TRÁMITE')">
+            <v-card-actions v-show="$store.getters.user.permissions.includes('CREAR TRÁMITE') && !procedure.has_flowed">
               <v-btn
                 block
                 color="success"
