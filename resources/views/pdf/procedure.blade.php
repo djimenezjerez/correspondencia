@@ -57,9 +57,7 @@
 								<td width="4%" style="height: 15px;" class="negrilla overflow">
 									Nº:
 								</td>
-								<td width="7%" style="height: 15px;" class="punteado overflow">
-									{{ $procedure->counter }}
-								</td>
+								<td width="7%" style="height: 15px;" class="punteado overflow"></td>
 								<td width="8%" style="height: 15px;" class="negrilla overflow">
 									Remite:
 								</td>

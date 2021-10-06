@@ -23,7 +23,6 @@ class Procedure extends Model
         'area_id',
         'procedure_type_id',
         'pending',
-        'counter',
     ];
 
     public $timestamps = true;

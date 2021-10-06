@@ -115,7 +115,6 @@ class ProcedureController extends Controller
         ]);
         $procedure = new Procedure;
         $procedure->fill($request->except('archived'));
-        $procedure->counter = $procedure->procedure_type->counter + 1;
         DB::beginTransaction();
         try {
             $procedure->save(['timestamps' => true]);
