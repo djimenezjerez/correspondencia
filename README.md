@@ -99,7 +99,7 @@ $ php artisan migrate:install
 $ php artisan migrate
 ```
 
-6. Compilar el código:
+6. Compilar el código fuente del frontend:
 
 ```sh
 $ yarn prod
@@ -112,3 +112,77 @@ $ php artisan db:seed --class=DatabaseSeeder
 ```
 
 Concluyendo estos pasos, se puede ingresar al navegador y apuntar la URL a la dirección del dominio del servidor donde se instaló el sistema.
+
+## PASOS PARA LA ACTUALIZACIÓN
+
+Para seguir los pasos listados continuación se debe tener abierta una consola con la ruta ubicada en la raíz del de la carpeta del proyecto.
+
+1. Actualizar las variables de entorno del archivo **.env** de acuerdo a los datos del ejemplo del archivo **.env.example**
+
+2. Instalar las nuevas dependencias:
+
+```sh
+$ php artisan key:generate
+$ composer install
+$ yarn install
+$ php artisan migrate
+```
+
+6. Compilar el código fuente del frontend:
+
+```sh
+$ yarn prod
+```
+
+7. Cargar los nuevos datos:
+
+```sh
+$ php artisan db:seed --class=DatabaseSeeder
+```
+
+Concluyendo estos pasos, se puede ingresar al navegador y apuntar la URL a la dirección del dominio del servidor donde se instaló el sistema.
+
+## PUESTA EN PRODUCCIÓN MEDIANTE DOCKER
+
+* Para levantar el sistema mediante virtualización de contenedores se necesitan los siguientes requisitos:
+
+    1. Docker versión 20.10.7 o superior
+    2. Docker Compose versión 1.29.2 o superior
+
+Los pasos a seguir para levantar los servicios necesarios son los siguientes:
+
+
+1. Editar el archivo de variables de entorno **docker/.env.example**.
+
+2. Copiar el archivo de variables de entorno editado anteriormente al directorio laradock:
+
+```sh
+$ copy /Y docker/.env.example laradock/.env
+```
+
+3. Copiar los archivos necesarios para levantar correctamente los contenedores:
+
+```sh
+$ copy /Y docker/docker-compose.yml laradock/docker-compose.yml
+$ copy /Y docker/mosquitto.conf laradock/mosquitto
+```
+
+4. Descargar las imágenes de los contenedores:
+
+```sh
+$ docker-compose build --parallel nginx php-fpm workspace mariadb mosquitto
+```
+
+5. Levantar el sistema:
+
+```sh
+$ docker-compose up -d nginx php-fpm workspace mariadb mosquitto
+```
+
+6. Verificar que todos los contenedores se encuentren en ejecución **State = Up**
+
+```sh
+$ docker-compose ps
+```
+
+Con ello se pueden seguir los [pasos de instalación](#pasos-para-la-instalación) o [pasos para la actualización](#pasos-para-la-actualización) mencionados anteriormente en el presente manual.
