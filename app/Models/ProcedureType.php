@@ -53,7 +53,7 @@ class ProcedureType extends Model
         $counter = $this->counter;
         do {
             $counter = $counter + 1;
-            $code = implode('/', ['ASCINALSS', auth()->user()->area->code, $this->code, $counter, $year]);
+            $code = implode('/', [auth()->user()->area->code, $this->code, $counter, $year]);
         } while (Procedure::where('code', $code)->exists());
         return $code;
     }

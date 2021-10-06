@@ -40,21 +40,27 @@ Los usuarios tienen acceso a una o más funciones de los módulos listados anter
 El encargado de administrar usuarios, para el caso sea el usuario que cuenta con el rol ADMINISTRADOR, es el que cuenta con la facultad de definir la sección para cada usuario usuario por medio. A cada sección se le asignó un rol predefinido:
 
 1. La sección ADMINISTRADOR tiene asociado el rol ADMINISTRADOR
-2. La sección SECRETARÍA GENERAL tiene asociado el rol RECEPCIÓN
-3. La sección SECRETARÍA HACIENDA tiene asociado el rol SECRETARÍA
-4. La sección RESPONSABLE DE PRESTACIONES tiene asociado el rol SECRETARÍA
-5. La sección ATENCION EN PLATAFORMA tiene asociado el rol VERIFICADOR
-6. La sección TESORERÍA tiene asociado el rol SECRETARÍA
-7. La sección SECRETARÍA PRESIDENCIA tiene asociado el rol SECRETARÍA
-8. La sección SECRETARÍA VICE PRESIDENCIA tiene asociado el rol SECRETARÍA
-9. La sección SECRETARÍA PERSONAL tiene asociado el rol SECRETARÍA
-10. La sección SECRETARÍA BIENESTAR SOCIAL Y VIVIENDA tiene asociado el rol SECRETARÍA
-11. La sección SECRETARÍA DE EDUCACIÓN tiene asociado el rol SECRETARÍA
+2. La sección PRESIDENCIA tiene asociado el rol SECRETARÍA
+3. La sección VICE PRESIDENCIA tiene asociado el rol SECRETARÍA
+4. La sección STRIA. RÉGIMEN INTERNO Y PERSONAL tiene asociado el rol SECRETARÍA
+5. La sección SECRETARÍA HACIENDA tiene asociado el rol SECRETARÍA
+6. La sección SECRETARÍA GENERAL tiene asociado el rol RECEPCIÓN
+7. La sección STRIA. BIENESTAR SOCIAL Y VIVIENDA tiene asociado el rol SECRETARÍA
+8. La sección STRIA. DE EDUCACIÓN Y CULTURA tiene asociado el rol SECRETARÍA
+9. La sección STRIA. DE ACTAS Y DEPORTE tiene asociado el rol SECRETARÍA
+10. La sección DIRECTOR ADMINISTRATIVO tiene asociado el rol SECRETARÍA
+11. La sección UNIDAD DE SISTEMAS tiene asociado el rol SECRETARÍA
+12. La sección UNIDAD DE ASESORÍA JURÍDICA tiene asociado el rol SECRETARÍA
+13. La sección UNIDAD DE AUDITORÍA tiene asociado el rol SECRETARÍA
+14. La sección RESPONSABLE DE PRESTACIONES tiene asociado el rol SECRETARÍA
+15. La sección ATENCIÓN EN PLATAFORMA tiene asociado el rol VERIFICADOR
+16. La sección TESORERÍA tiene asociado el rol SECRETARÍA
+17. La sección STRIA. RELACIONES PUBLICAS, PRENSA Y PROPAGANDA tiene asociado el rol SECRETARÍA
 
 ## CONSIDERACIONES DE USO
 
 * Cuando se crean usuarios el sistema asigna un nombre de usuario parcial que se valida al momento de enviar el formulario para evitar duplicidad de nombres de usuarios, sin embaro este campo es editable.
-* La primera contraseña de cada usuario es el dato del documento de identidad, siendo posible el cambio de contraseña por cada usuario en la vista de PERFIL o por medio de un usuario administrador en el formulario de edición de usuarios.
+* La primera contraseña de cada usuario es el dato del documento de identidad (con el Complemento Alfanumérico en Mayúsculas), siendo posible el cambio de contraseña por cada usuario en la vista de PERFIL o por medio de un usuario administrador en el formulario de edición de usuarios.
 * Cuando se crean hojas de ruta el sistema asigna una hoja de ruta parcial que se valida al momento de enviar el formulario para evitar duplicidad de códigos de hojas de ruta, sin embargo este campo es editable.
 * Los contadores que el sistema utiliza para generar códigos de hojas de ruta se reinician anualmente siempre y cuando el servidor tenga habilitada las tareas programadas de Cron y se hayan seguido los pasos indicados en la [documentación de Laravel](https://laravel.com/docs/8.x/scheduling#running-the-scheduler).
 

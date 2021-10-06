@@ -34,7 +34,7 @@
         Inicio
       </v-btn>
       <v-spacer></v-spacer>
-      <div class="mr-10 mt-2">
+      <div class="mr-10 mt-2" v-if="$route.name == 'procedures'">
         <NotificationBadge/>
       </div>
       <v-menu

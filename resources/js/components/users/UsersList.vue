@@ -46,29 +46,43 @@
                 <v-container style="width: 10em;">
                   <v-row dense no-gutters justify="space-around">
                     <v-col cols="auto" v-if="item.is_active">
-                      <v-btn
-                        color="yellow"
-                        class="py-6"
-                        small
-                        @click="$refs.dialogUserForm.showDialog(item)"
-                      >
-                        <v-icon>
-                          mdi-pencil
-                        </v-icon>
-                      </v-btn>
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn
+                            v-bind="attrs"
+                            v-on="on"
+                            color="yellow"
+                            class="py-6"
+                            small
+                            @click="$refs.dialogUserForm.showDialog(item)"
+                          >
+                            <v-icon>
+                              mdi-pencil
+                            </v-icon>
+                          </v-btn>
+                        </template>
+                        <span>Editar Usuario</span>
+                      </v-tooltip>
                     </v-col>
                     <v-col cols="auto">
-                      <v-btn
-                        :color="item.is_active ? 'red' : 'success'"
-                        :dark="item.is_active"
-                        class="py-6"
-                        small
-                        @click="$refs.dialogUserSwitch.showDialog(item)"
-                      >
-                        <v-icon>
-                          {{ item.is_active ? 'mdi-delete' : 'mdi-restore' }}
-                        </v-icon>
-                      </v-btn>
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn
+                            v-bind="attrs"
+                            v-on="on"
+                            :color="item.is_active ? 'red' : 'success'"
+                            :dark="item.is_active"
+                            class="py-6"
+                            small
+                            @click="$refs.dialogUserSwitch.showDialog(item)"
+                          >
+                            <v-icon>
+                              {{ item.is_active ? 'mdi-delete' : 'mdi-restore' }}
+                            </v-icon>
+                          </v-btn>
+                        </template>
+                        <span>{{ item.is_active ? 'Desactivar usuario' : 'Reactivar usuario' }}</span>
+                      </v-tooltip>
                     </v-col>
                   </v-row>
                 </v-container>

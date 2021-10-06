@@ -406,6 +406,10 @@ class ProcedureController extends Controller
     public function print(FlowRequest $request, Procedure $procedure)
     {
         $selected_area = Area::find($request->area_id);
+        $areas = Area::where('group', '>', 0)->orderBy('order', 'ASC')->orderBy('name', 'ASC')->select('id', 'name', 'code', 'order')->get();
+        foreach ($areas as $i => $area) {
+            $areas[$i]->selected = ($area->id == $request->area_id);
+        }
         try {
             $procedure->detail = explode('\n', wordwrap($procedure->detail, 75, '\n'));
             $data = [
@@ -417,63 +421,7 @@ class ProcedureController extends Controller
                     'border-right: none; border-left: none; text-align: start; vertical-align: top;',
                     'border-left: none; text-align: start; vertical-align: top;',
                 ],
-                'areas' => [
-                    [
-                        [
-                            'display' => 'Presidencia',
-                            'name' => 'SECRETARÍA PRESIDENCIA',
-                            'selected' => false,
-                        ], [
-                            'display' => 'Vicepresidencia',
-                            'name' => 'SECRETARÍA VICE PRESIDENCIA',
-                            'selected' => false,
-                        ], [
-                            'display' => 'Stria. Régimen Interno y Jefe de Personal',
-                            'name' => 'SECRETARÍA PERSONAL',
-                            'selected' => false,
-                        ], [
-                            'display' => 'Stria. de Hacienda',
-                            'name' => 'SECRETARÍA HACIENDA',
-                            'selected' => false,
-                        ],
-                    ], [
-                        [
-                            'display' => 'Stria. General de Relaciones Públicas, Prensa y Propaganda',
-                            'name' => 'SECRETARÍA GENERAL',
-                            'selected' => false,
-                        ], [
-                            'display' => 'Stria. de Bienestar Social y Vivienda',
-                            'name' => 'SECRETARÍA BIENESTAR SOCIAL Y VIVIENDA',
-                            'selected' => false,
-                        ], [
-                            'display' => 'Stria. de Educación y Cultura',
-                            'name' => 'SECRETARÍA DE EDUCACIÓN',
-                            'selected' => false,
-                        ], [
-                            'display' => 'Stria. de Actas y Deporte',
-                            'name' => 'DESCONOCIDO 3',
-                            'selected' => false,
-                        ],
-                    ], [
-                        [
-                            'display' => 'Director Administrativo',
-                            'name' => 'DESCONOCIDO 4',
-                            'selected' => false,
-                        ], [
-                            'display' => 'Unidad de Sistemas',
-                            'name' => 'DESCONOCIDO 5',
-                            'selected' => false,
-                        ], [
-                            'display' => 'Unidad de Asesoría Jurídica',
-                            'name' => 'DESCONOCIDO 6',
-                            'selected' => false,
-                        ], [
-                            'display' => 'Unidad de Auditoría',
-                            'name' => 'DESCONOCIDO 7',
-                            'selected' => false,
-                        ],
-                    ],
-                ]
+                'areas' => $areas->chunk(6),
             ];
             foreach ($data['areas'] as $i => $chunk) {
                 foreach ($chunk as $j => $area) {

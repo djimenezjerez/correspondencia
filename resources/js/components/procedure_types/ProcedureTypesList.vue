@@ -47,29 +47,43 @@
                 <v-container style="width: 10em;">
                   <v-row dense no-gutters justify="space-around">
                     <v-col cols="auto">
-                      <v-btn
-                        color="yellow"
-                        class="py-6"
-                        small
-                        @click="$refs.dialogProcedureTypeForm.showDialog(item)"
-                      >
-                        <v-icon>
-                          mdi-pencil
-                        </v-icon>
-                      </v-btn>
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn
+                            v-bind="attrs"
+                            v-on="on"
+                            color="yellow"
+                            class="py-6"
+                            small
+                            @click="$refs.dialogProcedureTypeForm.showDialog(item)"
+                          >
+                            <v-icon>
+                              mdi-pencil
+                            </v-icon>
+                          </v-btn>
+                        </template>
+                        <span>Editar trámite</span>
+                      </v-tooltip>
                     </v-col>
                     <v-col cols="auto" v-if="item.total_procedures == 0">
-                      <v-btn
-                        dark
-                        color="red"
-                        class="py-6"
-                        small
-                        @click="$refs.dialogProcedureTypeDelete.showDialog(item)"
-                      >
-                        <v-icon>
-                          mdi-delete
-                        </v-icon>
-                      </v-btn>
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn
+                            v-bind="attrs"
+                            v-on="on"
+                            dark
+                            color="red"
+                            class="py-6"
+                            small
+                            @click="$refs.dialogProcedureTypeDelete.showDialog(item)"
+                          >
+                            <v-icon>
+                              mdi-delete
+                            </v-icon>
+                          </v-btn>
+                        </template>
+                        <span>Eliminar trámite</span>
+                      </v-tooltip>
                     </v-col>
                   </v-row>
                 </v-container>

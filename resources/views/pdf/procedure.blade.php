@@ -113,7 +113,7 @@
 					<td class="borde fuente10 padding_x padding_y" style="{{ $areas_styles[$i] }}">
 						<ul>
 							@foreach ($chunk as $area)
-								<li class="{{ $area['selected'] ? 'seleccionado' : '' }}">{{ $area['display'] }}</li>
+								<li class="{{ $area->selected ? 'seleccionado' : '' }}">{{ $area->name }}</li>
 							@endforeach
 						</ul>
 					</td>
@@ -129,7 +129,7 @@
 						@for ($j = 0; $j < 4; $j++)
 							<div class="punteado" style="width: 100%; height: 15px;"></div>
 						@endfor
-						<div class="negrilla padding_y" style="width: 100%; margin-top: 34px;">
+						<div class="negrilla padding_y" style="width: 100%; margin-top: 31px;">
 							<span style="margin-right: 280px;">Firma</span>
 							<span>Fecha-Hora</span>
 						</div>

@@ -115,6 +115,7 @@
                   data-vv-name="identity_card"
                   :error-messages="errors"
                   prepend-icon="mdi-card-account-details"
+                  @input="value => userForm.identity_card = value.toUpperCase()"
                 ></v-text-field>
               </validation-provider>
               <validation-provider

@@ -37,29 +37,43 @@
                 <v-container style="width: 10em;">
                   <v-row dense no-gutters justify="space-around">
                     <v-col cols="auto">
-                      <v-btn
-                        color="yellow"
-                        class="py-6"
-                        small
-                        @click="$refs.dialogRequirementForm.showDialog(item)"
-                      >
-                        <v-icon>
-                          mdi-pencil
-                        </v-icon>
-                      </v-btn>
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn
+                            v-bind="attrs"
+                            v-on="on"
+                            color="yellow"
+                            class="py-6"
+                            small
+                            @click="$refs.dialogRequirementForm.showDialog(item)"
+                          >
+                            <v-icon>
+                              mdi-pencil
+                            </v-icon>
+                          </v-btn>
+                        </template>
+                        <span>Editar requisito</span>
+                      </v-tooltip>
                     </v-col>
                     <v-col cols="auto" v-if="!item.is_used">
-                      <v-btn
-                        color="red"
-                        class="py-6"
-                        dark
-                        small
-                        @click="$refs.dialogRequirementDelete.showDialog(item)"
-                      >
-                        <v-icon>
-                          mdi-delete
-                        </v-icon>
-                      </v-btn>
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn
+                            v-bind="attrs"
+                            v-on="on"
+                            color="red"
+                            class="py-6"
+                            dark
+                            small
+                            @click="$refs.dialogRequirementDelete.showDialog(item)"
+                          >
+                            <v-icon>
+                              mdi-delete
+                            </v-icon>
+                          </v-btn>
+                        </template>
+                        <span>Eliminar requisito</span>
+                      </v-tooltip>
                     </v-col>
                   </v-row>
                 </v-container>
