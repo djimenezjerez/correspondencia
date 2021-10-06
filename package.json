@@ -9,16 +9,19 @@
         "prod": "npm run production",
         "production": "mix --production"
     },
+    "resolutions": {
+        "@nuxtjs/vuetify/**/sass": "1.32.12"
+    },
     "devDependencies": {
-        "@mdi/font": "~5.9.55",
-        "axios": "~0.21",
+        "@mdi/font": "~6.2.95",
+        "axios": "~0.22.0",
         "deepmerge": "~4.2.2",
         "laravel-mix": "~6.0.6",
         "lodash": "~4.17.19",
         "path": "~0.12.7",
-        "postcss": "~8.1.14",
+        "postcss": "~8.3.9",
         "resolve-url-loader": "~4.0.0",
-        "sass": "~1.32.12",
+        "sass": "~1.32.6",
         "sass-loader": "~12.1.0",
         "source-map": "~0.7.3",
         "vue": "~2.6.12",
@@ -29,7 +32,7 @@
         "vuetifyjs-mix-extension": "~0.0.20"
     },
     "dependencies": {
-        "css-loader": "~6.2.0",
+        "css-loader": "~6.3.0",
         "vee-validate": "~3.4.11",
         "vue-moment": "~4.1.0",
         "vue-mqtt": "^2.0.3",

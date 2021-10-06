@@ -13,7 +13,7 @@
       ></v-app-bar-nav-icon>
       <v-toolbar-title>
         <v-img
-          src="/img/logo.png"
+          src="/img/logo_low.png"
           contain
           width="80"
         ></v-img>

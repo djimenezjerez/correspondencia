@@ -118,7 +118,7 @@
                   >
                     Subir
                     <v-icon right size="25">
-                      mdi-file-pdf
+                      mdi-file-document-multiple
                     </v-icon>
                   </v-btn>
                 </v-col>
@@ -202,7 +202,7 @@ export default {
           }
         case 'PDF':
           return {
-            icon: 'mdi-file-pdf',
+            icon: 'mdi-file-document-multiple',
             color: 'red'
           }
         default:

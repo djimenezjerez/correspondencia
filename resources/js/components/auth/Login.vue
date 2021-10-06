@@ -40,7 +40,7 @@
               contain
               :max-height="imageHeight"
               :height="imageHeight"
-              src="/img/logo.png"
+              src="/img/logo_low.png"
             ></v-img>
           </v-col>
           <v-col cols="12" class="pt-0">

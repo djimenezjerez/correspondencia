@@ -81,6 +81,9 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     // Derivar trámite
     Route::post('procedure/{procedure}/flow', [ProcedureController::class, 'flow'])->middleware('permission:DERIVAR TRÁMITE');
 
+    // Impresión de PDF
+    Route::post('procedure/{procedure}/print', [ProcedureController::class, 'print'])->middleware('permission:DERIVAR TRÁMITE');
+
     // Archivar trámite
     Route::post('procedure/{procedure}/archive', [ProcedureController::class, 'archive'])->middleware('permission:ARCHIVAR TRÁMITE');
 

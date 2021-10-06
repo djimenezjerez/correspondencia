@@ -176,7 +176,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Salman\Mqtt\MqttServiceProvider::class,
-
+        Barryvdh\DomPDF\ServiceProvider::class,
     ],
 
     /*
@@ -231,6 +231,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Mqtt' => \Salman\Mqtt\Facades\Mqtt::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
     ],
 
 ];

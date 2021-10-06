@@ -181,7 +181,7 @@
                               :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
                               class="pa-0 ma-0"
                             >
-                              mdi-file-pdf
+                              mdi-file-document-multiple
                             </v-icon>
                           </v-btn>
                         </v-col>

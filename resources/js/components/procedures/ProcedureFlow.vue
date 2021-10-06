@@ -66,8 +66,21 @@
             <v-card-actions>
               <v-btn
                 block
+                color="success"
+                :disabled="invalid || loading"
+                @click="printRoadmap"
+              >
+                <v-icon left>
+                  mdi-printer
+                </v-icon>
+                Imprimir
+              </v-btn>
+            </v-card-actions>
+            <v-card-actions>
+              <v-btn
+                block
                 type="submit"
-                color="primary"
+                color="info"
                 :disabled="invalid || loading"
               >
                 <v-icon left>
@@ -122,6 +135,34 @@ export default {
       this.$nextTick(() => {
         this.$refs.procedureFlowObserver.reset()
       })
+    },
+    async printRoadmap() {
+      try {
+        let valid = await this.$refs.procedureFlowObserver.validate()
+        if (valid) {
+          this.loading = true
+          const response = await axios.post(`procedure/${this.procedure.id}/print`, {
+            area_id: this.selectedArea
+          })
+          // Abrir PDF en nueva ventana
+          let pdfWindow = window.open("")
+          pdfWindow.document.write("<html<head><title>"+response.data.payload.file.name+"</title><style>body{margin: 0px;}iframe{border-width: 0px;}</style></head>")
+          pdfWindow.document.write("<body><embed width='100%' height='100%' src='data:application/pdf;base64, " + encodeURI(response.data.payload.file.content)+"#toolbar=0&navpanes=0&scrollbar=0'></embed></body></html>")
+          // Descargar PDF
+          // const downloadLink = document.createElement('a')
+          // downloadLink.href = `data:application/pdf;base64,${response.data.payload.file.content}`
+          // downloadLink.download = response.data.payload.file.name
+          // downloadLink.click()
+        }
+      } catch(error) {
+        this.$refs.procedureFlowObserver.reset()
+        if ('errors' in error.response.data) {
+          this.$refs.procedureFlowObserver.setErrors(error.response.data.errors)
+        }
+        this.$toast.error(error.response.data.message)
+      } finally {
+        this.loading = false
+      }
     },
     async submit() {
       try {

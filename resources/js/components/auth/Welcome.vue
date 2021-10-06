@@ -34,7 +34,6 @@
               <v-col cols="12">
                 <div>
                   <v-btn
-                    outlined
                     @click.stop="$refs.dialogLogin.showDialog()"
                     dark
                     :x-large="$vuetify.breakpoint.lg || $vuetify.breakpoint.xl"
@@ -66,7 +65,7 @@
               <v-img
                 contain
                 :max-width="imageWidth"
-                src="/img/logo.png"
+                src="/img/logo_low.png"
               ></v-img>
             </v-col>
             <v-col cols="12">
@@ -94,7 +93,6 @@
             >
               <v-col cols="12">
                 <v-btn
-                  outlined
                   dark
                   :x-large="$vuetify.breakpoint.lg || $vuetify.breakpoint.xl"
                   :large="$vuetify.breakpoint.md"

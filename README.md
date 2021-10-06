@@ -67,6 +67,7 @@ El encargado de administrar usuarios, para el caso sea el usuario que cuenta con
     4. OpenSSL versión 1.1.1
     5. NodeJS versión 14.17.3 o superior
     6. Yarn versión 1.22.11 o superior
+    7. MQTT Mosquitto Broker versión 2.0.12
 
 ## PASOS PARA LA INSTALACIÓN
 

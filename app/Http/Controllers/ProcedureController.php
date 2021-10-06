@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class ProcedureController extends Controller
 {
@@ -114,6 +115,7 @@ class ProcedureController extends Controller
         ]);
         $procedure = new Procedure;
         $procedure->fill($request->except('archived'));
+        $procedure->counter = $procedure->procedure_type->counter + 1;
         DB::beginTransaction();
         try {
             $procedure->save(['timestamps' => true]);
@@ -377,7 +379,7 @@ class ProcedureController extends Controller
         ];
     }
 
-    public function pending(Request $request)
+    public function pending()
     {
         $user = Auth::user();
         $area_id = $user->area_id;
@@ -389,7 +391,7 @@ class ProcedureController extends Controller
         ];
     }
 
-    public function receive(Request $request)
+    public function receive()
     {
         $user = Auth::user();
         $area_id = $user->area_id;
@@ -399,5 +401,101 @@ class ProcedureController extends Controller
         return [
             'message' => 'Trámites añadidos a la bandeja',
         ];
+    }
+
+    public function print(FlowRequest $request, Procedure $procedure)
+    {
+        $selected_area = Area::find($request->area_id);
+        try {
+            $data = [
+                'filename' => 'Trámite ' . $procedure->code . '-' . Carbon::now()->format('d-m-Y H-i') . '.pdf',
+                'logo' => 'data:image/png;base64,' . base64_encode(file_get_contents(resource_path('img/logo_low.png'))),
+                'procedure' => $procedure,
+                'areas_styles' => [
+                    'border-right: none; text-align: start; vertical-align: top;',
+                    'border-right: none; border-left: none; text-align: start; vertical-align: top;',
+                    'border-left: none; text-align: start; vertical-align: top;',
+                ],
+                'areas' => [
+                    [
+                        [
+                            'display' => 'Presidencia',
+                            'name' => 'SECRETARÍA PRESIDENCIA',
+                            'selected' => false,
+                        ], [
+                            'display' => 'Vicepresidencia',
+                            'name' => 'SECRETARÍA VICE PRESIDENCIA',
+                            'selected' => false,
+                        ], [
+                            'display' => 'Stria. Régimen Interno y Jefe de Personal',
+                            'name' => 'DESCONOCIDO 1',
+                            'selected' => false,
+                        ], [
+                            'display' => 'Stria. de Hacienda',
+                            'name' => 'SECRETARÍA HACIENDA',
+                            'selected' => false,
+                        ],
+                    ], [
+                        [
+                            'display' => 'Stria. General de Relaciones Públicas, Prensa y Propaganda',
+                            'name' => 'DESCONOCIDO 2',
+                            'selected' => false,
+                        ], [
+                            'display' => 'Stria. de Bienestar Social y Vivienda',
+                            'name' => 'SECRETARÍA BIENESTAR SOCIAL Y VIVIENDA',
+                            'selected' => false,
+                        ], [
+                            'display' => 'Stria. de Educación y Cultura',
+                            'name' => 'SECRETARÍA DE EDUCACIÓN',
+                            'selected' => false,
+                        ], [
+                            'display' => 'Stria. de Actas y Deporte',
+                            'name' => 'DESCONOCIDO 3',
+                            'selected' => false,
+                        ],
+                    ], [
+                        [
+                            'display' => 'Director Administrativo',
+                            'name' => 'DESCONOCIDO 4',
+                            'selected' => false,
+                        ], [
+                            'display' => 'Unidad de Sistemas',
+                            'name' => 'DESCONOCIDO 5',
+                            'selected' => false,
+                        ], [
+                            'display' => 'Unidad de Asesoría Jurídica',
+                            'name' => 'DESCONOCIDO 6',
+                            'selected' => false,
+                        ], [
+                            'display' => 'Unidad de Auditoría',
+                            'name' => 'DESCONOCIDO 7',
+                            'selected' => false,
+                        ],
+                    ],
+                ]
+            ];
+            foreach ($data['areas'] as $i => $chunk) {
+                foreach ($chunk as $j => $area) {
+                    if ($area['name'] == $selected_area->name) {
+                        $data['areas'][$i][$j]['selected'] = true;
+                        break 2;
+                    }
+                }
+            }
+            $pdf = PDF::loadView('pdf.procedure', $data)->output();
+            return [
+                'message' => 'PDF generado',
+                'payload' => [
+                    'file' => [
+                        'content' => base64_encode($pdf),
+                        'name' => $data['filename'],
+                    ],
+                ],
+            ];
+        } catch(\Throwable $e) {
+            return response()->json([
+                'message' => 'Error al generar el PDF',
+            ], 500);
+        }
     }
 }
