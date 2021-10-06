@@ -33,8 +33,8 @@
 						<table>
 							<tbody>
 								<tr>
-									<td width="10%" style="height: 60px; vertical-align: bottom;" class="overflow">Nº</td>
-									<td width="90%" style="height: 60px; vertical-align: bottom; padding-top: 10px;" class="punteado overflow">{{ $procedure->code }}</td>
+									<td width="10%" style="height: 50px; vertical-align: bottom;" class="overflow">Nº</td>
+									<td width="90%" style="height: 50px; vertical-align: bottom; padding-top: 10px;" class="punteado overflow">{{ $procedure->code }}</td>
 								</tr>
 							</tbody>
 						</table>

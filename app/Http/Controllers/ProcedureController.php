@@ -428,7 +428,7 @@ class ProcedureController extends Controller
                             'selected' => false,
                         ], [
                             'display' => 'Stria. Régimen Interno y Jefe de Personal',
-                            'name' => 'DESCONOCIDO 1',
+                            'name' => 'SECRETARÍA PERSONAL',
                             'selected' => false,
                         ], [
                             'display' => 'Stria. de Hacienda',
@@ -438,7 +438,7 @@ class ProcedureController extends Controller
                     ], [
                         [
                             'display' => 'Stria. General de Relaciones Públicas, Prensa y Propaganda',
-                            'name' => 'DESCONOCIDO 2',
+                            'name' => 'SECRETARÍA GENERAL',
                             'selected' => false,
                         ], [
                             'display' => 'Stria. de Bienestar Social y Vivienda',

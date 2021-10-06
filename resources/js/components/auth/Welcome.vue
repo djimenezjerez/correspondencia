@@ -1,59 +1,18 @@
 <template>
   <v-app id="welcome">
-    <v-container :fill-height="!$vuetify.breakpoint.xs" fluid>
+    <v-container fill-height fluid class="pa-0">
       <v-row
-        justify="space-around"
-        align="start"
+        align="center"
+        justify="space-between"
+        no-gutters
       >
         <v-col
-          cols="auto"
-          sm="4"
+          xl="7"
+          lg="7"
+          md="7"
+          sm="7"
           xs="12"
-          class="text-center pb-xs-0 pb-sm-10"
-          :style="{ 'margin-top': marginTopColumn1 }"
-        >
-          <v-container>
-            <v-row
-              align="start"
-              class="mb-xs-0 mb-sm-6 mb-md-4 mb-lg-14 mb-xl-16"
-            >
-              <v-col cols="12">
-                <div class="white--text">
-                  <div class="font-weight-light mb-xs-0 mb-sm-0 mb-md-1 text-xs-caption text-sm-subtitle-2 text-xl-h4 text-md-h6">
-                    Bienvenido al
-                  </div>
-                  <div class="font-weight-normal text-xs-body-2 text-sm-subtitle-1 text-xl-h3 text-md-h5">
-                    Sistema de Correspondencia
-                  </div>
-                </div>
-              </v-col>
-            </v-row>
-            <v-row
-              align="end"
-            >
-              <v-col cols="12">
-                <div>
-                  <v-btn
-                    @click.stop="$refs.dialogLogin.showDialog()"
-                    dark
-                    :x-large="$vuetify.breakpoint.lg || $vuetify.breakpoint.xl"
-                    :large="$vuetify.breakpoint.md"
-                    :small="$vuetify.breakpoint.sm"
-                    :x-small="$vuetify.breakpoint.xs"
-                    color="info"
-                  >
-                    Ingresar
-                  </v-btn>
-                </div>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-col>
-        <v-col
-          cols="auto"
-          sm="4"
-          xs="12"
-          :style="{ 'margin-top': marginTopColumn2 }"
+          class="text-center white--text"
         >
           <v-row
             justify="center"
@@ -65,47 +24,58 @@
               <v-img
                 contain
                 :max-width="imageWidth"
+                :width="imageWidth"
                 src="/img/logo_low.png"
               ></v-img>
             </v-col>
-            <v-col cols="12">
-              <div class="text-center text-md-caption text-lg-body-1 text-xl-h5 font-weight-normal white--text" :class="logoTextFont" :style="($vuetify.breakpoint.sm || $vuetify.breakpoint.xs) && 'font-size: 10px'">
-                <div>
-                  Asociacion Nacional de Suboficiales y Sargentos de las Fuerzas Armadas del Estado
-                </div>
-                <div>
-                  &quot;ASCINALSS&quot;
-                </div>
-              </div>
-            </v-col>
           </v-row>
+          <div class="text-md-caption text-lg-body-1 text-xl-h5 font-weight-normal py-4" :class="logoTextFont" :style="($vuetify.breakpoint.sm || $vuetify.breakpoint.xs) && 'font-size: 10px'">
+            <div>
+              Asociacion Nacional de Suboficiales y Sargentos de las Fuerzas Armadas del Estado
+            </div>
+            <div>
+              &quot;ASCINALSS&quot;
+            </div>
+          </div>
+          <div class="font-weight-normal text-xs-body-2 text-sm-subtitle-1 text-md-h6 text-lg-h5 text-xl-h4 py-8">
+            GESTIÓN DOCUMENTAL Y CONTROL DE CORRESPONDENCIA
+          </div>
+          <div class="py-5">
+            <v-btn
+              @click.stop="$refs.dialogLogin.showDialog()"
+              dark
+              :x-large="$vuetify.breakpoint.lg || $vuetify.breakpoint.xl"
+              :large="$vuetify.breakpoint.md"
+              :small="$vuetify.breakpoint.sm"
+              :x-small="$vuetify.breakpoint.xs"
+              color="info"
+            >
+              Iniciar sesión
+            </v-btn>
+          </div>
+          <div class="py-5">
+            <v-btn
+              dark
+              :x-large="$vuetify.breakpoint.lg || $vuetify.breakpoint.xl"
+              :large="$vuetify.breakpoint.md"
+              :small="$vuetify.breakpoint.sm"
+              :x-small="$vuetify.breakpoint.xs"
+              @click.stop="$refs.dialogSearchCode.showDialog()"
+              color="info"
+            >
+              Consultar trámite
+            </v-btn>
+          </div>
         </v-col>
         <v-col
-          cols="auto"
-          sm="4"
-          xs="12"
-          class="text-center pb-xs-0 pb-sm-10"
-          :style="{ 'margin-top': marginTopColumn3 }"
+          cols="5"
+          v-if="!$vuetify.breakpoint.xs"
         >
-          <v-container>
-            <v-row
-              align="start"
-            >
-              <v-col cols="12">
-                <v-btn
-                  dark
-                  :x-large="$vuetify.breakpoint.lg || $vuetify.breakpoint.xl"
-                  :large="$vuetify.breakpoint.md"
-                  :small="$vuetify.breakpoint.sm"
-                  :x-small="$vuetify.breakpoint.xs"
-                  @click.stop="$refs.dialogSearchCode.showDialog()"
-                  color="info"
-                >
-                  Consultar trámite
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-container>
+          <v-img
+            height="100vh"
+            max-width="1600"
+            src="/img/welcome_background.jpg"
+          ></v-img>
         </v-col>
       </v-row>
     </v-container>

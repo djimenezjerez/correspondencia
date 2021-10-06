@@ -57,7 +57,7 @@
             md="5"
             sm="5"
             xs="12"
-            :class="$vuetify.breakpoint.xs ? '' : 'mt-10 pr-6'"
+            :class="$vuetify.breakpoint.xs ? '' : 'mt-12 pr-6'"
           >
             <div class="text-center text-md-body-2 text-lg-body-2 text-xl-body-2 font-weight-normal black--text font-weight-medium" :style="{ 'font-size': $vuetify.breakpoint.sm ? '10px' : ($vuetify.breakpoint.xs ? '10px' : '10px') }">
               <div>
