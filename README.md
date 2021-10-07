@@ -98,8 +98,8 @@ $ copy admin_data.json.example storage/app/admin_data.json
 5. Instalar las dependencias:
 
 ```sh
-$ php artisan key:generate
 $ composer install
+$ php artisan key:generate
 $ yarn install
 $ php artisan migrate:install
 $ php artisan migrate
@@ -128,7 +128,6 @@ Para seguir los pasos listados continuación se debe tener abierta una consola c
 2. Instalar las nuevas dependencias:
 
 ```sh
-$ php artisan key:generate
 $ composer install
 $ yarn install
 $ php artisan migrate
@@ -176,6 +175,7 @@ $ copy /Y docker/mosquitto.conf laradock/mosquitto
 4. Descargar las imágenes de los contenedores:
 
 ```sh
+$ cd laradock
 $ docker-compose build --parallel nginx php-fpm workspace mariadb mosquitto
 ```
 
