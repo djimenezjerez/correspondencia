@@ -422,14 +422,6 @@ class ProcedureController extends Controller
                 ],
                 'areas' => $areas->chunk(6),
             ];
-            foreach ($data['areas'] as $i => $chunk) {
-                foreach ($chunk as $j => $area) {
-                    if ($area['name'] == $selected_area->name) {
-                        $data['areas'][$i][$j]['selected'] = true;
-                        break 2;
-                    }
-                }
-            }
             $pdf = PDF::loadView('pdf.procedure', $data)->output();
             return [
                 'message' => 'PDF generado',
