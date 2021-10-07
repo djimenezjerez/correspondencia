@@ -79,23 +79,29 @@ El encargado de administrar usuarios, para el caso sea el usuario que cuenta con
 
 Para seguir los pasos listados continuación se debe tener abierta una consola con la ruta ubicada en la raíz del de la carpeta del proyecto.
 
-1. Establecer las variables de entorno, renombrar **.env.example** a **.env** y edita los datos de acuerdo a los datos extraidos del servidor donde funcionará el sistema:
+1. Clonar el código fuente:
+
+```sh
+$ git clone --recurse-submodules --remote-submodules https://github.com/djimenezjerez/correspondencia.git
+```
+
+2. Establecer las variables de entorno, renombrar **.env.example** a **.env** y edita los datos de acuerdo a los datos extraidos del servidor donde funcionará el sistema:
 
 ```sh
 $ copy .env.example .env
 ```
 
-2. Establecer datos del primer usuario administrador:
+3. Establecer datos del primer usuario administrador:
 
 ```sh
 $ copy admin_data.json.example storage/app/admin_data.json
 ```
 
-3. Editar los datos para el usuario administrador en el archivo recién copiado a **storage/app/admin_data.json**.
+4. Editar los datos para el usuario administrador en el archivo recién copiado a **storage/app/admin_data.json**.
 
-4. Editar el dominio en el archivo **config/sanctum.php**, dentro de la variable *stateful*, reemplazar *localhost* por el dominio especificado por el servidor.
+5. Editar el dominio en el archivo **config/sanctum.php**, dentro de la variable *stateful*, reemplazar *localhost* por el dominio especificado por el servidor.
 
-5. Instalar las dependencias:
+6. Instalar las dependencias:
 
 ```sh
 $ composer install
@@ -105,13 +111,13 @@ $ php artisan migrate:install
 $ php artisan migrate
 ```
 
-6. Compilar el código fuente del frontend:
+7. Compilar el código fuente del frontend:
 
 ```sh
 $ yarn prod
 ```
 
-7. Cargar datos iniciales:
+8. Cargar datos iniciales:
 
 ```sh
 $ php artisan db:seed --class=DatabaseSeeder
@@ -133,13 +139,13 @@ $ yarn install
 $ php artisan migrate
 ```
 
-6. Compilar el código fuente del frontend:
+3. Compilar el código fuente del frontend:
 
 ```sh
 $ yarn prod
 ```
 
-7. Cargar los nuevos datos:
+4. Cargar los nuevos datos:
 
 ```sh
 $ php artisan db:seed --class=DatabaseSeeder
@@ -156,36 +162,41 @@ Concluyendo estos pasos, se puede ingresar al navegador y apuntar la URL a la di
 
 Los pasos a seguir para levantar los servicios necesarios son los siguientes:
 
+1. Clonar el código fuente:
 
-1. Editar el archivo de variables de entorno **docker/.env.example**.
+```sh
+$ git clone --recurse-submodules --remote-submodules https://github.com/djimenezjerez/correspondencia.git
+```
 
-2. Copiar el archivo de variables de entorno editado anteriormente al directorio laradock:
+2. Editar el archivo de variables de entorno **docker/.env.example** y de acuerdo a ello modificar el dominio en el archivo **config/sanctum.php**, dentro de la variable *stateful*, reemplazar *localhost* por el dominio especificado para el servidor Nginx o Apache.
+
+3. Copiar el archivo de variables de entorno editado anteriormente al directorio laradock:
 
 ```sh
 $ copy /Y docker/.env.example laradock/.env
 ```
 
-3. Copiar los archivos necesarios para levantar correctamente los contenedores:
+4. Copiar los archivos necesarios para levantar correctamente los contenedores:
 
 ```sh
 $ copy /Y docker/docker-compose.yml laradock/docker-compose.yml
 $ copy /Y docker/mosquitto.conf laradock/mosquitto
 ```
 
-4. Descargar las imágenes de los contenedores:
+5. Descargar las imágenes de los contenedores:
 
 ```sh
 $ cd laradock
 $ docker-compose build --parallel nginx php-fpm workspace mariadb mosquitto
 ```
 
-5. Levantar el sistema:
+6. Levantar el sistema:
 
 ```sh
 $ docker-compose up -d nginx php-fpm workspace mariadb mosquitto
 ```
 
-6. Verificar que todos los contenedores se encuentren en ejecución **State = Up**
+7. Verificar que todos los contenedores se encuentren en ejecución **State = Up**
 
 ```sh
 $ docker-compose ps
