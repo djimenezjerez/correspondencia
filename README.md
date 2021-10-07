@@ -123,6 +123,12 @@ $ yarn prod
 $ php artisan db:seed --class=DatabaseSeeder
 ```
 
+9. Habilitar el cargado de imágenes dentro de PDF:
+
+```sh
+$ sed -i.bak 's/$alpha_channel = $imagickClonable ? clone $imagick : $imagick->clone();/$alpha_channel = clone $imagick;/g' vendor/dompdf/dompdf/lib/Cpdf.php
+```
+
 Concluyendo estos pasos, se puede ingresar al navegador y apuntar la URL a la dirección del dominio del servidor donde se instaló el sistema.
 
 ## PASOS PARA LA ACTUALIZACIÓN
@@ -149,6 +155,12 @@ $ yarn prod
 
 ```sh
 $ php artisan db:seed --class=DatabaseSeeder
+```
+
+5. Habilitar el cargado de imágenes dentro de PDF:
+
+```sh
+$ sed -i.bak 's/$alpha_channel = $imagickClonable ? clone $imagick : $imagick->clone();/$alpha_channel = clone $imagick;/g' vendor/dompdf/dompdf/lib/Cpdf.php
 ```
 
 Concluyendo estos pasos, se puede ingresar al navegador y apuntar la URL a la dirección del dominio del servidor donde se instaló el sistema.
