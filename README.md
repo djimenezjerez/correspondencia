@@ -202,4 +202,4 @@ $ docker-compose up -d nginx php-fpm workspace mariadb mosquitto
 $ docker-compose ps
 ```
 
-Con ello se pueden seguir los [pasos de instalación](#pasos-para-la-instalación) o [pasos para la actualización](#pasos-para-la-actualización) mencionados anteriormente en el presente manual.
+Con ello se pueden seguir los [pasos de instalación](#pasos-para-la-instalación) o [pasos para la actualización](#pasos-para-la-actualización) mencionados anteriormente en el presente manual, tomando muy en cuenta que cada comando de **composer**, **php** o **yarn** debe ser ejecutado desde el directorio de *laradock* y precedido por el comando **docker-compose exec --user laradock workspace COMANDO(composer, php o yarn)**.
