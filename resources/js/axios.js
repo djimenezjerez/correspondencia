@@ -19,12 +19,12 @@ const responseSuccessHandler = response => {
 
 const responseErrorHandler = async error => {
   try {
-    if (error.response.status === 403) {
+    if ([401,403].includes(error.response.status)) {
       if (router.currentRoute.name != 'welcome') {
-        await store.dispatch('logout')
-        router.push({
-          name: 'welcome'
-        })
+        if (error.response.status == 403) {
+          await store.dispatch('logout')
+        }
+        window.location.replace('/');
       }
     }
   } catch(error) {
