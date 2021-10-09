@@ -27,7 +27,6 @@ localize({
       phone: 'teléfono',
       address: 'dirección',
       area_id: 'sección',
-      document_type_id: 'tipo de documento',
       code: 'código',
       origin: 'procedencia',
       detail: 'detalle',

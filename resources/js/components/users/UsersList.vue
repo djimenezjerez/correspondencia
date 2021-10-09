@@ -33,9 +33,6 @@
               }"
               id="datatable"
             >
-              <template v-slot:[`item.document_type_id`]="{ item }">
-                {{ documentType(item.document_type_id) }}
-              </template>
               <template v-slot:[`item.area_id`]="{ item }">
                 {{ area(item.area_id) }}
               </template>
@@ -92,7 +89,7 @@
         </v-card>
       </v-col>
     </v-row>
-    <UserForm ref="dialogUserForm" :areas="areas" :document-types="documentTypes" v-on:updateList="fetchUsers"/>
+    <UserForm ref="dialogUserForm" :areas="areas" v-on:updateList="fetchUsers"/>
     <UserSwitch ref="dialogUserSwitch" v-on:updateList="fetchUsers"/>
   </div>
 </template>
@@ -116,7 +113,6 @@ export default {
       loading: false,
       search: null,
       areas: [],
-      documentTypes: [],
       options: {
         page: 1,
         itemsPerPage: 8,
@@ -146,11 +142,6 @@ export default {
           align: 'center',
           sortable: true,
           value: 'identity_card',
-        }, {
-          text: 'Tipo de documento',
-          align: 'center',
-          sortable: false,
-          value: 'document_type_id',
         }, {
           text: 'Sección',
           align: 'center',
@@ -192,7 +183,6 @@ export default {
   created() {
     this.fetchUsers()
     this.fetchAreas()
-    this.fetchDocumentTypes()
   },
   watch: {
     options: function(newVal, oldVal) {
@@ -205,14 +195,6 @@ export default {
     }
   },
   methods: {
-    documentType(value) {
-      const documentType = this.documentTypes.find(o => o.id === value)
-      if (documentType) {
-        return documentType.code
-      } else {
-        return '-'
-      }
-    },
     area(value) {
       const area = this.areas.find(o => o.id === value)
       if (area) {
@@ -226,17 +208,6 @@ export default {
         this.loading = true
         let response = await axios.get('area')
         this.areas = response.data.payload.areas
-      } catch(error) {
-        console.log(error)
-      } finally {
-        this.loading = false
-      }
-    },
-    async fetchDocumentTypes() {
-      try {
-        this.loading = true
-        let response = await axios.get('document_type')
-        this.documentTypes = response.data.payload.document_types
       } catch(error) {
         console.log(error)
       } finally {

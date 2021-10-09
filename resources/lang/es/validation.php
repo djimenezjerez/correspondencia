@@ -168,7 +168,6 @@ return [
         'password' => 'contraseña',
         'address' => 'dirección',
         'phone' => 'teléfono',
-        'document_type_id' => 'tipo de documento',
         'old_password' => 'contraseña actual',
         'requirements' => 'requisitos',
         'attachments' => 'archivos',

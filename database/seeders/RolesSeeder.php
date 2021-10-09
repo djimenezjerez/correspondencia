@@ -24,7 +24,6 @@ class RolesSeeder extends Seeder
                     'EDITAR USUARIO',
                     'ELIMINAR USUARIO',
                     'LEER ROL',
-                    'LEER TIPO DOCUMENTO',
                     'CREAR REQUISITO',
                     'EDITAR REQUISITO',
                     'ELIMINAR REQUISITO',

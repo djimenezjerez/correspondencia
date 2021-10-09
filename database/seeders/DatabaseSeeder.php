@@ -19,7 +19,6 @@ class DatabaseSeeder extends Seeder
         Model::unguard();
         $this->call(RolesSeeder::class);
         $this->call(AreasSeeder::class);
-        $this->call(DocumentTypesSeeder::class);
         $this->call(RequirementsSeeder::class);
         $this->call(ProcedureTypeSeeder::class);
         if (User::whereHas('roles', function($q) { $q->where('name', 'ADMINISTRADOR'); })->count() == 0) {

@@ -90,22 +90,6 @@
               </validation-provider>
               <validation-provider
                 v-slot="{ errors }"
-                name="document_type_id"
-                rules="required"
-              >
-                <v-select
-                  :items="documentTypes"
-                  item-text="name"
-                  item-value="id"
-                  label="Tipo de documento"
-                  v-model="userForm.document_type_id"
-                  data-vv-name="document_type_id"
-                  :error-messages="errors"
-                  prepend-icon="mdi-card-account-details-outline"
-                ></v-select>
-              </validation-provider>
-              <validation-provider
-                v-slot="{ errors }"
                 name="identity_card"
                 rules="required|min:3|alpha_dash"
               >
@@ -199,10 +183,6 @@ export default {
       type: Array,
       required: true
     },
-    documentTypes: {
-      type: Array,
-      required: true
-    },
   },
   data: function() {
     return {
@@ -219,7 +199,6 @@ export default {
         email: '',
         address: '',
         phone: '',
-        document_type_id: null,
         area_id: null,
       },
       loading: false,
@@ -257,7 +236,6 @@ export default {
           email: '',
           address: '',
           phone: '',
-          document_type_id: null,
           area_id: null,
         }
       }

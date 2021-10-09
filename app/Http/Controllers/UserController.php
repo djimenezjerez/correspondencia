@@ -79,7 +79,6 @@ class UserController extends Controller
                 'payload' => [
                     'user' => collect([
                         'area' => $user->area->name,
-                        'document_type' => $user->document_type->name,
                     ])->merge(new UserResource($user)),
                 ]
             ];

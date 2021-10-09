@@ -46,10 +46,6 @@
                       <td class="font-weight-bold text-body-1">{{ user.identity_card }}</td>
                     </tr>
                     <tr>
-                      <td class="text-right text-body-1">Tipo de documento: </td>
-                      <td class="font-weight-bold text-body-1">{{ user.document_type }}</td>
-                    </tr>
-                    <tr>
                       <td class="text-right text-body-1">Teléfono: </td>
                       <td class="font-weight-bold text-body-1">{{ user.phone }}</td>
                     </tr>

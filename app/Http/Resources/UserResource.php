@@ -23,7 +23,6 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'address' => $this->address,
             'phone' => $this->phone,
-            'document_type_id' => $this->document_type_id,
             'area_id' => $this->area_id,
             'role' => $this->roles()->first()->name,
             'is_active' => $this->deleted_at === NULL ? true : false,

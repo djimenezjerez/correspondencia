@@ -4,7 +4,6 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AreaController;
-use App\Http\Controllers\DocumentTypeController;
 use App\Http\Controllers\RequirementController;
 use App\Http\Controllers\ProcedureTypeController;
 use App\Http\Controllers\ProcedureController;
@@ -36,10 +35,6 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     // Roles
     Route::get('role', [RoleController::class, 'index'])->middleware('permission:LEER ROL');
     Route::get('role/{role}', [RoleController::class, 'show']);
-
-    // Tipos de documento
-    Route::get('document_type', [DocumentTypeController::class, 'index'])->middleware('permission:LEER TIPO DOCUMENTO');
-    Route::get('document_type/{document_type}', [DocumentTypeController::class, 'show']);
 
     // Secciones
     Route::get('area', [AreaController::class, 'index']);

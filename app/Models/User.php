@@ -28,7 +28,6 @@ class User extends Authenticatable
         'email',
         'address',
         'phone',
-        'document_type_id',
         'area_id',
     ];
 
@@ -41,11 +40,6 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-
-    public function document_type()
-    {
-        return $this->belongsTo(DocumentType::class);
-    }
 
     public function area()
     {

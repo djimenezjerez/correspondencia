@@ -39,7 +39,6 @@ class UserRequest extends FormRequest
             'email' => 'email:rfc',
             'address' => 'string|min:3',
             'phone' => 'numeric',
-            'document_type_id' => 'exists:document_types,id',
             'area_id' => 'exists:areas,id',
         ];
         switch ($this->method()) {
