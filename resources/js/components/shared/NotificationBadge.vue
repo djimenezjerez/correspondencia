@@ -2,25 +2,42 @@
   <div>
     <audio id="notification" src="/audio/notification.mp3" type="audio/mp3"></audio>
     <div v-if="badge > 0">
-      <v-tooltip bottom>
+      <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
             v-bind="attrs"
             v-on="on"
             icon
-            @click.stop="receiveProcedures"
           >
             <v-badge
               overlap
               color="red"
               :content="badge"
             >
-              <v-icon>mdi-bell</v-icon>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon
+                    v-bind="attrs"
+                    v-on="on"
+                  >mdi-bell</v-icon>
+                </template>
+                <span>Recibir</span>
+              </v-tooltip>
             </v-badge>
           </v-btn>
         </template>
-        <span>Recibir</span>
-      </v-tooltip>
+        <v-list
+          v-for="procedure in tray"
+          :key="procedure.id"
+        >
+          <v-list-item
+            :disabled="loading"
+            @click.stop="receiveProcedure(procedure.id)"
+          >
+            <v-list-item-title>{{ procedure.code }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </div>
     <div v-else>
       <v-icon disabled>mdi-bell</v-icon>
@@ -35,7 +52,9 @@ export default {
   name: 'NotificationBadge',
   data: function() {
     return {
+      loading: true,
       badge: 0,
+      tray: [],
     }
   },
   mounted() {
@@ -46,22 +65,28 @@ export default {
     this.fetchPendingBadge()
   },
   methods: {
-    async receiveProcedures() {
+    async receiveProcedure(procedure_id) {
       try {
-        await axios.post('procedure/tray/receive')
+        this.loading = true
+        await axios.post(`procedure/tray/receive/${procedure_id}`)
       } catch(error) {
         console.log(error)
       } finally {
         this.fetchPendingBadge()
         bus.$emit('updateProcedureList')
+        this.loading = false
       }
     },
     async fetchPendingBadge() {
       try {
+        this.loading = true
         let response = await axios.get('procedure/tray/pending')
         this.badge = response.data.payload.badge
+        this.tray = response.data.payload.procedures
       } catch(error) {
         console.log(error)
+      } finally {
+        this.loading = false
       }
     },
   },

@@ -383,29 +383,33 @@ class ProcedureController extends Controller
     {
         $user = Auth::user();
         $area_id = $user->area_id;
+        $query = Procedure::where('pending', true)->where('area_id', $area_id);
         return [
             'message' => 'Trámites por ingresar',
             'payload' => [
-                'badge' => Procedure::where('pending', true)->where('area_id', $area_id)->count(),
+                'badge' => $query->count(),
+                'procedures' => $query->select('id', 'code')->get(),
             ],
         ];
     }
 
-    public function receive()
+    public function receive(Procedure $procedure)
     {
         $user = Auth::user();
-        $area_id = $user->area_id;
-        Procedure::where('pending', true)->where('area_id', $area_id)->update([
-            'pending' => false
-        ]);
-        return [
-            'message' => 'Trámites añadidos a la bandeja',
-        ];
+        if ($procedure->area_id == $user->area_id) {
+            $procedure->update([
+                'pending' => false
+            ]);
+            return [
+                'message' => 'Trámite añadido a la bandeja',
+            ];
+        } else {
+            abort(403, 'El trámite no le pertenece');
+        }
     }
 
     public function print(FlowRequest $request, Procedure $procedure)
     {
-        $selected_area = Area::find($request->area_id);
         $areas = Area::where('group', '>', 0)->orderBy('order', 'ASC')->orderBy('name', 'ASC')->select('id', 'name', 'code', 'order')->get();
         foreach ($areas as $i => $area) {
             $areas[$i]->selected = ($area->id == $request->area_id);

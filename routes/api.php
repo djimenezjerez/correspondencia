@@ -90,5 +90,5 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
 
     // Bandeja de trámites
     Route::get('procedure/tray/pending', [ProcedureController::class, 'pending']);
-    Route::post('procedure/tray/receive', [ProcedureController::class, 'receive']);
+    Route::post('procedure/tray/receive/{procedure}', [ProcedureController::class, 'receive']);
 });
