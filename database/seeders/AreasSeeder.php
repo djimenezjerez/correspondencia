@@ -49,7 +49,7 @@ class AreasSeeder extends Seeder
             ], [
                 'name' => 'SECRETARÍA GENERAL',
                 'code' => 'SGE',
-                'role' => 'RECEPCIÓN',
+                'role' => 'SECRETARÍA',
                 'group' => 1,
                 'order' => 5,
             ], [

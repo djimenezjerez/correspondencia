@@ -41,45 +41,47 @@
               <template v-slot:header>
                 <thead>
                   <tr>
-                    <th v-for="(header, index) in tableHeaders" :key="index" class="text-center" :style="{ 'font-size': `${fontSize} !important` }">
-                      {{ header.text }}
-                    </th>
-                    <th width="15%" class="px-0 mx-0 text-center" :style="{ 'font-size': `${fontSize} !important` }">
-                      {{ actionHeader.text }}
+                    <th :width="`${header.width}%`" v-for="(header, index) in headers" :key="index" class="text-center font-weight-bold" :style="{ 'font-size': `${$helpers.fontSize($vuetify.breakpoint.name)} !important` }">
+                      {{ header.text.toUpperCase() }}
                     </th>
                   </tr>
                 </thead>
               </template>
               <template v-slot:body="{ items }">
                 <tbody>
-                  <tr v-for="item in items" :key="item.id" :style="{ 'height': rowHeight }">
+                  <tr v-for="item in items" :key="item.id" :style="{ 'height': $helpers.rowHeight($vuetify.breakpoint.name) }">
                     <td>
-                      <div class="text-center" :style="{ 'font-size': `${fontSize} !important` }">
-                        {{ item.incoming_at ? item.incoming_at : item.created_at | moment('L LT') }}
+                      <div class="text-center">
+                        <div :style="{ 'font-size': `${$helpers.fontSize($vuetify.breakpoint.name)} !important` }">
+                          {{ item.incoming_at ? item.incoming_at : item.created_at | moment('L') }}
+                        </div>
+                        <div :style="{ 'font-size': `${$helpers.fontSize($vuetify.breakpoint.name)} !important` }">
+                          {{ item.incoming_at ? item.incoming_at : item.created_at | moment('LT') }}
+                        </div>
                       </div>
                     </td>
-                    <td v-if="$store.getters.user.role != 'RECEPCIÓN'">
-                      <div class="text-center" :style="{ 'font-size': `${fontSize} !important` }">
+                    <td>
+                      <div class="text-center">
                         {{ area(item.from_area ? item.from_area : 0) }}
                       </div>
                     </td>
                     <td>
-                      <div class="text-center" :style="{ 'font-size': `${fontSize} !important` }">
+                      <div class="text-center">
                         {{ item.code }}
                       </div>
                     </td>
                     <td>
-                      <div class="text-center" :style="{ 'font-size': `${fontSize} !important` }">
+                      <div class="text-center">
                         {{ procedureType(item.procedure_type_id) }}
                       </div>
                     </td>
                     <td>
-                      <div class="text-center" :style="{ 'font-size': `${fontSize} !important` }">
+                      <div class="text-center">
                         {{ item.origin }}
                       </div>
                     </td>
                     <td>
-                      <div class="text-center" :style="{ 'font-size': `${fontSize} !important` }">
+                      <div class="text-center">
                         {{ item.detail }}
                       </div>
                     </td>
@@ -87,7 +89,7 @@
                       <v-row justify="center">
                         <div v-if="item.archived && item.owner">
                           <v-col cols="auto">
-                            <div class="text-center" :style="{ 'font-size': `${fontSize} !important` }">
+                            <div class="text-center">
                               ARCHIVADO
                             </div>
                           </v-col>
@@ -104,7 +106,7 @@
                                 :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg || $vuetify.breakpoint.md"
                                 :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
                               >
-                                <div class="text-center" :style="{ 'font-size': `${fontSize} !important` }">
+                                <div class="text-center">
                                   Derivar
                                 </div>
                               </v-btn>
@@ -119,14 +121,14 @@
                                 :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg || $vuetify.breakpoint.md"
                                 :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
                               >
-                              <div class="text-center" :style="{ 'font-size': `${fontSize} !important` }">
+                              <div class="text-center">
                                 Requisitos
                               </div>
                               </v-btn>
                             </div>
                           </v-col>
                           <v-col cols="autp" v-else>
-                            <div class="text-center" :style="{ 'font-size': `${fontSize} !important` }">
+                            <div class="text-center">
                               {{ area(item.to_area) }}
                             </div>
                           </v-col>
@@ -134,15 +136,25 @@
                       </v-row>
                     </td>
                     <td>
-                      <div class="text-center" :style="{ 'font-size': `${fontSize} !important` }">
+                      <div class="text-center">
                         <div v-if="item.archived">
-                          {{ item.updated_at | moment('L LT') }}
+                          <div :style="{ 'font-size': `${$helpers.fontSize($vuetify.breakpoint.name)} !important` }">
+                            {{ item.updated_at | moment('L') }}
+                          </div>
+                          <div :style="{ 'font-size': `${$helpers.fontSize($vuetify.breakpoint.name)} !important` }">
+                            {{ item.updated_at | moment('LT') }}
+                          </div>
                         </div>
                         <div v-else-if="!item.outgoing_at">
                           -
                         </div>
                         <div v-else>
-                          {{ item.outgoing_at | moment('L LT') }}
+                          <div :style="{ 'font-size': `${$helpers.fontSize($vuetify.breakpoint.name)} !important` }">
+                            {{ item.outgoing_at | moment('L') }}
+                          </div>
+                          <div :style="{ 'font-size': `${$helpers.fontSize($vuetify.breakpoint.name)} !important` }">
+                            {{ item.outgoing_at | moment('LT') }}
+                          </div>
                         </div>
                       </div>
                     </td>
@@ -230,7 +242,7 @@
                               <v-btn
                                 v-bind="attrs"
                                 v-on="on"
-                                color="warning"
+                                color="warning lighten-1"
                                 @click="$refs.dialogProcedureArchive.showDialog(item)"
                                 dark
                                 class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-0 mx-0 my-1"
@@ -256,7 +268,7 @@
                               <v-btn
                                 v-bind="attrs"
                                 v-on="on"
-                                color="warning"
+                                color="warning darken-1"
                                 @click="$refs.dialogProcedureDelete.showDialog(item)"
                                 dark
                                 class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-0 mx-0 my-1"
@@ -325,6 +337,63 @@ export default {
     return {
       loading: false,
       search: null,
+      headers: [
+        {
+          text: 'Fecha de ingreso',
+          align: 'center',
+          sortable: false,
+          value: 'incoming_at',
+          width: '7%',
+        }, {
+          text: 'Sección/Origen',
+          align: 'center',
+          sortable: false,
+          value: 'from_area',
+          width: '12%',
+        }, {
+          text: 'Código de hoja de ruta',
+          align: 'center',
+          sortable: false,
+          value: 'code',
+          width: '10%',
+        }, {
+          text: 'Tipo de trámite',
+          align: 'center',
+          sortable: false,
+          value: 'procedure_type_id',
+          width: '10%',
+        }, {
+          text: 'Procedencia',
+          align: 'center',
+          sortable: false,
+          value: 'origin',
+          width: '10%',
+        }, {
+          text: 'Detalle/Asunto',
+          align: 'center',
+          sortable: false,
+          value: 'detail',
+          width: '15%',
+        }, {
+          text: 'Sección/Destino',
+          align: 'center',
+          sortable: false,
+          value: 'to_area',
+          width: '12%',
+        }, {
+          text: 'Fecha de derivación',
+          align: 'center',
+          sortable: false,
+          value: 'outgoing_at',
+          width: '7%',
+        }, {
+          text: 'Acciones',
+          align: 'center',
+          sortable: false,
+          value: 'actions',
+          width: '17%',
+        },
+      ],
       options: {
         page: 1,
         itemsPerPage: 8,
@@ -352,98 +421,6 @@ export default {
     topic() {
       return `procedures/received/area/${this.$store.getters.user.area_id}`
     },
-    tableHeaders() {
-      const headers = this.headers.slice(0, -1)
-      return headers
-    },
-    actionHeader() {
-      const header = this.headers.splice(-1)
-      return header[0]
-    },
-    rowHeight() {
-      switch (this.$vuetify.breakpoint.name) {
-        case 'xs': return '65px'
-        case 'sm': return '55px'
-        case 'md': return '45px'
-        case 'lg': return '80px'
-        case 'xl': return '90px'
-        default: return '45px'
-      }
-    },
-    fontSize() {
-      switch (this.$vuetify.breakpoint.name) {
-        case 'xs': return '8px'
-        case 'sm': return '8px'
-        case 'md': return '8px'
-        case 'lg': return '14px'
-        case 'xl': return '16px'
-        default: return '12px'
-      }
-    },
-    headers() {
-      let headers = [
-        {
-          text: 'Fecha de ingreso',
-          align: 'center',
-          sortable: false,
-          value: 'incoming_at',
-          // width: '8%',
-        }, {
-          text: 'Sección/Origen',
-          align: 'center',
-          sortable: false,
-          value: 'from_area',
-          // width: '10%',
-        }, {
-          text: 'Código de hoja de ruta',
-          align: 'center',
-          sortable: false,
-          value: 'code',
-          // width: '10%',
-        }, {
-          text: 'Tipo de trámite',
-          align: 'center',
-          sortable: false,
-          value: 'procedure_type_id',
-          // width: '10%',
-        }, {
-          text: 'Procedencia',
-          align: 'center',
-          sortable: false,
-          value: 'origin',
-          // width: '10%',
-        }, {
-          text: 'Detalle/Asunto',
-          align: 'center',
-          sortable: false,
-          value: 'detail',
-          // width: '12%',
-        }, {
-          text: 'Sección/Destino',
-          align: 'center',
-          sortable: false,
-          value: 'to_area',
-          // width: '10%',
-        }, {
-          text: 'Fecha de derivación',
-          align: 'center',
-          sortable: false,
-          value: 'outgoing_at',
-          // width: '8%',
-        }, {
-          text: 'Acciones',
-          align: 'center',
-          sortable: false,
-          value: 'actions',
-          // width: '8%',
-        },
-      ]
-      if (this.$store.getters.user.role == 'RECEPCIÓN') {
-        return headers.filter(o => o.value != 'from_area')
-      } else {
-        return headers
-      }
-    }
   },
   mounted() {
     const table = document.getElementById('datatable').getElementsByTagName('table')[0]

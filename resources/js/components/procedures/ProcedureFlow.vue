@@ -63,19 +63,6 @@
                 ></v-select>
               </validation-provider>
             </v-card-text>
-            <v-card-actions v-show="$store.getters.user.permissions.includes('CREAR TRÁMITE') && !procedure.has_flowed">
-              <v-btn
-                block
-                color="success"
-                :disabled="invalid || loading"
-                @click="printRoadmap"
-              >
-                <v-icon left>
-                  mdi-printer
-                </v-icon>
-                Imprimir
-              </v-btn>
-            </v-card-actions>
             <v-card-actions>
               <v-btn
                 block
@@ -168,6 +155,9 @@ export default {
       try {
         let valid = await this.$refs.procedureFlowObserver.validate()
         if (valid) {
+          if (!this.procedure.has_flowed) {
+            await this.printRoadmap()
+          }
           this.loading = true
           const response = await axios.post(`procedure/${this.procedure.id}/flow`, {
             area_id: this.selectedArea

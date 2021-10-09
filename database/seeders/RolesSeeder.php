@@ -33,19 +33,12 @@ class RolesSeeder extends Seeder
                     'ELIMINAR TIPO TRÁMITE',
                 ],
             ], [
-                'name' => 'RECEPCIÓN',
+                'name' => 'VERIFICADOR',
                 'permissions' => [
                     'CREAR TRÁMITE',
                     'LEER TRÁMITE',
                     'EDITAR TRÁMITE',
                     'ELIMINAR TRÁMITE',
-                    'DERIVAR TRÁMITE',
-                    'ADJUNTAR ARCHIVO',
-                ],
-            ], [
-                'name' => 'VERIFICADOR',
-                'permissions' => [
-                    'LEER TRÁMITE',
                     'DERIVAR TRÁMITE',
                     'ARCHIVAR TRÁMITE',
                     'ADJUNTAR ARCHIVO',
@@ -53,9 +46,13 @@ class RolesSeeder extends Seeder
             ], [
                 'name' => 'SECRETARÍA',
                 'permissions' => [
+                    'CREAR TRÁMITE',
                     'LEER TRÁMITE',
+                    'EDITAR TRÁMITE',
+                    'ELIMINAR TRÁMITE',
                     'DERIVAR TRÁMITE',
                     'ARCHIVAR TRÁMITE',
+                    'ADJUNTAR ARCHIVO',
                 ],
             ],
         ];

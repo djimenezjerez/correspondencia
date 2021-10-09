@@ -34,13 +34,10 @@ class ProcedureController extends Controller
         $user = Auth::user();
         $area_id = $user->area_id;
         $owned_procedures = DB::table('procedures')->where('area_id', $area_id)->select('id');
-        if ($user->area->name != 'SECRETARÍA GENERAL') {
-            $owned_procedures = $owned_procedures->where('pending', false);
-        }
         // Tramites que se encuentran actualmente en la sección
         $current = DB::table('procedures as p')->select('p.id', 'pf.from_area', 'pf.created_at as incoming_at', 'pf.user_id as incoming_user', DB::raw('null as to_area'), DB::raw('null as outgoing_at'), DB::raw('null as outgoing_user'), DB::raw('TRUE as owner'), 'p.archived')->leftJoin('procedure_flows as pf', function($query) {
             $query->on('pf.procedure_id','=','p.id')->whereRaw('pf.id IN (select MAX(a.id) from procedure_flows as a join procedures as b on a.procedure_id = b.id group by b.id)');
-        })->whereIn('p.id', $owned_procedures)->where('p.deleted_at', null)->where('p.archived', false);
+        })->whereIn('p.id', $owned_procedures->where('pending', false))->where('p.deleted_at', null)->where('p.archived', false);
         if ($request->has('search')) {
             if ($request->search != '') {
                 $current->where('p.code', 'like', '%'.trim(mb_strtoupper($request->search)).'%');
@@ -68,19 +65,11 @@ class ProcedureController extends Controller
             $join->on('a.created_at', '<', 'b.created_at');
         })->where('b.id', null)->where('a.from_area', $area_id)->where('a.from_area', $area_id)->whereNotIn('a.procedure_id', $owned_procedures);
         // Tramites entraron y salieron por la sección
-        if ($user->hasRole('RECEPCIÓN')) {
-            $flowed = DB::table('procedures as p')->rightJoinSub($outgoing, 'o', function ($join) {
-                $join->on('p.id', '=', 'o.procedure_id');
-            })->select( 'p.id', 'i.from_area', 'i.created_at as incoming_at', 'i.user_id as incoming_user', 'o.to_area', 'o.created_at as outgoing_at', 'o.user_id as outgoing_user', DB::raw('FALSE as owner'), DB::raw('FALSE as archived'))->leftJoinSub($incoming, 'i', function ($join) {
-                $join->on('p.id', '=', 'i.procedure_id');
-            })->where('p.deleted_at', null)->where('p.pending', false);
-        } else {
-            $flowed = DB::table('procedures as p')->rightJoinSub($incoming, 'i', function ($join) {
-                $join->on('p.id', '=', 'i.procedure_id');
-            })->leftJoinSub($outgoing, 'o', function ($join) {
-                $join->on('p.id', '=', 'o.procedure_id');
-            })->select( 'p.id', 'i.from_area', 'i.created_at as incoming_at', 'i.user_id as incoming_user', 'o.to_area', 'o.created_at as outgoing_at', 'o.user_id as outgoing_user', DB::raw('FALSE as owner'), DB::raw('FALSE as archived'))->where('p.deleted_at', null)->where('p.pending', false);
-        }
+        $flowed = DB::table('procedures as p')->rightJoinSub($incoming, 'i', function ($join) {
+            $join->on('p.id', '=', 'i.procedure_id');
+        })->leftJoinSub($outgoing, 'o', function ($join) {
+            $join->on('p.id', '=', 'o.procedure_id');
+        })->select( 'p.id', 'i.from_area', 'i.created_at as incoming_at', 'i.user_id as incoming_user', 'o.to_area', 'o.created_at as outgoing_at', 'o.user_id as outgoing_user', DB::raw('FALSE as owner'), DB::raw('FALSE as archived'))->where('p.deleted_at', null)->where('p.area_id' , '!=', $area_id);
         if ($request->has('search')) {
             if ($request->search != '') {
                 $flowed->where('p.code', 'like', '%'.trim(mb_strtoupper($request->search)).'%');
@@ -102,6 +91,8 @@ class ProcedureController extends Controller
      */
     public function store(ProcedureRequest $request)
     {
+        $user = auth()->user();
+        $area_id = $user->area_id;
         if (Procedure::whereCode($request->code)->exists()) {
             return response()->json([
                 'message' => 'Hoja de ruta inválida',
@@ -111,7 +102,7 @@ class ProcedureController extends Controller
             ], 400);
         }
         $request->merge([
-            'area_id' => auth()->user()->area_id,
+            'area_id' => $area_id,
         ]);
         $procedure = new Procedure;
         $procedure->fill($request->except('archived'));
@@ -120,6 +111,11 @@ class ProcedureController extends Controller
             $procedure->save(['timestamps' => true]);
             $procedure->requirements()->sync($procedure->procedure_type->requirements);
             $procedure->procedure_type()->increment('counter');
+            $procedure->procedure_flows()->create([
+                'from_area' => $area_id,
+                'to_area' => $area_id,
+                'user_id' => $user->id,
+            ]);
             DB::commit();
             return [
                 'message' => 'Trámite creado',
@@ -320,8 +316,7 @@ class ProcedureController extends Controller
 
     public function timeline(Procedure $procedure)
     {
-        $role = Role::whereName('RECEPCIÓN')->firstOrFail();
-        $area = Area::where('role_id', $role->id)->first();
+        $area = Area::find($procedure->procedure_flows()->first()->from_area);
         $created = [[
             'to_area' => [
                 'name' => $area->name,

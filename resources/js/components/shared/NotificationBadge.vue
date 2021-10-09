@@ -43,9 +43,7 @@ export default {
       document.getElementById('notification').play()
       this.badge = value
     })
-    if (!this.$store.getters.user.permissions.includes('CREAR TRÁMITE')) {
-      this.fetchPendingBadge()
-    }
+    this.fetchPendingBadge()
   },
   methods: {
     async receiveProcedures() {

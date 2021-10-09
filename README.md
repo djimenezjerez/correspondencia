@@ -23,19 +23,17 @@ Los usuarios tienen acceso a una o más funciones de los módulos listados anter
     * Crear Tipos de Trámites
     * Editar Tipos de Trámites
     * Eliminar Tipos de Trámites (solo si no existen trámites creados del tipo en cuestión)
-2. El rol de RECEPCIÓN cuenta con permisos para:
+2. El rol de SECRETARÍA cuenta con permisos para:
     * Crear Trámites
     * Editar Trámites (recién creados y sin derivar)
     * Eliminar Trámites (recién creados y sin derivar)
-    * Derivar Trámites (hacia todas las secciones)
+    * Derivar Trámite (hacia secciones predefinidas)
     * Adjuntar Archivos (solo si el trámite se encuentra en su bandeja y no existe otro archivo con el mismo nombre asociado al trámite)
+    * Archivar Trámite
 3. El rol de VERIFICADOR cuenta con permisos para:
     * Derivar Trámites (hacia secciones predefinidas)
     * Archivar Trámites
     * Adjuntar Archivos (solo si el trámite se encuentra en su bandeja y no existe otro archivo con el mismo nombre asociado al trámite)
-4. Y por último el rol SECRETARÍA cuenta con permisos para:
-    * Derivar Trámite (hacia secciones predefinidas)
-    * Archivar Trámite
 
 El encargado de administrar usuarios, para el caso sea el usuario que cuenta con el rol ADMINISTRADOR, es el que cuenta con la facultad de definir la sección para cada usuario usuario por medio. A cada sección se le asignó un rol predefinido:
 
@@ -44,7 +42,7 @@ El encargado de administrar usuarios, para el caso sea el usuario que cuenta con
 3. La sección VICE PRESIDENCIA tiene asociado el rol SECRETARÍA
 4. La sección STRIA. RÉGIMEN INTERNO Y PERSONAL tiene asociado el rol SECRETARÍA
 5. La sección SECRETARÍA HACIENDA tiene asociado el rol SECRETARÍA
-6. La sección SECRETARÍA GENERAL tiene asociado el rol RECEPCIÓN
+6. La sección SECRETARÍA GENERAL tiene asociado el rol SECRETARÍA
 7. La sección STRIA. BIENESTAR SOCIAL Y VIVIENDA tiene asociado el rol SECRETARÍA
 8. La sección STRIA. DE EDUCACIÓN Y CULTURA tiene asociado el rol SECRETARÍA
 9. La sección STRIA. DE ACTAS Y DEPORTE tiene asociado el rol SECRETARÍA
@@ -160,7 +158,7 @@ $ php artisan db:seed --class=DatabaseSeeder
 5. Habilitar el cargado de imágenes dentro de PDF:
 
 ```sh
-$ sed -i.bak 's/$alpha_channel = $imagickClonable ? clone $imagick : $imagick->clone();/$alpha_channel = clone $imagick;/g' vendor/dompdf/dompdf/lib/Cpdf.php
+$ copy /Y docker/Cpdf.php vendor/dompdf/dompdf/lib/Cpdf.php
 ```
 
 Concluyendo estos pasos, se puede ingresar al navegador y apuntar la URL a la dirección del dominio del servidor donde se instaló el sistema.

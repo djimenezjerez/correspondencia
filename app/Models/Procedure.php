@@ -59,7 +59,13 @@ class Procedure extends Model
 
     public function getHasFlowedAttribute()
     {
-        return $this->procedure_flows()->count() > 0;
+        if ($this->procedure_flows()->count() == 1) {
+            $flow = $this->procedure_flows()->first();
+            if ($flow->from_area == $flow->to_area) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public function getValidatedAttribute()
