@@ -18,11 +18,11 @@ class ProcedureTypeSeeder extends Seeder
     {
         $procedure_types = [
             [
-                'name' => 'TRAMITE GENERAL',
+                'name' => 'Tramite General',
                 'code' => 'TG',
                 'requirements' => [],
             ], [
-                'name' => 'PRÉSTAMO DE EMERGENCIA',
+                'name' => 'Préstamo de Emergencia',
                 'code' => 'PE',
                 'requirements' => [
                     'FOTOCOPIA BOLETA DE PAGO (MES ANTERIOR)',
@@ -32,7 +32,7 @@ class ProcedureTypeSeeder extends Seeder
                     'FOTOCOPIA CARNET DE SEGURO',
                 ],
             ], [
-                'name' => 'PRÉSTAMO REGULAR',
+                'name' => 'Préstamo Regular',
                 'code' => 'PR',
                 'requirements' => [
                     'FOTOCOPIA BOLETA DE PAGO (MES ANTERIOR)',
@@ -42,7 +42,7 @@ class ProcedureTypeSeeder extends Seeder
                     'FOTOCOPIA CARNET DE SEGURO',
                 ],
             ], [
-                'name' => 'PRÉSTAMO INICIACIÓN',
+                'name' => 'Préstamo Iniciación',
                 'code' => 'PI',
                 'requirements' => [
                     'FOTOCOPIA BOLETA DE PAGO (MES ANTERIOR)',
@@ -67,7 +67,7 @@ class ProcedureTypeSeeder extends Seeder
             $requirements = [];
             foreach ($procedure_type['requirements'] as $requirement) {
                 $new_equirement = Requirement::firstOrCreate([
-                    'name' => $requirement
+                    'name' => $requirement,
                 ], []);
                 $requirements[] = $new_equirement->id;
             }

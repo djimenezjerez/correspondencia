@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ProcedureType;
 use App\Http\Requests\ProcedureTypeRequest;
 use App\Http\Resources\ProcedureTypeResource;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class ProcedureTypeController extends Controller
@@ -36,7 +37,7 @@ class ProcedureTypeController extends Controller
         }
         if ($request->has('search')) {
             if ($request->search != '') {
-                $query->where('name', 'like', '%'.trim(mb_strtoupper($request->search)).'%');
+                $query->where(DB::raw('lower(name)'), 'like', '%'.trim(mb_strtoupper($request->search)).'%');
             }
         }
         return [

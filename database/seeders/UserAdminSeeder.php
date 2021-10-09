@@ -21,7 +21,7 @@ class UserAdminSeeder extends Seeder
             throw new \RuntimeException('Primero debe establecer los datos del administrador');
         } else {
             $data = json_decode(Storage::get($file), true);
-            $area = Area::where('name', 'ADMINISTRADOR')->firstOrFail();
+            $area = Area::where('name', 'Administrador')->firstOrFail();
             $user = User::firstOrCreate([
                 'username' => $data['username'],
             ], [

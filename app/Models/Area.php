@@ -57,7 +57,7 @@ class Area extends Model
 
     public function setNameAttribute($value)
     {
-        $this->attributes['name'] = trim(mb_strtoupper($value));
+        $this->attributes['name'] = trim($value);
     }
 
     public function setCodeAttribute($value)

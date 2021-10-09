@@ -27,6 +27,7 @@ class DropDocumentTypesTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::create('document_types', function (Blueprint $table) {
             $table->id();
             $table->string('name')->comment('Nombre');
@@ -37,5 +38,6 @@ class DropDocumentTypesTable extends Migration
             $table->unsignedBigInteger('document_type_id')->comment('Tipo de Documento de Identidad');
             $table->foreign('document_type_id')->references('id')->on('document_types')->onDelete('cascade')->onUpdate('cascade');
         });
+        Schema::enableForeignKeyConstraints();
     }
 }

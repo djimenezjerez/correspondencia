@@ -40,7 +40,9 @@ class ProcedureController extends Controller
         })->whereIn('p.id', $owned_procedures->where('pending', false))->where('p.deleted_at', null)->where('p.archived', false);
         if ($request->has('search')) {
             if ($request->search != '') {
-                $current->where('p.code', 'like', '%'.trim(mb_strtoupper($request->search)).'%');
+                $current->where(function($q) use ($request) {
+                    return $q->where(DB::raw('upper(p.code)'), 'like', '%'.trim(mb_strtoupper($request->search)).'%')->orWhere(DB::raw('upper(p.origin)'), 'like', '%'.trim(mb_strtoupper($request->search)).'%');
+                });
             }
         }
         // Tramites archivados en la sección
@@ -49,7 +51,9 @@ class ProcedureController extends Controller
         })->whereIn('p.id', $owned_procedures)->where('p.deleted_at', null)->where('p.archived', true);
         if ($request->has('search')) {
             if ($request->search != '') {
-                $archived->where('p.code', 'like', '%'.trim(mb_strtoupper($request->search)).'%');
+                $archived->where(function($q) use ($request) {
+                    return $q->where(DB::raw('upper(p.code)'), 'like', '%'.trim(mb_strtoupper($request->search)).'%')->orWhere(DB::raw('upper(p.origin)'), 'like', '%'.trim(mb_strtoupper($request->search)).'%');
+                });
             }
         }
         // Tramites que llegaron a la sección
@@ -72,7 +76,9 @@ class ProcedureController extends Controller
         })->select( 'p.id', 'i.from_area', 'i.created_at as incoming_at', 'i.user_id as incoming_user', 'o.to_area', 'o.created_at as outgoing_at', 'o.user_id as outgoing_user', DB::raw('FALSE as owner'), DB::raw('FALSE as archived'))->where('p.deleted_at', null)->where('p.area_id' , '!=', $area_id);
         if ($request->has('search')) {
             if ($request->search != '') {
-                $flowed->where('p.code', 'like', '%'.trim(mb_strtoupper($request->search)).'%');
+                $flowed->where(function($q) use ($request) {
+                    return $q->where(DB::raw('upper(p.code)'), 'like', '%'.trim(mb_strtoupper($request->search)).'%')->orWhere(DB::raw('upper(p.origin)'), 'like', '%'.trim(mb_strtoupper($request->search)).'%');
+                });
             }
         }
         // Union de los resultados, primero los que se encuentran en la sección, después los que pasaron por la sección y por último los que fueron archivados en la sección

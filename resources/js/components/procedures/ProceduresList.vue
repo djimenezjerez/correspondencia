@@ -90,7 +90,7 @@
                         <div v-if="item.archived && item.owner">
                           <v-col cols="auto">
                             <div class="text-center">
-                              ARCHIVADO
+                              Archivado
                             </div>
                           </v-col>
                         </div>
