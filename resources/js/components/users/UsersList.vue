@@ -13,15 +13,16 @@
             <AddButton text="Agregar usuario" @click="$refs.dialogUserForm.showDialog()"/>
           </v-toolbar>
           <v-row
-            align="end"
-            justify="end"
-            class="mt-1"
+            class="mt-1 px-4 pb-0 mb-0"
+            dense
           >
-            <v-col cols="auto" md="3" sm="4" xs="12">
+            <v-col xl="9" lg="9" md="9" sm="8" xs="12" class="pb-0 mb-0">
+            </v-col>
+            <v-col xl="3" lg="3" md="3" sm="4" xs="12" class="pb-0 mb-0">
               <SearchInput v-model="search"/>
             </v-col>
           </v-row>
-          <v-card-text>
+          <v-card-text class="pt-0 mt-0">
             <v-data-table
               :headers="headers"
               :items="users"
@@ -31,6 +32,8 @@
               :footer-props="{
                 itemsPerPageOptions: [8, 15, 30]
               }"
+              mobile-breakpoint="0"
+              dense
               id="datatable"
             >
               <template v-slot:[`item.area_id`]="{ item }">
@@ -40,49 +43,59 @@
                 {{ item.is_active ? 'ACTIVO' : 'INACTIVO' }}
               </template>
               <template v-slot:[`item.actions`]="{ item }">
-                <v-container style="width: 10em;">
-                  <v-row dense no-gutters justify="space-around">
-                    <v-col cols="auto" v-if="item.is_active">
-                      <v-tooltip bottom>
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-btn
-                            v-bind="attrs"
-                            v-on="on"
-                            color="yellow"
-                            class="py-6"
-                            small
-                            @click="$refs.dialogUserForm.showDialog(item)"
+                <v-row dense no-gutters justify="space-around">
+                  <v-col cols="auto" v-if="item.is_active">
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          v-bind="attrs"
+                          v-on="on"
+                          color="yellow"
+                          class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-0 mx-0 my-1"
+                          @click="$refs.dialogUserForm.showDialog(item)"
+                          :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
+                          :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                        >
+                          <v-icon
+                            dense
+                            :small="$vuetify.breakpoint.md"
+                            :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                            class="pa-0 ma-0"
                           >
-                            <v-icon>
-                              mdi-pencil
-                            </v-icon>
-                          </v-btn>
-                        </template>
-                        <span>Editar Usuario</span>
-                      </v-tooltip>
-                    </v-col>
-                    <v-col cols="auto">
-                      <v-tooltip bottom>
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-btn
-                            v-bind="attrs"
-                            v-on="on"
-                            :color="item.is_active ? 'red' : 'success'"
-                            :dark="item.is_active"
-                            class="py-6"
-                            small
-                            @click="$refs.dialogUserSwitch.showDialog(item)"
+                            mdi-pencil
+                          </v-icon>
+                        </v-btn>
+                      </template>
+                      <span>Editar Usuario</span>
+                    </v-tooltip>
+                  </v-col>
+                  <v-col cols="auto">
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          v-bind="attrs"
+                          v-on="on"
+                          :color="item.is_active ? 'red' : 'success'"
+                          :dark="item.is_active"
+                          class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-0 mx-0 my-1"
+                          @click="$refs.dialogUserSwitch.showDialog(item)"
+                          :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
+                          :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                        >
+                          <v-icon
+                            dense
+                            :small="$vuetify.breakpoint.md"
+                            :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                            class="pa-0 ma-0"
                           >
-                            <v-icon>
-                              {{ item.is_active ? 'mdi-delete' : 'mdi-restore' }}
-                            </v-icon>
-                          </v-btn>
-                        </template>
-                        <span>{{ item.is_active ? 'Desactivar usuario' : 'Reactivar usuario' }}</span>
-                      </v-tooltip>
-                    </v-col>
-                  </v-row>
-                </v-container>
+                            {{ item.is_active ? 'mdi-delete' : 'mdi-restore' }}
+                          </v-icon>
+                        </v-btn>
+                      </template>
+                      <span>{{ item.is_active ? 'Desactivar usuario' : 'Reactivar usuario' }}</span>
+                    </v-tooltip>
+                  </v-col>
+                </v-row>
               </template>
             </v-data-table>
           </v-card-text>
@@ -123,55 +136,56 @@ export default {
       users: [],
       headers: [
         {
-          text: 'Nombre',
+          text: 'NOMBRE',
           align: 'center',
           sortable: true,
           value: 'name',
         }, {
-          text: 'Apellido',
+          text: 'APELLIDO',
           align: 'center',
           sortable: true,
           value: 'last_name',
         }, {
-          text: 'Nombre de usuario',
+          text: 'NOMBRE DE USUARIO',
           align: 'center',
           sortable: true,
           value: 'username',
         }, {
-          text: 'Documento de identidad',
+          text: 'DOCUMENTO DE IDENTIDAD',
           align: 'center',
           sortable: true,
           value: 'identity_card',
         }, {
-          text: 'Sección',
+          text: 'SECCIÓN',
           align: 'center',
           sortable: false,
           value: 'area_id',
         }, {
-          text: 'Dirección',
+          text: 'DIRECCIÓN',
           align: 'center',
           sortable: false,
           value: 'address',
         }, {
-          text: 'Teléfono',
+          text: 'TELÉFONO',
           align: 'center',
           sortable: false,
           value: 'phone',
         }, {
-          text: 'Email',
+          text: 'EMAIL',
           align: 'center',
           sortable: false,
           value: 'email',
         }, {
-          text: 'Estado',
+          text: 'ESTADO',
           align: 'center',
           sortable: false,
           value: 'is_active',
         }, {
-          text: 'Acciones',
+          text: 'ACCIONES',
           align: 'center',
           value: 'actions',
           sortable: false,
+          width: '12%',
         },
       ],
     }
@@ -179,6 +193,7 @@ export default {
   mounted() {
     const table = document.getElementById('datatable').getElementsByTagName('table')[0]
     table.setAttribute('class', 'datatables')
+    table.setAttribute('width', '100%')
   },
   created() {
     this.fetchUsers()

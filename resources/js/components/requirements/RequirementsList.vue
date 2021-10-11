@@ -116,12 +116,12 @@ export default {
       requirements: [],
       headers: [
         {
-          text: 'Nombre',
+          text: 'NOMBRE',
           align: 'center',
           sortable: true,
           value: 'name',
         }, {
-          text: 'Acciones',
+          text: 'ACCIONES',
           align: 'center',
           value: 'actions',
           sortable: false,

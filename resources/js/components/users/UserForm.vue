@@ -31,142 +31,176 @@
         <validation-observer ref="userObserver" v-slot="{ invalid }">
           <form v-on:submit.prevent="submit">
             <v-card-text>
-              <validation-provider
-                v-slot="{ errors }"
-                name="name"
-                rules="required|min:3|alpha_spaces"
-              >
-                <v-text-field
-                  label="Nombre"
-                  v-model="userForm.name"
-                  data-vv-name="name"
-                  :error-messages="errors"
-                  prepend-icon="mdi-account"
-                  autofocus
-                ></v-text-field>
-              </validation-provider>
-              <validation-provider
-                v-slot="{ errors }"
-                name="last_name"
-                rules="required|min:3|alpha_spaces"
-              >
-                <v-text-field
-                  label="Apellido"
-                  v-model="userForm.last_name"
-                  data-vv-name="last_name"
-                  :error-messages="errors"
-                  prepend-icon="mdi-account"
-                ></v-text-field>
-              </validation-provider>
-              <validation-provider
-                v-slot="{ errors }"
-                name="username"
-                rules="required|min:3|alpha_num"
-              >
-                <v-text-field
-                  label="Nombre de usuario"
-                  v-model="userForm.username"
-                  data-vv-name="username"
-                  :error-messages="errors"
-                  prepend-icon="mdi-account"
-                ></v-text-field>
-              </validation-provider>
-              <validation-provider
-                v-slot="{ errors }"
-                name="password"
-                :rules="edit ? '' : 'required|min:4'"
-                v-if="edit"
-              >
-                <v-text-field
-                  label="Contraseña"
-                  v-model="userForm.password"
-                  data-vv-name="password"
-                  :error-messages="errors"
-                  prepend-icon="mdi-lock"
-                  :append-icon="shadowPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                  @click:append="() => (shadowPassword = !shadowPassword)"
-                  :type="shadowPassword ? 'password' : 'text'"
-                ></v-text-field>
-              </validation-provider>
-              <validation-provider
-                v-slot="{ errors }"
-                name="identity_card"
-                rules="required|min:3|alpha_dash"
-              >
-                <v-text-field
-                  label="Documento de Identidad"
-                  v-model="userForm.identity_card"
-                  data-vv-name="identity_card"
-                  :error-messages="errors"
-                  prepend-icon="mdi-card-account-details"
-                  @input="value => userForm.identity_card = value.toUpperCase()"
-                ></v-text-field>
-              </validation-provider>
-              <validation-provider
-                v-slot="{ errors }"
-                name="email"
-                rules="required|email"
-              >
-                <v-text-field
-                  label="Email"
-                  v-model="userForm.email"
-                  data-vv-name="email"
-                  :error-messages="errors"
-                  prepend-icon="mdi-at"
-                ></v-text-field>
-              </validation-provider>
-              <validation-provider
-                v-slot="{ errors }"
-                name="phone"
-                rules="required|min:7|integer"
-              >
-                <v-text-field
-                  label="Teléfono"
-                  v-model="userForm.phone"
-                  data-vv-name="phone"
-                  :error-messages="errors"
-                  prepend-icon="mdi-account"
-                ></v-text-field>
-              </validation-provider>
-              <validation-provider
-                v-slot="{ errors }"
-                name="address"
-                rules="required|min:3"
-              >
-                <v-text-field
-                  label="Dirección"
-                  v-model="userForm.address"
-                  data-vv-name="address"
-                  :error-messages="errors"
-                  prepend-icon="mdi-map-marker"
-                ></v-text-field>
-              </validation-provider>
-              <validation-provider
-                v-slot="{ errors }"
-                name="area_id"
-                rules="required"
-              >
-                <v-select
-                  :items="areas"
-                  item-text="name"
-                  item-value="id"
-                  label="Sección"
-                  v-model="userForm.area_id"
-                  data-vv-name="area_id"
-                  :error-messages="errors"
-                  prepend-icon="mdi-briefcase"
-                ></v-select>
-              </validation-provider>
+              <v-row dense>
+                <v-col cols="6" class="pr-3">
+                  <validation-provider
+                    v-slot="{ errors }"
+                    name="name"
+                    rules="required|min:3|alpha_spaces"
+                  >
+                    <v-text-field
+                      label="Nombre"
+                      v-model="userForm.name"
+                      data-vv-name="name"
+                      :error-messages="errors"
+                      prepend-icon="mdi-account-circle"
+                      autofocus
+                    ></v-text-field>
+                  </validation-provider>
+                </v-col>
+                <v-col cols="6" class="pl-3">
+                  <validation-provider
+                    v-slot="{ errors }"
+                    name="last_name"
+                    rules="required|min:3|alpha_spaces"
+                  >
+                    <v-text-field
+                      label="Apellido"
+                      v-model="userForm.last_name"
+                      data-vv-name="last_name"
+                      :error-messages="errors"
+                      prepend-icon="mdi-account-circle-outline"
+                    ></v-text-field>
+                  </validation-provider>
+                </v-col>
+              </v-row>
+              <v-row dense>
+                <v-col cols="6" class="pr-3">
+                  <validation-provider
+                    v-slot="{ errors }"
+                    name="identity_card"
+                    rules="required|min:3|alpha_dash"
+                  >
+                    <v-text-field
+                      label="Documento de Identidad"
+                      v-model="userForm.identity_card"
+                      data-vv-name="identity_card"
+                      :error-messages="errors"
+                      prepend-icon="mdi-card-account-details"
+                      @input="value => userForm.identity_card = value.toUpperCase()"
+                    ></v-text-field>
+                  </validation-provider>
+                </v-col>
+                <v-col cols="6" class="pl-3">
+                  <validation-provider
+                    v-slot="{ errors }"
+                    name="area_id"
+                    rules="required"
+                  >
+                    <v-select
+                      :items="areas"
+                      item-text="name"
+                      item-value="id"
+                      label="Sección"
+                      v-model="userForm.area_id"
+                      data-vv-name="area_id"
+                      :error-messages="errors"
+                      prepend-icon="mdi-briefcase"
+                    ></v-select>
+                  </validation-provider>
+                </v-col>
+              </v-row>
+              <v-row dense>
+                <v-col cols="6" class="pr-3">
+                  <validation-provider
+                    v-slot="{ errors }"
+                    name="username"
+                    rules="required|min:3|alpha_num"
+                  >
+                    <v-text-field
+                      label="Nombre de usuario"
+                      v-model="userForm.username"
+                      data-vv-name="username"
+                      :error-messages="errors"
+                      prepend-icon="mdi-account"
+                    ></v-text-field>
+                  </validation-provider>
+                </v-col>
+                <v-col cols="6" class="pl-3">
+                  <validation-provider
+                    v-slot="{ errors }"
+                    name="email"
+                    rules="required|email"
+                  >
+                    <v-text-field
+                      label="Email"
+                      v-model="userForm.email"
+                      data-vv-name="email"
+                      :error-messages="errors"
+                      prepend-icon="mdi-at"
+                    ></v-text-field>
+                  </validation-provider>
+                </v-col>
+              </v-row>
+              <v-row dense>
+                <v-col cols="6" class="pr-3">
+                  <validation-provider
+                    v-slot="{ errors }"
+                    name="phone"
+                    rules="required|min:7|integer"
+                  >
+                    <v-text-field
+                      label="Teléfono"
+                      v-model="userForm.phone"
+                      data-vv-name="phone"
+                      :error-messages="errors"
+                      prepend-icon="mdi-phone"
+                    ></v-text-field>
+                  </validation-provider>
+                </v-col>
+                <v-col cols="6" class="pl-3">
+                  <validation-provider
+                    v-slot="{ errors }"
+                    name="address"
+                    rules="required|min:3"
+                  >
+                    <v-text-field
+                      label="Dirección"
+                      v-model="userForm.address"
+                      data-vv-name="address"
+                      :error-messages="errors"
+                      prepend-icon="mdi-map-marker"
+                    ></v-text-field>
+                  </validation-provider>
+                </v-col>
+              </v-row>
+              <v-row dense>
+                <v-col cols="6" class="pr-3">
+                  <validation-provider
+                    v-slot="{ errors }"
+                    name="password"
+                    :rules="edit ? '' : 'required|min:4'"
+                    v-if="edit"
+                  >
+                    <v-text-field
+                      label="Contraseña"
+                      v-model="userForm.password"
+                      data-vv-name="password"
+                      :error-messages="errors"
+                      prepend-icon="mdi-lock"
+                      :append-icon="shadowPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                      @click:append="() => (shadowPassword = !shadowPassword)"
+                      :type="shadowPassword ? 'password' : 'text'"
+                    ></v-text-field>
+                  </validation-provider>
+                </v-col>
+                <v-col cols="6" class="pl-3"></v-col>
+              </v-row>
             </v-card-text>
             <v-card-actions>
-              <v-btn
-                block
-                type="submit"
-                color="info"
-                :disabled="invalid || loading"
-              >
-                Guardar
-              </v-btn>
+              <v-row dense>
+                <v-col cols="6" class="pr-3"></v-col>
+                <v-col cols="6" class="pl-3">
+                  <v-btn
+                    block
+                    type="submit"
+                    color="info"
+                    :disabled="invalid || loading"
+                  >
+                    Guardar
+                  </v-btn>
+                </v-col>
+              </v-row>
             </v-card-actions>
           </form>
         </validation-observer>

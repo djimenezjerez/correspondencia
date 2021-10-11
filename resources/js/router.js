@@ -7,6 +7,7 @@ import ProcedureTypesList from '@/components/procedure_types/ProcedureTypesList'
 import ProceduresList from '@/components/procedures/ProceduresList'
 import Profile from '@/components/auth/Profile'
 import UsersList from '@/components/users/UsersList'
+import HelpManual from '@/components/help/Manual'
 import store from '@/store.js'
 
 Vue.use(VueRouter)
@@ -48,6 +49,10 @@ const router = new VueRouter({
           path: '/user',
           name: 'users',
           component: UsersList,
+        }, {
+          path: '/help_manual',
+          name: 'help_manual',
+          component: HelpManual,
         }
       ]
     },

@@ -127,22 +127,22 @@ export default {
       procedureTypes: [],
       headers: [
         {
-          text: 'Nombre',
+          text: 'NOMBRE',
           align: 'center',
           sortable: true,
           value: 'name',
         }, {
-          text: 'Requisitos',
+          text: 'REQUISITOS',
           align: 'center',
           sortable: false,
           value: 'requirements',
         }, {
-          text: 'Código',
+          text: 'CÓDIGO',
           align: 'center',
           sortable: false,
           value: 'code',
         }, {
-          text: 'Acciones',
+          text: 'ACCIONES',
           align: 'center',
           value: 'actions',
           sortable: false,

@@ -38,15 +38,6 @@
               dense
               id="datatable"
             >
-              <template v-slot:header>
-                <thead>
-                  <tr>
-                    <th :width="`${header.width}%`" v-for="(header, index) in headers" :key="index" class="text-center font-weight-bold" :style="{ 'font-size': `${$helpers.fontSize($vuetify.breakpoint.name)} !important` }">
-                      {{ header.text.toUpperCase() }}
-                    </th>
-                  </tr>
-                </thead>
-              </template>
               <template v-slot:body="{ items }">
                 <tbody>
                   <tr v-for="item in items" :key="item.id" :style="{ 'height': $helpers.rowHeight($vuetify.breakpoint.name) }">
@@ -339,55 +330,55 @@ export default {
       search: null,
       headers: [
         {
-          text: 'Fecha de ingreso',
+          text: 'FECHA DE INGRESO',
           align: 'center',
-          sortable: false,
+          sortable: true,
           value: 'incoming_at',
           width: '7%',
         }, {
-          text: 'Sección/Origen',
+          text: 'SECCIÓN/ORIGEN',
           align: 'center',
           sortable: false,
           value: 'from_area',
           width: '12%',
         }, {
-          text: 'Código de hoja de ruta',
+          text: 'CÓDIGO DE HOJA DE RUTA',
           align: 'center',
-          sortable: false,
+          sortable: true,
           value: 'code',
           width: '10%',
         }, {
-          text: 'Tipo de trámite',
+          text: 'TIPO DE TRÁMITE',
           align: 'center',
           sortable: false,
           value: 'procedure_type_id',
           width: '10%',
         }, {
-          text: 'Procedencia',
+          text: 'PROCEDENCIA',
           align: 'center',
-          sortable: false,
+          sortable: true,
           value: 'origin',
           width: '10%',
         }, {
-          text: 'Detalle/Asunto',
+          text: 'DETALLE/ASUNTO',
           align: 'center',
           sortable: false,
           value: 'detail',
           width: '15%',
         }, {
-          text: 'Sección/Destino',
+          text: 'SECCIÓN/DESTINO',
           align: 'center',
           sortable: false,
           value: 'to_area',
           width: '12%',
         }, {
-          text: 'Fecha de derivación',
+          text: 'FECHA DE DERIVACIÓN',
           align: 'center',
-          sortable: false,
+          sortable: true,
           value: 'outgoing_at',
           width: '7%',
         }, {
-          text: 'Acciones',
+          text: 'ACCIONES',
           align: 'center',
           sortable: false,
           value: 'actions',

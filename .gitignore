@@ -6,6 +6,7 @@
 /public/css
 /public/js
 /public/audio
+/public/assets
 /storage/*.key
 /storage/app/admin_data.json
 /vendor

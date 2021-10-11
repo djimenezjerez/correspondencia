@@ -8,16 +8,8 @@
       v-if="$store.getters.isLoggedIn"
     >
       <v-app-bar-nav-icon
-        @click="drawer = true"
-        v-if="$store.getters.user.isAdmin"
+        @click="drawer = !drawer"
       ></v-app-bar-nav-icon>
-      <v-toolbar-title>
-        <v-img
-          src="/img/logo_low.png"
-          contain
-          width="80"
-        ></v-img>
-      </v-toolbar-title>
       <v-divider class="mx-5" vertical></v-divider>
       <v-btn
         outlined
@@ -81,34 +73,70 @@
     <v-navigation-drawer
       app
       dark
-      temporary
-      v-model="drawer"
+      permanent
+      :mini-variant.sync="drawer"
       color="secondary"
+      :width="barSize"
     >
+      <v-row align="center" justify="center" class="my-3" dense>
+        <v-col cols="auto" class="text-center">
+          <v-img
+            src="/img/logo_low.png"
+            contain
+            width="120"
+          ></v-img>
+          <div class="white--text font-weight-bold" style="font-size: 16px;" v-if="!drawer">
+            ASCINALSS
+          </div>
+        </v-col>
+      </v-row>
+      <v-divider></v-divider>
       <v-list
         nav
         dense
       >
-        <v-list-item-group v-model="group">
-          <v-list-item link :to="{ name: 'users' }">
+        <v-list-item link :to="{ name: 'users' }" v-if="$store.getters.user.isAdmin">
+          <v-list-item-icon>
+            <v-icon>mdi-account</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>Usuarios</v-list-item-title>
+        </v-list-item>
+        <v-list-item link :to="{ name: 'procedure_types' }" v-if="$store.getters.user.isAdmin">
+          <v-list-item-icon>
+            <v-icon>mdi-paperclip</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>Trámites</v-list-item-title>
+        </v-list-item>
+        <v-list-item link :to="{ name: 'requirements' }" v-if="$store.getters.user.isAdmin">
+          <v-list-item-icon>
+            <v-icon>mdi-card-account-details</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>Requisitos</v-list-item-title>
+        </v-list-item>
+        <v-list-item link :to="{ name: 'procedures' }" v-if="!$store.getters.user.isAdmin">
+          <v-list-item-icon>
+            <v-icon>mdi-paperclip</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>Hojas de ruta</v-list-item-title>
+        </v-list-item>
+
+        <v-list-group color="white">
+          <v-icon slot="prependIcon" color="white">mdi-help-circle-outline</v-icon>
+          <template v-slot:activator>
+            <v-list-item-title>Ayuda</v-list-item-title>
+          </template>
+          <v-list-item :to="{ name: 'help_manual' }" :class="{ 'ml-6': !drawer }">
             <v-list-item-icon>
-              <v-icon>mdi-account</v-icon>
+              <v-icon>mdi-information</v-icon>
             </v-list-item-icon>
-            <v-list-item-title>Usuarios</v-list-item-title>
+            <v-list-item-title>Manual de usuario</v-list-item-title>
           </v-list-item>
-          <v-list-item link :to="{ name: 'procedure_types' }">
-            <v-list-item-icon>
-              <v-icon>mdi-paperclip</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Trámites</v-list-item-title>
-          </v-list-item>
-          <v-list-item link :to="{ name: 'requirements' }">
-            <v-list-item-icon>
-              <v-icon>mdi-card-account-details</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Requisitos</v-list-item-title>
-          </v-list-item>
-        </v-list-item-group>
+        </v-list-group>
+
+
+
+
+
       </v-list>
     </v-navigation-drawer>
     <v-main>
@@ -130,7 +158,6 @@ export default {
   data: function() {
     return {
       drawer: false,
-      group: null,
     }
   },
   computed: {
@@ -139,6 +166,16 @@ export default {
         case 'xs': return 40
         case 'sm': return 40
         default: return 45
+      }
+    },
+    barSize() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs': return 240
+        case 'sm': return 245
+        case 'md': return 250
+        case 'lg': return 245
+        case 'xl': return 240
+        default: return 250
       }
     }
   },

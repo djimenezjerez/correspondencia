@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Area;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -30,7 +31,7 @@ class UserController extends Controller
         if ($request->has('search')) {
             if ($request->search != '') {
                 $query->where(function($q) use ($request) {
-                    return $q->orWhere('name', 'like', '%'.trim(mb_strtoupper($request->search)).'%')->orWhere('username', 'like', '%'.$request->search.'%');
+                    return $q->orWhere(DB::raw('upper(name)'), 'like', '%'.trim(mb_strtoupper($request->search)).'%')->orWhere(DB::raw('upper(last_name)'), 'like', '%'.trim(mb_strtoupper($request->search)).'%')->orWhere(DB::raw('upper(identity_card)'), 'like', '%'.trim(mb_strtoupper($request->search)).'%')->orWhere('phone', 'like', '%'.$request->search.'%')->orWhere(DB::raw('upper(username)'), 'like', '%'.trim(mb_strtoupper($request->search)).'%');
                 });
             }
         }
