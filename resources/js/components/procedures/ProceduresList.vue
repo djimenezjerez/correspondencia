@@ -33,256 +33,228 @@
               :footer-props="{
                 itemsPerPageOptions: [8, 15, 30]
               }"
-              hide-default-header
               mobile-breakpoint="0"
               dense
               id="datatable"
             >
-              <template v-slot:body="{ items }">
-                <tbody>
-                  <tr v-for="item in items" :key="item.id" :style="{ 'height': $helpers.rowHeight($vuetify.breakpoint.name) }">
-                    <td>
+              <template v-slot:[`item.incoming_at`]="{ item }">
+                <div>
+                  {{ item.incoming_at ? item.incoming_at : item.created_at | moment('L') }}
+                </div>
+                <div>
+                  {{ item.incoming_at ? item.incoming_at : item.created_at | moment('LT') }}
+                </div>
+              </template>
+              <template v-slot:[`item.from_area`]="{ item }">
+                {{ area(item.from_area ? item.from_area : 0) }}
+              </template>
+              <template v-slot:[`item.procedure_type_id`]="{ item }">
+                {{ procedureType(item.procedure_type_id) }}
+              </template>
+              <template v-slot:[`item.to_area`]="{ item }">
+                <v-row justify="center">
+                  <div v-if="item.archived && item.owner">
+                    <v-col cols="auto">
                       <div class="text-center">
-                        <div :style="{ 'font-size': `${$helpers.fontSize($vuetify.breakpoint.name)} !important` }">
-                          {{ item.incoming_at ? item.incoming_at : item.created_at | moment('L') }}
-                        </div>
-                        <div :style="{ 'font-size': `${$helpers.fontSize($vuetify.breakpoint.name)} !important` }">
-                          {{ item.incoming_at ? item.incoming_at : item.created_at | moment('LT') }}
-                        </div>
+                        Archivado
                       </div>
-                    </td>
-                    <td>
-                      <div class="text-center">
-                        {{ area(item.from_area ? item.from_area : 0) }}
-                      </div>
-                    </td>
-                    <td>
-                      <div class="text-center">
-                        {{ item.code }}
-                      </div>
-                    </td>
-                    <td>
-                      <div class="text-center">
-                        {{ procedureType(item.procedure_type_id) }}
-                      </div>
-                    </td>
-                    <td>
-                      <div class="text-center">
-                        {{ item.origin }}
-                      </div>
-                    </td>
-                    <td>
-                      <div class="text-center">
-                        {{ item.detail }}
-                      </div>
-                    </td>
-                    <td>
-                      <v-row justify="center">
-                        <div v-if="item.archived && item.owner">
-                          <v-col cols="auto">
-                            <div class="text-center">
-                              Archivado
-                            </div>
-                          </v-col>
-                        </div>
-                        <div v-else>
-                          <v-col cols="6" v-if="$store.getters.user.permissions.includes('DERIVAR TRÁMITE') && item.owner && procedureTypes.length > 0">
-                            <div v-if="item.validated || $store.getters.user.role != 'VERIFICADOR'">
-                              <v-btn
-                                dark
-                                rounded
-                                color="green darken-1"
-                                @click="$refs.dialogProcedureFlow.showDialog(item, procedureType(item.procedure_type_id))"
-                                class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-xl-4 px-lg-4 px-md-2 px-sm-2 px-xs-0 mx-0"
-                                :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg || $vuetify.breakpoint.md"
-                                :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
-                              >
-                                <div class="text-center">
-                                  Derivar
-                                </div>
-                              </v-btn>
-                            </div>
-                            <div v-else>
-                              <v-btn
-                                dark
-                                rounded
-                                color="orange darken-1"
-                                @click="$refs.dialogProcedureRequirements.showDialog(item)"
-                                class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-xl-4 px-lg-4 px-md-2 px-sm-2 px-xs-0 mx-0"
-                                :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg || $vuetify.breakpoint.md"
-                                :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
-                              >
-                              <div class="text-center">
-                                Requisitos
-                              </div>
-                              </v-btn>
-                            </div>
-                          </v-col>
-                          <v-col cols="autp" v-else>
-                            <div class="text-center">
-                              {{ area(item.to_area) }}
-                            </div>
-                          </v-col>
-                        </div>
-                      </v-row>
-                    </td>
-                    <td>
-                      <div class="text-center">
-                        <div v-if="item.archived">
-                          <div :style="{ 'font-size': `${$helpers.fontSize($vuetify.breakpoint.name)} !important` }">
-                            {{ item.updated_at | moment('L') }}
+                    </v-col>
+                  </div>
+                  <div v-else>
+                    <v-col cols="6" v-if="$store.getters.user.permissions.includes('DERIVAR TRÁMITE') && item.owner && procedureTypes.length > 0">
+                      <div v-if="item.validated || $store.getters.user.role != 'VERIFICADOR'">
+                        <v-btn
+                          dark
+                          rounded
+                          color="green darken-1"
+                          @click="$refs.dialogProcedureFlow.showDialog(item, procedureType(item.procedure_type_id))"
+                          class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-xl-4 px-lg-4 px-md-2 px-sm-2 px-xs-0 mx-0"
+                          :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg || $vuetify.breakpoint.md"
+                          :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                        >
+                          <div class="text-center">
+                            Derivar
                           </div>
-                          <div :style="{ 'font-size': `${$helpers.fontSize($vuetify.breakpoint.name)} !important` }">
-                            {{ item.updated_at | moment('LT') }}
-                          </div>
-                        </div>
-                        <div v-else-if="!item.outgoing_at">
-                          -
-                        </div>
-                        <div v-else>
-                          <div :style="{ 'font-size': `${$helpers.fontSize($vuetify.breakpoint.name)} !important` }">
-                            {{ item.outgoing_at | moment('L') }}
-                          </div>
-                          <div :style="{ 'font-size': `${$helpers.fontSize($vuetify.breakpoint.name)} !important` }">
-                            {{ item.outgoing_at | moment('LT') }}
-                          </div>
-                        </div>
+                        </v-btn>
                       </div>
-                    </td>
-                    <td>
-                      <v-row dense no-gutters justify="space-around">
-                        <v-col cols="auto" v-if="!item.has_flowed && item.owner && !item.archived && $store.getters.user.permissions.includes('EDITAR TRÁMITE')">
-                          <v-tooltip bottom>
-                            <template v-slot:activator="{ on, attrs }">
-                              <v-btn
-                                v-bind="attrs"
-                                v-on="on"
-                                color="info"
-                                @click="$refs.dialogProcedureForm.showDialog(item)"
-                                class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-0 mx-0 my-1"
-                                :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
-                                :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
-                              >
-                                <v-icon
-                                  dense
-                                  :small="$vuetify.breakpoint.md"
-                                  :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
-                                  class="pa-0 ma-0"
-                                >
-                                  mdi-pencil
-                                </v-icon>
-                              </v-btn>
-                            </template>
-                            <span>Editar Hoja de Ruta</span>
-                          </v-tooltip>
-                        </v-col>
-                        <v-col cols="auto">
-                          <v-tooltip bottom>
-                            <template v-slot:activator="{ on, attrs }">
-                              <v-btn
-                                v-bind="attrs"
-                                v-on="on"
-                                color="error"
-                                @click="$refs.dialogProcedureAttachments.showDialog(item, procedureType(item.procedure_type_id))"
-                                dark
-                                class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-0 mx-0 my-1"
-                                :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
-                                :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
-                              >
-                                <v-icon
-                                  dense
-                                  :small="$vuetify.breakpoint.md"
-                                  :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
-                                  class="pa-0 ma-0"
-                                >
-                                  mdi-file-document-multiple
-                                </v-icon>
-                              </v-btn>
-                            </template>
-                            <span>Archivos adjuntos</span>
-                          </v-tooltip>
-                        </v-col>
-                        <v-col cols="auto" v-if="item.has_flowed">
-                          <v-tooltip bottom>
-                            <template v-slot:activator="{ on, attrs }">
-                              <v-btn
-                                v-bind="attrs"
-                                v-on="on"
-                                color="info"
-                                @click="$refs.dialogProcedureTimeline.showDialog(item)"
-                                class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-0 mx-0 my-1"
-                                :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
-                                :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
-                              >
-                                <v-icon
-                                  dense
-                                  :small="$vuetify.breakpoint.md"
-                                  :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
-                                  class="pa-0 ma-0"
-                                >
-                                  mdi-chart-timeline-variant
-                                </v-icon>
-                              </v-btn>
-                            </template>
-                            <span>Registro de derivaciones</span>
-                          </v-tooltip>
-                        </v-col>
-                        <v-col cols="auto" v-if="$store.getters.user.permissions.includes('ARCHIVAR TRÁMITE') && item.has_flowed && item.owner && !item.archived">
-                          <v-tooltip bottom>
-                            <template v-slot:activator="{ on, attrs }">
-                              <v-btn
-                                v-bind="attrs"
-                                v-on="on"
-                                color="warning lighten-1"
-                                @click="$refs.dialogProcedureArchive.showDialog(item)"
-                                dark
-                                class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-0 mx-0 my-1"
-                                :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
-                                :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
-                              >
-                                <v-icon
-                                  dense
-                                  :small="$vuetify.breakpoint.md"
-                                  :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
-                                  class="pa-0 ma-0"
-                                >
-                                  mdi-folder
-                                </v-icon>
-                              </v-btn>
-                            </template>
-                            <span>Archivar</span>
-                          </v-tooltip>
-                        </v-col>
-                        <v-col cols="auto" v-if="!item.has_flowed && item.owner && !item.archived && $store.getters.user.permissions.includes('ELIMINAR TRÁMITE')">
-                          <v-tooltip bottom>
-                            <template v-slot:activator="{ on, attrs }">
-                              <v-btn
-                                v-bind="attrs"
-                                v-on="on"
-                                color="warning darken-1"
-                                @click="$refs.dialogProcedureDelete.showDialog(item)"
-                                dark
-                                class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-0 mx-0 my-1"
-                                :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
-                                :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
-                              >
-                                <v-icon
-                                  dense
-                                  :small="$vuetify.breakpoint.md"
-                                  :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
-                                  class="pa-0 ma-0"
-                                >
-                                  mdi-delete
-                                </v-icon>
-                              </v-btn>
-                            </template>
-                            <span>Eliminar</span>
-                          </v-tooltip>
-                        </v-col>
-                      </v-row>
-                    </td>
-                  </tr>
-                </tbody>
+                      <div v-else>
+                        <v-btn
+                          dark
+                          rounded
+                          color="orange darken-1"
+                          @click="$refs.dialogProcedureRequirements.showDialog(item)"
+                          class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-xl-4 px-lg-4 px-md-2 px-sm-2 px-xs-0 mx-0"
+                          :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg || $vuetify.breakpoint.md"
+                          :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                        >
+                        <div class="text-center">
+                          Requisitos
+                        </div>
+                        </v-btn>
+                      </div>
+                    </v-col>
+                    <v-col cols="auto" v-else>
+                      <div class="text-center">
+                        {{ area(item.to_area) }}
+                      </div>
+                    </v-col>
+                  </div>
+                </v-row>
+              </template>
+              <template v-slot:[`item.outgoing_at`]="{ item }">
+                <div class="text-center">
+                  <div v-if="item.archived">
+                    <div :style="{ 'font-size': `${$helpers.fontSize($vuetify.breakpoint.name)} !important` }">
+                      {{ item.updated_at | moment('L') }}
+                    </div>
+                    <div :style="{ 'font-size': `${$helpers.fontSize($vuetify.breakpoint.name)} !important` }">
+                      {{ item.updated_at | moment('LT') }}
+                    </div>
+                  </div>
+                  <div v-else-if="!item.outgoing_at">
+                    -
+                  </div>
+                  <div v-else>
+                    <div :style="{ 'font-size': `${$helpers.fontSize($vuetify.breakpoint.name)} !important` }">
+                      {{ item.outgoing_at | moment('L') }}
+                    </div>
+                    <div :style="{ 'font-size': `${$helpers.fontSize($vuetify.breakpoint.name)} !important` }">
+                      {{ item.outgoing_at | moment('LT') }}
+                    </div>
+                  </div>
+                </div>
+              </template>
+              <template v-slot:[`item.actions`]="{ item }">
+                <v-row dense no-gutters justify="space-around">
+                  <v-col cols="auto" v-if="!item.has_flowed && item.owner && !item.archived && $store.getters.user.permissions.includes('EDITAR TRÁMITE')">
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          v-bind="attrs"
+                          v-on="on"
+                          color="info"
+                          @click="$refs.dialogProcedureForm.showDialog(item)"
+                          class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-0 mx-0 my-1"
+                          :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
+                          :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                        >
+                          <v-icon
+                            dense
+                            :small="$vuetify.breakpoint.md"
+                            :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                            class="pa-0 ma-0"
+                          >
+                            mdi-pencil
+                          </v-icon>
+                        </v-btn>
+                      </template>
+                      <span>Editar Hoja de Ruta</span>
+                    </v-tooltip>
+                  </v-col>
+                  <v-col cols="auto">
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          v-bind="attrs"
+                          v-on="on"
+                          color="error"
+                          @click="$refs.dialogProcedureAttachments.showDialog(item, procedureType(item.procedure_type_id))"
+                          dark
+                          class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-0 mx-0 my-1"
+                          :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
+                          :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                        >
+                          <v-icon
+                            dense
+                            :small="$vuetify.breakpoint.md"
+                            :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                            class="pa-0 ma-0"
+                          >
+                            mdi-file-document-multiple
+                          </v-icon>
+                        </v-btn>
+                      </template>
+                      <span>Archivos adjuntos</span>
+                    </v-tooltip>
+                  </v-col>
+                  <v-col cols="auto" v-if="item.has_flowed">
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          v-bind="attrs"
+                          v-on="on"
+                          color="info"
+                          @click="$refs.dialogProcedureTimeline.showDialog(item)"
+                          class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-0 mx-0 my-1"
+                          :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
+                          :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                        >
+                          <v-icon
+                            dense
+                            :small="$vuetify.breakpoint.md"
+                            :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                            class="pa-0 ma-0"
+                          >
+                            mdi-chart-timeline-variant
+                          </v-icon>
+                        </v-btn>
+                      </template>
+                      <span>Registro de derivaciones</span>
+                    </v-tooltip>
+                  </v-col>
+                  <v-col cols="auto" v-if="$store.getters.user.permissions.includes('ARCHIVAR TRÁMITE') && item.has_flowed && item.owner && !item.archived">
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          v-bind="attrs"
+                          v-on="on"
+                          color="warning lighten-1"
+                          @click="$refs.dialogProcedureArchive.showDialog(item)"
+                          dark
+                          class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-0 mx-0 my-1"
+                          :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
+                          :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                        >
+                          <v-icon
+                            dense
+                            :small="$vuetify.breakpoint.md"
+                            :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                            class="pa-0 ma-0"
+                          >
+                            mdi-folder
+                          </v-icon>
+                        </v-btn>
+                      </template>
+                      <span>Archivar</span>
+                    </v-tooltip>
+                  </v-col>
+                  <v-col cols="auto" v-if="!item.has_flowed && item.owner && !item.archived && $store.getters.user.permissions.includes('ELIMINAR TRÁMITE')">
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          v-bind="attrs"
+                          v-on="on"
+                          color="warning darken-1"
+                          @click="$refs.dialogProcedureDelete.showDialog(item)"
+                          dark
+                          class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-0 mx-0 my-1"
+                          :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
+                          :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                        >
+                          <v-icon
+                            dense
+                            :small="$vuetify.breakpoint.md"
+                            :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                            class="pa-0 ma-0"
+                          >
+                            mdi-delete
+                          </v-icon>
+                        </v-btn>
+                      </template>
+                      <span>Eliminar</span>
+                    </v-tooltip>
+                  </v-col>
+                </v-row>
               </template>
             </v-data-table>
           </v-card-text>
@@ -332,7 +304,7 @@ export default {
         {
           text: 'FECHA DE INGRESO',
           align: 'center',
-          sortable: true,
+          sortable: false,
           value: 'incoming_at',
           width: '7%',
         }, {
@@ -344,7 +316,7 @@ export default {
         }, {
           text: 'CÓDIGO DE HOJA DE RUTA',
           align: 'center',
-          sortable: true,
+          sortable: false,
           value: 'code',
           width: '10%',
         }, {
@@ -356,7 +328,7 @@ export default {
         }, {
           text: 'PROCEDENCIA',
           align: 'center',
-          sortable: true,
+          sortable: false,
           value: 'origin',
           width: '10%',
         }, {
@@ -374,7 +346,7 @@ export default {
         }, {
           text: 'FECHA DE DERIVACIÓN',
           align: 'center',
-          sortable: true,
+          sortable: false,
           value: 'outgoing_at',
           width: '7%',
         }, {

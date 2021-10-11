@@ -34,6 +34,11 @@ class ProcedureController extends Controller
         $user = Auth::user();
         $area_id = $user->area_id;
         $owned_procedures = DB::table('procedures')->where('area_id', $area_id)->select('id');
+        if ($request->has('sort_by') && $request->has('sort_desc')) {
+            foreach ($request->sort_by as $i => $sort) {
+                $owned_procedures->orderBy($sort, filter_var($request->sort_desc[$i], FILTER_VALIDATE_BOOLEAN) ? 'DESC' : 'ASC');
+            }
+        }
         // Tramites que se encuentran actualmente en la sección
         $current = DB::table('procedures as p')->select('p.id', 'pf.from_area', 'pf.created_at as incoming_at', 'pf.user_id as incoming_user', DB::raw('null as to_area'), DB::raw('null as outgoing_at'), DB::raw('null as outgoing_user'), DB::raw('TRUE as owner'), 'p.archived')->leftJoin('procedure_flows as pf', function($query) {
             $query->on('pf.procedure_id','=','p.id')->whereRaw('pf.id IN (select MAX(a.id) from procedure_flows as a join procedures as b on a.procedure_id = b.id group by b.id)');
@@ -41,7 +46,7 @@ class ProcedureController extends Controller
         if ($request->has('search')) {
             if ($request->search != '') {
                 $current->where(function($q) use ($request) {
-                    return $q->where(DB::raw('upper(p.code)'), 'like', '%'.trim(mb_strtoupper($request->search)).'%')->orWhere(DB::raw('upper(p.origin)'), 'like', '%'.trim(mb_strtoupper($request->search)).'%');
+                    return $q->orWhere(DB::raw('upper(p.code)'), 'like', '%'.trim(mb_strtoupper($request->search)).'%')->orWhere(DB::raw('upper(p.origin)'), 'like', '%'.trim(mb_strtoupper($request->search)).'%');
                 });
             }
         }
@@ -52,7 +57,7 @@ class ProcedureController extends Controller
         if ($request->has('search')) {
             if ($request->search != '') {
                 $archived->where(function($q) use ($request) {
-                    return $q->where(DB::raw('upper(p.code)'), 'like', '%'.trim(mb_strtoupper($request->search)).'%')->orWhere(DB::raw('upper(p.origin)'), 'like', '%'.trim(mb_strtoupper($request->search)).'%');
+                    return $q->orWhere(DB::raw('upper(p.code)'), 'like', '%'.trim(mb_strtoupper($request->search)).'%')->orWhere(DB::raw('upper(p.origin)'), 'like', '%'.trim(mb_strtoupper($request->search)).'%');
                 });
             }
         }
@@ -77,7 +82,7 @@ class ProcedureController extends Controller
         if ($request->has('search')) {
             if ($request->search != '') {
                 $flowed->where(function($q) use ($request) {
-                    return $q->where(DB::raw('upper(p.code)'), 'like', '%'.trim(mb_strtoupper($request->search)).'%')->orWhere(DB::raw('upper(p.origin)'), 'like', '%'.trim(mb_strtoupper($request->search)).'%');
+                    return $q->orWhere(DB::raw('upper(p.code)'), 'like', '%'.trim(mb_strtoupper($request->search)).'%')->orWhere(DB::raw('upper(p.origin)'), 'like', '%'.trim(mb_strtoupper($request->search)).'%');
                 });
             }
         }
