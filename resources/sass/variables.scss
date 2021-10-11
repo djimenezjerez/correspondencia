@@ -15,7 +15,8 @@ $btn-sizes: (
     'large': 44,
     'x-large': 52
 );
-$body-font-family: 'Roboto', sans-serif !default;
+$font-family: 'Roboto';
+$body-font-family: $font-family !default;
 $heading-font-family: $body-font-family !default;
 $headings: (
     'h1': (
@@ -123,3 +124,9 @@ $headings: (
         'text-transform': uppercase
     )
 );
+.v-application {
+    [class*='text-'] {
+        font-family: $font-family, sans-serif !important;
+    }
+    font-family: $font-family, sans-serif !important;
+}

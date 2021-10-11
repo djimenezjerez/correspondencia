@@ -23,6 +23,8 @@ const responseErrorHandler = async error => {
       if (router.currentRoute.name != 'welcome') {
         if (error.response.status == 403) {
           await store.dispatch('logout')
+        } else {
+          await store.commit('logout')
         }
         window.location.replace('/');
       }

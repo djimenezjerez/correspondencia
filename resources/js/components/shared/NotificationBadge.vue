@@ -61,6 +61,7 @@ export default {
     bus.$on('updateProcedureNotification', (value) => {
       document.getElementById('notification').play()
       this.badge = value
+      this.fetchPendingBadge()
     })
     this.fetchPendingBadge()
   },

@@ -138,22 +138,22 @@ export default {
         {
           text: 'NOMBRE',
           align: 'center',
-          sortable: true,
+          sortable: false,
           value: 'name',
         }, {
           text: 'APELLIDO',
           align: 'center',
-          sortable: true,
+          sortable: false,
           value: 'last_name',
         }, {
           text: 'NOMBRE DE USUARIO',
           align: 'center',
-          sortable: true,
+          sortable: false,
           value: 'username',
         }, {
           text: 'DOCUMENTO DE IDENTIDAD',
           align: 'center',
-          sortable: true,
+          sortable: false,
           value: 'identity_card',
         }, {
           text: 'SECCIÓN',

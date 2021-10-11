@@ -144,7 +144,7 @@ export default {
         {
           text: 'NOMBRE',
           align: 'center',
-          sortable: true,
+          sortable: false,
           value: 'name',
         }, {
           text: 'REQUISITOS',
