@@ -2,7 +2,7 @@
   <div>
     <audio id="notification" src="/audio/notification.mp3" type="audio/mp3"></audio>
     <div v-if="badge > 0">
-      <v-menu offset-y>
+      <v-menu offset-y v-model="menu">
         <template v-slot:activator="{ on, attrs }">
           <v-btn
             v-bind="attrs"
@@ -53,6 +53,7 @@ export default {
   data: function() {
     return {
       loading: true,
+      menu: false,
       badge: 0,
       tray: [],
     }
@@ -70,6 +71,7 @@ export default {
       try {
         this.loading = true
         await axios.post(`procedure/tray/receive/${procedure_id}`)
+        this.menu = false
       } catch(error) {
         console.log(error)
       } finally {
