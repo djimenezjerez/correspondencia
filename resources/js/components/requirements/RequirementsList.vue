@@ -21,7 +21,7 @@
               <SearchInput v-model="search"/>
             </v-col>
           </v-row>
-          <v-card-text>
+          <v-card-text class="pt-0 mt-0">
             <v-data-table
               :headers="headers"
               :items="requirements"
@@ -31,52 +31,64 @@
               :footer-props="{
                 itemsPerPageOptions: [8, 15, 30]
               }"
+              mobile-breakpoint="0"
+              dense
               id="datatable"
             >
               <template v-slot:[`item.actions`]="{ item }">
-                <v-container style="width: 10em;">
-                  <v-row dense no-gutters justify="space-around">
-                    <v-col cols="auto">
-                      <v-tooltip bottom>
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-btn
-                            v-bind="attrs"
-                            v-on="on"
-                            color="yellow"
-                            class="py-6"
-                            small
-                            @click="$refs.dialogRequirementForm.showDialog(item)"
+                <v-row dense no-gutters justify="space-around">
+                  <v-col cols="auto">
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          v-bind="attrs"
+                          v-on="on"
+                          color="yellow"
+                          class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-0 mx-0 my-1"
+                          @click="$refs.dialogRequirementForm.showDialog(item)"
+                          :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
+                          :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                        >
+                          <v-icon
+                            dense
+                            :small="$vuetify.breakpoint.md"
+                            :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                            class="pa-0 ma-0"
                           >
-                            <v-icon>
-                              mdi-pencil
-                            </v-icon>
-                          </v-btn>
-                        </template>
-                        <span>Editar requisito</span>
-                      </v-tooltip>
-                    </v-col>
-                    <v-col cols="auto" v-if="!item.is_used">
-                      <v-tooltip bottom>
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-btn
-                            v-bind="attrs"
-                            v-on="on"
-                            color="red"
-                            class="py-6"
-                            dark
-                            small
-                            @click="$refs.dialogRequirementDelete.showDialog(item)"
+                            mdi-pencil
+                          </v-icon>
+                        </v-btn>
+                      </template>
+                      <span>Editar requisito</span>
+                    </v-tooltip>
+                  </v-col>
+                  <v-col cols="auto" v-if="!item.is_used">
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          v-bind="attrs"
+                          v-on="on"
+                          color="red"
+                          class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-0 mx-0 my-1"
+                          dark
+                          @click="$refs.dialogRequirementDelete.showDialog(item)"
+                          :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
+                          :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                        >
+                          <v-icon
+                            dense
+                            :small="$vuetify.breakpoint.md"
+                            :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                            class="pa-0 ma-0"
                           >
-                            <v-icon>
-                              mdi-delete
-                            </v-icon>
-                          </v-btn>
-                        </template>
-                        <span>Eliminar requisito</span>
-                      </v-tooltip>
-                    </v-col>
-                  </v-row>
-                </v-container>
+                            mdi-delete
+                          </v-icon>
+                        </v-btn>
+                      </template>
+                      <span>Eliminar requisito</span>
+                    </v-tooltip>
+                  </v-col>
+                </v-row>
               </template>
             </v-data-table>
           </v-card-text>
@@ -125,7 +137,7 @@ export default {
           align: 'center',
           value: 'actions',
           sortable: false,
-          width: '10em',
+          width: '12%',
         },
       ],
     }

@@ -37,7 +37,9 @@ class ProcedureTypeController extends Controller
         }
         if ($request->has('search')) {
             if ($request->search != '') {
-                $query->where(DB::raw('lower(name)'), 'like', '%'.trim(mb_strtoupper($request->search)).'%');
+                $query->where(function($q) use ($request) {
+                    return $q->orWhere(DB::raw('upper(name)'), 'like', '%'.trim(mb_strtoupper($request->search)).'%')->orWhere(DB::raw('upper(code)'), 'like', '%'.trim(mb_strtoupper($request->search)).'%');
+                });
             }
         }
         return [

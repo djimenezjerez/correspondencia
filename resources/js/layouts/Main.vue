@@ -10,7 +10,7 @@
       <v-app-bar-nav-icon
         @click="drawer = !drawer"
       ></v-app-bar-nav-icon>
-      <v-divider class="mx-5" vertical></v-divider>
+      <v-divider class="ml-1 mr-5" vertical></v-divider>
       <v-btn
         outlined
         :large="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
