@@ -138,7 +138,7 @@ export default {
           validated: false,
         }))
       } catch(error) {
-        console.log(error)
+        console.error(error)
       } finally {
         this.loading = false
       }
@@ -157,7 +157,7 @@ export default {
           }
         }
       } catch(error) {
-        console.log(error)
+        console.error(error)
       } finally {
         this.loading = false
       }

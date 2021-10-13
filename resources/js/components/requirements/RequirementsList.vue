@@ -177,7 +177,7 @@ export default {
         this.options.page = response.data.payload.current_page
         this.options.itemsPerPage = parseInt(response.data.payload.per_page)
       } catch(error) {
-        console.log(error)
+        console.error(error)
       } finally {
         this.loading = false
       }

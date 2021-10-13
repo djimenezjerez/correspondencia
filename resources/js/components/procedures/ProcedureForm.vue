@@ -165,7 +165,7 @@ export default {
           let response = await axios.get(`procedure_type/${value}/code`)
           this.procedureForm.code = response.data.payload.code
         } catch(error) {
-          console.log(error)
+          console.error(error)
         } finally {
           this.loading = false
         }

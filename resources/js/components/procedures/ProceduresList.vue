@@ -368,27 +368,10 @@ export default {
       requirements: [],
     }
   },
-  beforeDestroy() {
-    this.$mqtt.unsubscribe(this.topic)
-  },
-  mqtt: {
-    'procedures/received/area/+' (data, topic) {
-      if (topic == this.topic) {
-        bus.$emit('updateProcedureNotification', Number(String.fromCharCode.apply(null, data)))
-      }
-    }
-  },
-  computed: {
-    topic() {
-      return `procedures/received/area/${this.$store.getters.user.area_id}`
-    },
-  },
   mounted() {
     const table = document.getElementById('datatable').getElementsByTagName('table')[0]
     table.setAttribute('class', 'datatables')
     table.setAttribute('width', '100%')
-    this.$mqtt.subscribe(this.topic)
-    console.log(`Suscrito a socket: ${this.topic}`)
     bus.$on('updateProcedureList', () => {
       this.search = null
       this.options = {
@@ -442,7 +425,7 @@ export default {
         })
         this.procedureTypes = response.data.payload.procedure_types
       } catch(error) {
-        console.log(error)
+        console.error(error)
       } finally {
         this.loading = false
       }
@@ -453,7 +436,7 @@ export default {
         let response = await axios.get('area')
         this.areas = response.data.payload.areas
       } catch(error) {
-        console.log(error)
+        console.error(error)
       } finally {
         this.loading = false
       }
@@ -468,7 +451,7 @@ export default {
         })
         this.requirements = response.data.payload.requirements
       } catch(error) {
-        console.log(error)
+        console.error(error)
       } finally {
         this.loading = false
       }
@@ -488,7 +471,7 @@ export default {
         this.options.page = response.data.payload.current_page
         this.options.itemsPerPage = parseInt(response.data.payload.per_page)
       } catch(error) {
-        console.log(error)
+        console.error(error)
       } finally {
         this.loading = false
       }

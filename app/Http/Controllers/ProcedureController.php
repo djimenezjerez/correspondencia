@@ -270,7 +270,7 @@ class ProcedureController extends Controller
             DB::commit();
             try {
                 $mqtt = new Mqtt();
-                $notify = $mqtt->ConnectAndPublish('procedures/received/area/'.$request->area_id, Procedure::where('area_id', $request->area_id)->where('pending', true)->count());
+                $notify = $mqtt->ConnectAndPublish('procedures/tray/area/'.$request->area_id, Procedure::where('area_id', $request->area_id)->where('pending', true)->count());
                 if (!$notify) {
                     Log::error('Conexión perdida con el servidor de Websockets');
                 }
@@ -410,6 +410,11 @@ class ProcedureController extends Controller
             $procedure->update([
                 'pending' => false
             ]);
+            $mqtt = new Mqtt();
+            $notify = $mqtt->ConnectAndPublish('procedures/tray/area/'.$procedure->area_id, Procedure::where('area_id', $procedure->area_id)->where('pending', true)->count());
+            if (!$notify) {
+                Log::error('Conexión perdida con el servidor de Websockets');
+            }
             return [
                 'message' => 'Trámite añadido a la bandeja',
                 'payload' => [

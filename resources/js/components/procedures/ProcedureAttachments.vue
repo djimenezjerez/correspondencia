@@ -179,7 +179,7 @@ export default {
         document.body.appendChild(link);
         link.click();
       } catch (error) {
-        console.log(error)
+        console.error(error)
       }
     },
     getExtension(filename) {

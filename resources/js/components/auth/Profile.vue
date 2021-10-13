@@ -159,7 +159,7 @@ export default {
         const response = await axios.get(`user/${this.$store.getters.user.id}`)
         this.user = response.data.payload.user
       } catch(error) {
-        console.log(error)
+        console.error(error)
       } finally {
         this.loading = false
       }

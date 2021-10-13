@@ -81,7 +81,7 @@ export default {
         const response = await axios.get(`procedure/${procedureId}/flow`)
         this.timeline = response.data.payload.timeline
       } catch (error) {
-        console.log(error)
+        console.error(error)
       } finally {
         this.loading = false
       }

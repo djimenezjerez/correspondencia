@@ -146,6 +146,9 @@
 </template>
 
 <script>
+import mqtt from 'mqtt'
+import moment from 'moment'
+import { bus } from '@/app'
 import NotificationBadge from '@/components/shared/NotificationBadge'
 
 export default {
@@ -156,9 +159,17 @@ export default {
   data: function() {
     return {
       drawer: false,
+      mqtt: {
+        connected: false,
+        unsubscribe: () => {},
+        end: () => {},
+      },
     }
   },
   computed: {
+    topic() {
+      return `procedures/tray/area/${this.$store.getters.user.area_id}`
+    },
     avatarSize() {
       switch (this.$vuetify.breakpoint.name) {
         case 'xs': return 40
@@ -175,9 +186,48 @@ export default {
         case 'xl': return 220
         default: return 230
       }
-    }
+    },
+  },
+  mounted() {
+    this.mqttConnect()
+  },
+  beforeDestroy() {
+    this.mqtt.unsubscribe(this.topic)
+    this.mqtt.end()
   },
   methods: {
+    mqttConnect() {
+      if (!this.mqtt.connected) {
+        this.mqtt = mqtt.connect(`${JSON.parse(process.env.MIX_MQTT_SSL) ? 'wss' : 'ws'}://${process.env.MIX_MQTT_HOST}:${process.env.MIX_MQTT_PORT}`, {
+          clientId: `web.${moment().unix()}`
+        })
+        this.mqtt.subscribe(this.topic, { qos: 1 }, (error) => {
+          if (error) {
+            console.log('Error en la subscripción de WebSocket', error)
+            return
+          }
+          console.log('Suscrito a WebSocket:', this.topic)
+        })
+      }
+      this.mqtt.on('connect' , () => {
+        console.log('Conectado a servidor de WebSockets')
+      })
+      this.mqtt.on('reconnect' , () => {
+        console.log('Reconectando con servidor de WebSockets...')
+      })
+      this.mqtt.on('disconnect' , () => {
+        console.log('Desconectando de servidor de WebSockets...')
+      })
+      this.mqtt.on('end' , () => {
+        console.log('Desconexión con servidor de WebSockets completa')
+      })
+      this.mqtt.on('error' , (error) => {
+        console.error(error)
+      })
+      this.mqtt.on('message', function (topic, payload) {
+        bus.$emit('updateProcedureNotification', Number(String.fromCharCode.apply(null, payload)))
+      })
+    },
     async logout() {
       try {
         await this.$store.dispatch('logout')
@@ -185,7 +235,7 @@ export default {
           name: 'welcome'
         })
       } catch(error) {
-        console.log(error)
+        console.error(error)
       }
     }
   }
@@ -199,7 +249,7 @@ export default {
   /* opacity: 0.9 !important; */
 }
 .v-icon {
-    font-size: 1.9vh !important;
+    font-size: calc(1em + 0.1vh + 0.2vw) !important;
     padding-left: 4px;
     padding-right: 0;
     margin: 0;

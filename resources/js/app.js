@@ -5,13 +5,14 @@ import vuetify from '@/vuetify'
 import router from '@/router'
 import store from '@/store'
 import '@/helpers'
-import '@/mqtt'
 
 import ToolBarTitle from '@/components/shared/ToolBarTitle'
+import Vue from 'vue'
 
 Vue.component('ToolBarTitle', ToolBarTitle)
 
-export const bus = new Vue();
+export const bus = new Vue()
+
 new Vue({
   store,
   router,

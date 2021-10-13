@@ -30,7 +30,7 @@ const responseErrorHandler = async error => {
       }
     }
   } catch(error) {
-    console.log(error)
+    console.error(error)
   } finally {
     return Promise.reject(error)
   }

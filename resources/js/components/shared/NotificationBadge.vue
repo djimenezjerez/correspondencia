@@ -75,7 +75,7 @@ export default {
         this.menu = false
         this.$toast.success(`${response.data.message}: ${response.data.payload.procedure.code}`)
       } catch(error) {
-        console.log(error)
+        console.error(error)
       } finally {
         this.fetchPendingBadge()
         bus.$emit('updateProcedureList')
@@ -89,7 +89,7 @@ export default {
         this.badge = response.data.payload.badge
         this.tray = response.data.payload.procedures
       } catch(error) {
-        console.log(error)
+        console.error(error)
       } finally {
         this.loading = false
       }
@@ -100,6 +100,6 @@ export default {
 
 <style scoped>
 .v-icon {
-    font-size: 2.5vh !important;
+    font-size: calc(1em + 0.15vh + 0.3vw) !important;
 }
 </style>
