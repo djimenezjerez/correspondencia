@@ -122,8 +122,10 @@
         </v-list-item>
 
         <v-list-group color="white">
-          <v-icon slot="prependIcon" color="white">mdi-help-circle-outline</v-icon>
           <template v-slot:activator>
+            <v-list-item-icon>
+              <v-icon>mdi-help-circle-outline</v-icon>
+            </v-list-item-icon>
             <v-list-item-title>Ayuda</v-list-item-title>
           </template>
           <v-list-item :to="{ name: 'help_manual' }" :class="{ 'ml-6': !drawer }">
@@ -166,12 +168,12 @@ export default {
     },
     barSize() {
       switch (this.$vuetify.breakpoint.name) {
-        case 'xs': return 240
-        case 'sm': return 245
-        case 'md': return 250
-        case 'lg': return 245
-        case 'xl': return 240
-        default: return 250
+        case 'xs': return 220
+        case 'sm': return 225
+        case 'md': return 230
+        case 'lg': return 225
+        case 'xl': return 220
+        default: return 230
       }
     }
   },
@@ -195,5 +197,16 @@ export default {
   font-size: 15px !important;
   /* background-color: blue; */
   /* opacity: 0.9 !important; */
+}
+.v-icon {
+    font-size: 1.9vh !important;
+    padding-left: 4px;
+    padding-right: 0;
+    margin: 0;
+}
+.v-list-item__icon {
+    padding: 0px !important;
+    margin-right: 5px !important;
+    margin-left: 0px !important;
 }
 </style>

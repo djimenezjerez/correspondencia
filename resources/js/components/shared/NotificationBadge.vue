@@ -2,7 +2,7 @@
   <div>
     <audio id="notification" src="/audio/notification.mp3" type="audio/mp3"></audio>
     <div v-if="badge > 0">
-      <v-menu offset-y v-model="menu">
+      <v-menu offset-y v-model="menu" :disabled="$route.name != 'procedures'">
         <template v-slot:activator="{ on, attrs }">
           <v-btn
             v-bind="attrs"
@@ -19,6 +19,7 @@
                   <v-icon
                     v-bind="attrs"
                     v-on="on"
+                    style="font-size: 30px;"
                   >mdi-bell</v-icon>
                 </template>
                 <span>Recibir</span>
@@ -96,3 +97,9 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.v-icon {
+    font-size: 2.5vh !important;
+}
+</style>

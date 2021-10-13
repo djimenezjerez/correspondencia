@@ -141,6 +141,7 @@ Para seguir los pasos listados continuación se debe tener abierta una consola c
 $ composer install
 $ yarn install
 $ php artisan migrate
+$ composer clear
 ```
 
 3. Compilar el código fuente del frontend:
@@ -153,6 +154,7 @@ $ yarn prod
 
 ```sh
 $ php artisan db:seed --class=DatabaseSeeder
+$ php artisan clear
 ```
 
 5. Habilitar el cargado de imágenes dentro de PDF:
