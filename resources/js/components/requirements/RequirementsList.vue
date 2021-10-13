@@ -36,7 +36,7 @@
               id="datatable"
             >
               <template v-slot:[`item.actions`]="{ item }">
-                <v-row dense no-gutters justify="space-around">
+                <v-row dense no-gutters justify="space-around" align="center">
                   <v-col cols="auto">
                     <v-tooltip bottom>
                       <template v-slot:activator="{ on, attrs }">
@@ -44,7 +44,7 @@
                           v-bind="attrs"
                           v-on="on"
                           color="yellow"
-                          class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-0 mx-0 my-1"
+                          class="px-0 py-4 mx-0 my-1"
                           @click="$refs.dialogRequirementForm.showDialog(item)"
                           :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
                           :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
@@ -69,7 +69,7 @@
                           v-bind="attrs"
                           v-on="on"
                           color="red"
-                          class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-0 mx-0 my-1"
+                          class="px-0 py-4 mx-0 my-1"
                           dark
                           @click="$refs.dialogRequirementDelete.showDialog(item)"
                           :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"

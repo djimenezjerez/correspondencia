@@ -68,11 +68,11 @@
                           rounded
                           color="green darken-1"
                           @click="$refs.dialogProcedureFlow.showDialog(item, procedureType(item.procedure_type_id))"
-                          class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-xl-4 px-lg-4 px-md-2 px-sm-2 px-xs-0 mx-0"
+                          class="mx-0"
                           :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg || $vuetify.breakpoint.md"
                           :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
                         >
-                          <div class="text-center">
+                          <div class="text-center text-responsive">
                             Derivar
                           </div>
                         </v-btn>
@@ -83,11 +83,11 @@
                           rounded
                           color="orange darken-1"
                           @click="$refs.dialogProcedureRequirements.showDialog(item)"
-                          class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-xl-4 px-lg-4 px-md-2 px-sm-2 px-xs-0 mx-0"
+                          class="mx-0"
                           :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg || $vuetify.breakpoint.md"
                           :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
                         >
-                        <div class="text-center">
+                        <div class="text-center text-responsive">
                           Requisitos
                         </div>
                         </v-btn>
@@ -102,30 +102,28 @@
                 </v-row>
               </template>
               <template v-slot:[`item.outgoing_at`]="{ item }">
-                <div class="text-center">
-                  <div v-if="item.archived">
-                    <div :style="{ 'font-size': `${$helpers.fontSize($vuetify.breakpoint.name)} !important` }">
-                      {{ item.updated_at | moment('L') }}
-                    </div>
-                    <div :style="{ 'font-size': `${$helpers.fontSize($vuetify.breakpoint.name)} !important` }">
-                      {{ item.updated_at | moment('LT') }}
-                    </div>
+                <div v-if="item.archived">
+                  <div>
+                    {{ item.updated_at | moment('L') }}
                   </div>
-                  <div v-else-if="!item.outgoing_at">
-                    -
+                  <div>
+                    {{ item.updated_at | moment('LT') }}
                   </div>
-                  <div v-else>
-                    <div :style="{ 'font-size': `${$helpers.fontSize($vuetify.breakpoint.name)} !important` }">
-                      {{ item.outgoing_at | moment('L') }}
-                    </div>
-                    <div :style="{ 'font-size': `${$helpers.fontSize($vuetify.breakpoint.name)} !important` }">
-                      {{ item.outgoing_at | moment('LT') }}
-                    </div>
+                </div>
+                <div v-else-if="!item.outgoing_at">
+                  -
+                </div>
+                <div v-else>
+                  <div>
+                    {{ item.outgoing_at | moment('L') }}
+                  </div>
+                  <div>
+                    {{ item.outgoing_at | moment('LT') }}
                   </div>
                 </div>
               </template>
               <template v-slot:[`item.actions`]="{ item }">
-                <v-row dense no-gutters justify="space-around">
+                <v-row dense no-gutters justify="space-around" align="center">
                   <v-col cols="auto" v-if="!item.has_flowed && item.owner && !item.archived && $store.getters.user.permissions.includes('EDITAR TRÁMITE')">
                     <v-tooltip bottom>
                       <template v-slot:activator="{ on, attrs }">
@@ -134,7 +132,7 @@
                           v-on="on"
                           color="info"
                           @click="$refs.dialogProcedureForm.showDialog(item)"
-                          class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-0 mx-0 my-1"
+                          class="px-0 py-4 mx-0 my-1"
                           :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
                           :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
                         >
@@ -160,7 +158,7 @@
                           color="error"
                           @click="$refs.dialogProcedureAttachments.showDialog(item, procedureType(item.procedure_type_id))"
                           dark
-                          class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-0 mx-0 my-1"
+                          class="px-0 py-4 mx-0 my-1"
                           :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
                           :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
                         >
@@ -185,7 +183,7 @@
                           v-on="on"
                           color="info"
                           @click="$refs.dialogProcedureTimeline.showDialog(item)"
-                          class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-0 mx-0 my-1"
+                          class="px-0 py-4 mx-0 my-1"
                           :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
                           :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
                         >
@@ -211,7 +209,7 @@
                           color="warning lighten-1"
                           @click="$refs.dialogProcedureArchive.showDialog(item)"
                           dark
-                          class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-0 mx-0 my-1"
+                          class="px-0 py-4 mx-0 my-1"
                           :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
                           :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
                         >
@@ -237,7 +235,7 @@
                           color="warning darken-1"
                           @click="$refs.dialogProcedureDelete.showDialog(item)"
                           dark
-                          class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-0 mx-0 my-1"
+                          class="px-0 py-4 mx-0 my-1"
                           :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
                           :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
                         >

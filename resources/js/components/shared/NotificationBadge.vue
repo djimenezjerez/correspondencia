@@ -70,8 +70,9 @@ export default {
     async receiveProcedure(procedure_id) {
       try {
         this.loading = true
-        await axios.post(`procedure/tray/receive/${procedure_id}`)
+        const response = await axios.post(`procedure/tray/receive/${procedure_id}`)
         this.menu = false
+        this.$toast.success(`${response.data.message}: ${response.data.payload.procedure.code}`)
       } catch(error) {
         console.log(error)
       } finally {

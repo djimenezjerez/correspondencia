@@ -26,7 +26,7 @@
         Inicio
       </v-btn>
       <v-spacer></v-spacer>
-      <div class="mr-10 mt-2" v-if="$route.name == 'procedures'">
+      <div class="mr-10 mt-2">
         <NotificationBadge/>
       </div>
       <v-menu
@@ -70,6 +70,7 @@
         </v-list>
       </v-menu>
     </v-app-bar>
+    <!-- Barra lateral de Menu Aplicación -->
     <v-navigation-drawer
       app
       dark
@@ -132,11 +133,6 @@
             <v-list-item-title>Manual de usuario</v-list-item-title>
           </v-list-item>
         </v-list-group>
-
-
-
-
-
       </v-list>
     </v-navigation-drawer>
     <v-main>

@@ -43,7 +43,7 @@
                 {{ item.is_active ? 'ACTIVO' : 'INACTIVO' }}
               </template>
               <template v-slot:[`item.actions`]="{ item }">
-                <v-row dense no-gutters justify="space-around">
+                <v-row dense no-gutters justify="space-around" align="center">
                   <v-col cols="auto" v-if="item.is_active">
                     <v-tooltip bottom>
                       <template v-slot:activator="{ on, attrs }">
@@ -51,7 +51,7 @@
                           v-bind="attrs"
                           v-on="on"
                           color="yellow"
-                          class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-0 mx-0 my-1"
+                          class="px-0 py-4 mx-0 my-1"
                           @click="$refs.dialogUserForm.showDialog(item)"
                           :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
                           :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
@@ -77,7 +77,7 @@
                           v-on="on"
                           :color="item.is_active ? 'red' : 'success'"
                           :dark="item.is_active"
-                          class="py-xl-6 py-lg-6 py-md-0 py-sm-0 py-xs-0 px-0 mx-0 my-1"
+                          class="px-0 py-4 mx-0 my-1"
                           @click="$refs.dialogUserSwitch.showDialog(item)"
                           :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
                           :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"

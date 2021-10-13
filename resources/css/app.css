@@ -8,6 +8,11 @@
     border-top: 1px solid #000 !important;
     border-bottom: 1px solid #000 !important;
     font-size: 0.7vw !important;
+    min-height: 0.4vh;
+}
+
+.datatables tbody tr {
+    height: 6vh !important;
 }
 
 .datatables tbody tr:nth-child(odd) {
@@ -26,4 +31,15 @@
 .datatables th {
     background-color: #666;
     color: #fff !important;
+}
+
+.v-icon {
+    font-size: 1.8vh !important;
+    margin-left: 3px;
+}
+
+.text-responsive {
+    font-size: 0.7vw !important;
+    margin: 0;
+    padding: 0;
 }

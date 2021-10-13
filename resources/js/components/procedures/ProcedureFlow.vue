@@ -162,7 +162,7 @@ export default {
           const response = await axios.post(`procedure/${this.procedure.id}/flow`, {
             area_id: this.selectedArea
           })
-          this.$toast.success(response.data.message)
+          this.$toast.success(`${response.data.message}: ${response.data.payload.procedure.code}`)
           this.$emit('updateList')
           this.dialog = false
         }

@@ -3,7 +3,7 @@
     :large="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
     :small="$vuetify.breakpoint.sm"
     :x-small="$vuetify.breakpoint.xs"
-    class="py-4"
+    class="px-4 py-0 ma-0"
     color="info"
     @click="$emit('click', $event)"
   >
@@ -12,7 +12,9 @@
     >
       {{ icon }}
     </v-icon>
-    {{ text }}
+    <div class="text-responsive">
+      {{ text }}
+    </div>
   </v-btn>
 </template>
 

@@ -268,10 +268,15 @@ class ProcedureController extends Controller
                 'updated_at' => Carbon::now(),
             ]);
             DB::commit();
-            $mqtt = new Mqtt();
-            $notify = $mqtt->ConnectAndPublish('procedures/received/area/'.$request->area_id, Procedure::where('area_id', $request->area_id)->where('pending', true)->count());
-            if (!$notify) {
-                Log::error('Conexión perdida con el servidor de Websockets');
+            try {
+                $mqtt = new Mqtt();
+                $notify = $mqtt->ConnectAndPublish('procedures/received/area/'.$request->area_id, Procedure::where('area_id', $request->area_id)->where('pending', true)->count());
+                if (!$notify) {
+                    Log::error('Conexión perdida con el servidor de Websockets');
+                }
+            } catch(\Throwable $e) {
+                Log::error($e);
+                Log::error('Servidor de Websockets inalcanzable');
             }
             return [
                 'message' => 'Trámite derivado',
@@ -407,6 +412,9 @@ class ProcedureController extends Controller
             ]);
             return [
                 'message' => 'Trámite añadido a la bandeja',
+                'payload' => [
+                    'procedure' => $procedure,
+                ],
             ];
         } else {
             abort(403, 'El trámite no le pertenece');
