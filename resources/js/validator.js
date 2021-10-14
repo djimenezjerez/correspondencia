@@ -31,6 +31,8 @@ localize({
       origin: 'procedencia',
       detail: 'detalle',
       attachments: 'archivos',
+      search: 'texto de búsqueda',
+      search_by: 'parámetro de búsqueda',
     }
   },
 })

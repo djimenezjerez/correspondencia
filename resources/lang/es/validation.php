@@ -173,5 +173,7 @@ return [
         'attachments' => 'archivos',
         'attachments.*' => 'archivos',
         'requirements.*' => 'requisito',
+        'search' => 'texto de búsqueda',
+        'search_by' => 'parámetro de búsqueda',
     ],
 ];

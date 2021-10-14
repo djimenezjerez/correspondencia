@@ -11,7 +11,6 @@ use App\Http\Requests\CodeRequest;
 use App\Http\Requests\ProcedureRequest;
 use App\Http\Resources\ProcedureResource;
 use App\Http\Resources\ProcedureFlowResource;
-use App\Http\Resources\TimelineResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -334,38 +333,6 @@ class ProcedureController extends Controller
                 'message' => 'Error al archivar el trámite',
             ], 500);
         }
-    }
-
-    public function timeline(Procedure $procedure)
-    {
-        $area = Area::find($procedure->procedure_flows()->first()->from_area);
-        $created = [[
-            'to_area' => [
-                'name' => $area->name,
-            ],
-            'action' => 'TRÁMITE CREADO',
-            'created_at' => $procedure->created_at,
-        ]];
-        $timeline = $procedure->procedure_flows()->select('to_area', 'created_at')->selectRaw("'DERIVADO' as action")->with(['to_area' => function($q) {
-            return $q->select('id', 'name');
-        }])->orderBy('created_at', 'DESC')->get()->toArray();
-        $archived = [];
-        if ($procedure->archived) {
-            $archived = [[
-                'to_area' => [
-                    'name' => $procedure->area->name,
-                ],
-                'action' => 'ARCHIVADO',
-                'created_at' => $procedure->updated_at,
-            ]];
-        }
-        if (count($timeline) > 0) $timeline[0]['action'] = 'ÚLTIMO DESTINO';
-        return [
-            'message' => 'Historia del trámite',
-            'payload' => [
-                'timeline' => TimelineResource::collection(array_merge($archived, $timeline, $created)),
-            ],
-        ];
     }
 
     public function code(CodeRequest $request)

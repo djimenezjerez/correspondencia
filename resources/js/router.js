@@ -6,6 +6,7 @@ import RequirementsList from '@/components/requirements/RequirementsList'
 import ProcedureTypesList from '@/components/procedure_types/ProcedureTypesList'
 import ProceduresList from '@/components/procedures/ProceduresList'
 import ProcedureRequirementList from '@/components/procedures/ProcedureRequirementList'
+import ProcedureTracking from '@/components/procedures/ProcedureTracking'
 import Profile from '@/components/auth/Profile'
 import UsersList from '@/components/users/UsersList'
 import HelpManual from '@/components/help/Manual'
@@ -58,6 +59,10 @@ const router = new VueRouter({
           path: '/procedure_requirements',
           name: 'procedure_requirements',
           component: ProcedureRequirementList,
+        }, {
+          path: '/tracking',
+          name: 'tracking',
+          component: ProcedureTracking,
         }
       ]
     },

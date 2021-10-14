@@ -126,6 +126,12 @@
           </v-list-item-icon>
           <v-list-item-title>Regularización de Documentos</v-list-item-title>
         </v-list-item>
+        <v-list-item link :to="{ name: 'tracking' }" v-if="!$store.getters.user.isAdmin">
+          <v-list-item-icon>
+            <v-icon>mdi-chart-timeline-variant</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>Seguimiento</v-list-item-title>
+        </v-list-item>
 
         <v-list-group color="white">
           <template v-slot:activator>

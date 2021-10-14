@@ -54,7 +54,7 @@
 import Timeline from '@/components/shared/Timeline'
 
 export default {
-  name: 'ProcedureHistory',
+  name: 'ProcedureTimeline',
   components: {
     Timeline
   },
@@ -78,7 +78,7 @@ export default {
     async fetchFlows(procedureId) {
       try {
         this.loading = true
-        const response = await axios.get(`procedure/${procedureId}/flow`)
+        const response = await axios.get(`tracking/${procedureId}`)
         this.timeline = response.data.payload.timeline
       } catch (error) {
         console.error(error)

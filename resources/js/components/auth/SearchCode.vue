@@ -208,7 +208,7 @@ export default {
             }
           })
           this.procedure = response.data.payload.procedure
-          response = await axios.get(`procedure/${response.data.payload.procedure.id}/flow`)
+          response = await axios.get(`tracking/${response.data.payload.procedure.id}`)
           this.timeline = response.data.payload.timeline
         }
       } catch(error) {

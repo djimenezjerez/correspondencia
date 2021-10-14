@@ -8,6 +8,7 @@ use App\Http\Controllers\RequirementController;
 use App\Http\Controllers\ProcedureTypeController;
 use App\Http\Controllers\ProcedureController;
 use App\Http\Controllers\ProcedureRequirementController;
+use App\Http\Controllers\ProcedureTrackingController;
 use App\Http\Controllers\AttachmentController;
 use App\Http\Middleware\EnsureUserOwnsProcedure;
 use Illuminate\Support\Facades\Route;
@@ -27,7 +28,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('login', [AuthController::class, 'store']);
 
 // Consulta externa
-Route::get('procedure/{procedure}/flow', [ProcedureController::class, 'timeline']);
+Route::get('tracking/{procedure}', [ProcedureTrackingController::class, 'show']);
 Route::get('procedure_code', [ProcedureController::class, 'code']);
 
 Route::group(['middleware' => ['auth:sanctum']], function() {
@@ -95,4 +96,7 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     // Bandeja de trámites
     Route::get('procedure/tray/pending', [ProcedureController::class, 'pending']);
     Route::post('procedure/tray/receive/{procedure}', [ProcedureController::class, 'receive']);
+
+    // Seguimiento de trámites
+    Route::get('tracking', [ProcedureTrackingController::class, 'index']);
 });

@@ -16,11 +16,8 @@
             class="mt-1 px-4 pb-0 mb-0"
             dense
           >
-            <v-col xl="9" lg="9" md="9" sm="8" xs="12" class="pb-0 mb-0">
+            <v-col cols="12" class="pb-0 mb-0">
               <div class="text-xl-h5 text-lg-h5 text-md-h6 text-sm-subtitle-1 text-xs-body-1">{{ area($store.getters.user.area_id) }}</div>
-            </v-col>
-            <v-col xl="3" lg="3" md="3" sm="4" xs="12" class="pb-0 mb-0">
-              <SearchInput v-model="search"/>
             </v-col>
           </v-row>
           <v-card-text class="pt-0 mt-0">
