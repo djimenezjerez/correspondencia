@@ -20,7 +20,8 @@ class Area extends Model
         'code',
         'group',
         'order',
-        'role_id'
+        'role_id',
+        'counter',
     ];
 
     public $timestamps = true;

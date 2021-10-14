@@ -120,6 +120,12 @@
           </v-list-item-icon>
           <v-list-item-title>Hojas de ruta</v-list-item-title>
         </v-list-item>
+        <v-list-item link :to="{ name: 'procedure_requirements' }" v-if="$store.getters.user.permissions.includes('LEER REQUISITOS DE TRÁMITE')">
+          <v-list-item-icon>
+            <v-icon>mdi-file-document-multiple-outline</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>Regularización de Documentos</v-list-item-title>
+        </v-list-item>
 
         <v-list-group color="white">
           <template v-slot:activator>
@@ -179,12 +185,12 @@ export default {
     },
     barSize() {
       switch (this.$vuetify.breakpoint.name) {
-        case 'xs': return 220
-        case 'sm': return 225
-        case 'md': return 230
-        case 'lg': return 225
-        case 'xl': return 220
-        default: return 230
+        case 'xs': return 250
+        case 'sm': return 255
+        case 'md': return 260
+        case 'lg': return 255
+        case 'xl': return 250
+        default: return 260
       }
     },
   },

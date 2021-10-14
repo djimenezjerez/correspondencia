@@ -6,12 +6,9 @@ use Salman\Mqtt\MqttClass\Mqtt;
 use Carbon\Carbon;
 use App\Models\Area;
 use App\Models\Procedure;
-use App\Models\ProcedureType;
-use Spatie\Permission\Models\Role;
 use App\Http\Requests\FlowRequest;
 use App\Http\Requests\CodeRequest;
 use App\Http\Requests\ProcedureRequest;
-use App\Http\Requests\ProcedureRequirementRequest;
 use App\Http\Resources\ProcedureResource;
 use App\Http\Resources\ProcedureFlowResource;
 use App\Http\Resources\TimelineResource;
@@ -34,6 +31,11 @@ class ProcedureController extends Controller
         $user = Auth::user();
         $area_id = $user->area_id;
         $owned_procedures = DB::table('procedures')->where('area_id', $area_id)->select('id');
+        if ($user->hasRole('VERIFICADOR')) {
+            $owned_procedures->where(function($q) {
+                return $q->orWhere('verified', '=', null)->orWhere('verified', '=', true);
+            });
+        }
         if ($request->has('sort_by') && $request->has('sort_desc')) {
             foreach ($request->sort_by as $i => $sort) {
                 $owned_procedures->orderBy($sort, filter_var($request->sort_desc[$i], FILTER_VALIDATE_BOOLEAN) ? 'DESC' : 'ASC');
@@ -119,9 +121,17 @@ class ProcedureController extends Controller
         $procedure->fill($request->except('archived'));
         DB::beginTransaction();
         try {
+            $procedure->counter = $procedure->area->counter + 1;
+            $procedure->user_id = $user->id;
+            if ($procedure->procedure_type->requirements()->count() == 0) {
+                $procedure->verified = true;
+            } else {
+                $procedure->verified = null;
+            }
             $procedure->save(['timestamps' => true]);
             $procedure->requirements()->sync($procedure->procedure_type->requirements);
             $procedure->procedure_type()->increment('counter');
+            $procedure->area()->increment('counter');
             $procedure->procedure_flows()->create([
                 'from_area' => $area_id,
                 'to_area' => $area_id,
@@ -196,6 +206,9 @@ class ProcedureController extends Controller
                 }, array_flip($requirements));
                 $procedure->requirements()->sync($requirements);
                 $procedure->procedure_type()->increment('counter');
+                $procedure->update([
+                    'verified' => null,
+                ]);
             }
             DB::commit();
             return [
@@ -242,11 +255,7 @@ class ProcedureController extends Controller
             return response()->json([
                 'message' => 'El trámite no se puede derivar porque ya fue archivado',
             ], 422);
-        } elseif ($procedure->area_id != $user->area_id) {
-            return response()->json([
-                'message' => 'El trámite no se puede derivar porque no se encuentra en su bandeja',
-            ], 422);
-        } elseif (!$procedure->validated && $user->hasRole('VERIFICADOR')) {
+        } elseif (!$procedure->verified && $user->hasRole('VERIFICADOR')) {
             return response()->json([
                 'message' => 'Antes de derivar debe verificar los requisitos',
             ], 422);
@@ -258,6 +267,7 @@ class ProcedureController extends Controller
             ])->update([
                 'area_id' => $request->area_id,
                 'pending' => true,
+                'user_id' => null,
             ]);
             DB::table('procedure_flows')->insert([
                 'procedure_id' => $procedure->id,
@@ -300,10 +310,6 @@ class ProcedureController extends Controller
         if ($procedure->archived) {
             return response()->json([
                 'message' => 'El trámite ya fue archivado',
-            ], 422);
-        } elseif ($procedure->area_id != auth()->user()->area_id) {
-            return response()->json([
-                'message' => 'El trámite no se puede archivar porque no se encuentra en su bandeja',
             ], 422);
         }
         DB::beginTransaction();
@@ -374,28 +380,13 @@ class ProcedureController extends Controller
         ];
     }
 
-    public function requirements(ProcedureRequirementRequest $request, Procedure $procedure)
-    {
-        foreach($request->requirements as $requirement) {
-            $procedure->requirements()->updateExistingPivot($requirement['id'], [
-                'validated' => $requirement['validated'],
-            ], false);
-        }
-        return [
-            'message' => 'Trámite actualizado',
-            'payload' => [
-                'procedure' => new ProcedureResource($procedure),
-            ]
-        ];
-    }
-
     public function pending()
     {
         $user = Auth::user();
         $area_id = $user->area_id;
         $query = Procedure::where('pending', true)->where('area_id', $area_id);
         return [
-            'message' => 'Trámites por ingresar',
+            'message' => 'Trámites esperando ingresar a la bandeja',
             'payload' => [
                 'badge' => $query->count(),
                 'procedures' => $query->select('id', 'code')->get(),
@@ -408,7 +399,8 @@ class ProcedureController extends Controller
         $user = Auth::user();
         if ($procedure->area_id == $user->area_id) {
             $procedure->update([
-                'pending' => false
+                'pending' => false,
+                'user_id' => $user->id,
             ]);
             $mqtt = new Mqtt();
             $notify = $mqtt->ConnectAndPublish('procedures/tray/area/'.$procedure->area_id, Procedure::where('area_id', $procedure->area_id)->where('pending', true)->count());

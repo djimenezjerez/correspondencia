@@ -23,6 +23,9 @@ class Procedure extends Model
         'area_id',
         'procedure_type_id',
         'pending',
+        'user_id',
+        'verified',
+        'counter',
     ];
 
     public $timestamps = true;
@@ -35,6 +38,11 @@ class Procedure extends Model
     public function area()
     {
         return $this->belongsTo(Area::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function procedure_type()

@@ -51,6 +51,11 @@ class User extends Authenticatable
         return $this->hasMany(ProcedureFlow::class);
     }
 
+    public function procedures()
+    {
+        return $this->hasMany(Procedure::class);
+    }
+
     public function setNameAttribute($value)
     {
         $this->attributes['name'] = trim(mb_strtoupper($value));

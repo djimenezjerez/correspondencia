@@ -62,32 +62,32 @@
                   </div>
                   <div v-else>
                     <v-col cols="6" v-if="$store.getters.user.permissions.includes('DERIVAR TRÁMITE') && item.owner && procedureTypes.length > 0">
-                      <div v-if="item.validated || $store.getters.user.role != 'VERIFICADOR'">
+                      <div v-if="item.verified || $store.getters.user.role != 'VERIFICADOR'">
                         <v-btn
-                          dark
                           rounded
                           color="green darken-1"
                           @click="$refs.dialogProcedureFlow.showDialog(item, procedureType(item.procedure_type_id))"
                           class="mx-0"
                           :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg || $vuetify.breakpoint.md"
                           :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                          :disabled="!$helpers.userOwnsProcedure(item.user_id)"
                         >
-                          <div class="text-center text-responsive">
+                          <div class="text-center white--text text-responsive">
                             Derivar
                           </div>
                         </v-btn>
                       </div>
                       <div v-else>
                         <v-btn
-                          dark
                           rounded
                           color="orange darken-1"
                           @click="$refs.dialogProcedureRequirements.showDialog(item)"
                           class="mx-0"
                           :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg || $vuetify.breakpoint.md"
                           :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                          :disabled="!$helpers.userOwnsProcedure(item.user_id)"
                         >
-                        <div class="text-center text-responsive">
+                        <div class="text-center white--text text-responsive">
                           Requisitos
                         </div>
                         </v-btn>
@@ -135,6 +135,7 @@
                           class="px-0 py-4 mx-0 my-1"
                           :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
                           :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                          :disabled="!$helpers.userOwnsProcedure(item.user_id)"
                         >
                           <v-icon
                             dense
@@ -175,31 +176,6 @@
                       <span>Archivos adjuntos</span>
                     </v-tooltip>
                   </v-col>
-                  <v-col cols="auto" v-if="item.has_flowed">
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                          v-bind="attrs"
-                          v-on="on"
-                          color="info"
-                          @click="$refs.dialogProcedureTimeline.showDialog(item)"
-                          class="px-0 py-4 mx-0 my-1"
-                          :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
-                          :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
-                        >
-                          <v-icon
-                            dense
-                            :small="$vuetify.breakpoint.md"
-                            :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
-                            class="pa-0 ma-0"
-                          >
-                            mdi-chart-timeline-variant
-                          </v-icon>
-                        </v-btn>
-                      </template>
-                      <span>Registro de derivaciones</span>
-                    </v-tooltip>
-                  </v-col>
                   <v-col cols="auto" v-if="$store.getters.user.permissions.includes('ARCHIVAR TRÁMITE') && item.has_flowed && item.owner && !item.archived">
                     <v-tooltip bottom>
                       <template v-slot:activator="{ on, attrs }">
@@ -212,6 +188,7 @@
                           class="px-0 py-4 mx-0 my-1"
                           :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
                           :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                          :disabled="!$helpers.userOwnsProcedure(item.user_id)"
                         >
                           <v-icon
                             dense
@@ -234,10 +211,10 @@
                           v-on="on"
                           color="warning darken-1"
                           @click="$refs.dialogProcedureDelete.showDialog(item)"
-                          dark
                           class="px-0 py-4 mx-0 my-1"
                           :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
                           :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                          :disabled="!$helpers.userOwnsProcedure(item.user_id)"
                         >
                           <v-icon
                             dense
@@ -262,10 +239,9 @@
     <ProcedureForm ref="dialogProcedureForm" :procedure-types="procedureTypes" v-on:updateList="fetchProcedures"/>
     <ProcedureDelete ref="dialogProcedureDelete" v-on:updateList="fetchProcedures"/>
     <ProcedureFlow ref="dialogProcedureFlow" :areas="areas" v-on:updateList="fetchProcedures"/>
-    <ProcedureRequirements ref="dialogProcedureRequirements" :requirements="requirements" v-on:updateList="fetchProcedures"/>
+    <ProcedureRequirements ref="dialogProcedureRequirements" :procedure-types="procedureTypes" v-on:updateList="fetchProcedures"/>
     <ProcedureArchive ref="dialogProcedureArchive" v-on:updateList="fetchProcedures"/>
     <ProcedureAttachments ref="dialogProcedureAttachments"/>
-    <ProcedureTimeline ref="dialogProcedureTimeline"/>
   </div>
 </template>
 
@@ -276,7 +252,6 @@ import ProcedureFlow from '@/components/procedures/ProcedureFlow'
 import ProcedureArchive from '@/components/procedures/ProcedureArchive'
 import ProcedureRequirements from '@/components/procedures/ProcedureRequirements'
 import ProcedureAttachments from '@/components/procedures/ProcedureAttachments'
-import ProcedureTimeline from '@/components/procedures/ProcedureTimeline'
 import SearchInput from '@/components/shared/SearchInput'
 import AddButton from '@/components/shared/AddButton'
 import { bus } from '@/app'
@@ -290,7 +265,6 @@ export default {
     ProcedureArchive,
     ProcedureRequirements,
     ProcedureAttachments,
-    ProcedureTimeline,
     SearchInput,
     AddButton,
   },
@@ -300,6 +274,12 @@ export default {
       search: null,
       headers: [
         {
+          text: 'Nº',
+          align: 'center',
+          sortable: false,
+          value: 'counter',
+          width: '2%',
+        }, {
           text: 'FECHA DE INGRESO',
           align: 'center',
           sortable: false,
@@ -310,7 +290,7 @@ export default {
           align: 'center',
           sortable: false,
           value: 'from_area',
-          width: '12%',
+          width: '11%',
         }, {
           text: 'CÓDIGO DE HOJA DE RUTA',
           align: 'center',
@@ -340,7 +320,7 @@ export default {
           align: 'center',
           sortable: false,
           value: 'to_area',
-          width: '12%',
+          width: '11%',
         }, {
           text: 'FECHA DE DERIVACIÓN',
           align: 'center',
@@ -365,7 +345,6 @@ export default {
       procedureTypes: [],
       areas: [],
       procedures: [],
-      requirements: [],
     }
   },
   mounted() {
@@ -383,7 +362,6 @@ export default {
   },
   created() {
     this.fetchAreas()
-    this.fetchRequirements()
     this.fetchProcedureTypes()
     this.fetchProcedures()
   },
@@ -435,21 +413,6 @@ export default {
         this.loading = true
         let response = await axios.get('area')
         this.areas = response.data.payload.areas
-      } catch(error) {
-        console.error(error)
-      } finally {
-        this.loading = false
-      }
-    },
-    async fetchRequirements() {
-      try {
-        this.loading = true
-        let response = await axios.get('requirement', {
-          params: {
-            all: true,
-          },
-        })
-        this.requirements = response.data.payload.requirements
       } catch(error) {
         console.error(error)
       } finally {

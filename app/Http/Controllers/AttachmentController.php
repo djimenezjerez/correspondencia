@@ -92,7 +92,6 @@ class AttachmentController extends Controller
      */
     public function destroy(Procedure $procedure, Attachment $attachment)
     {
-        if ($procedure->area_id != auth()->user()->area_id) abort(403, 'El trámite no se encuentra en su bandeja');
         $file = $attachment->path . '/' . $attachment->name;
         if (Storage::exists($file)) {
             Storage::delete($file);

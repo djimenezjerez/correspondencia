@@ -56,7 +56,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="requirement in procedureRequirements" :key="requirement.id">
+                <tr v-for="requirement in requirements" :key="requirement.id">
                   <td>{{ requirement.name }}</td>
                   <td class="text-center">
                     <v-btn
@@ -64,6 +64,7 @@
                       icon
                       :color="requirement.validated ? 'success darken-1' : 'warning darken-1'"
                       @click.stop="switchRequirement(requirement.id)"
+                      :disabled="!requirement.editable"
                     >
                       <v-icon>{{ requirement.validated ? 'mdi-check' : 'mdi-close' }}</v-icon>
                     </v-btn>
@@ -77,13 +78,18 @@
           <v-btn
             block
             color="info"
-            :disabled="loading || !validProcedure"
+            :disabled="loading"
             @click="submit"
           >
             <v-icon left>
               mdi-check
             </v-icon>
-            Guardar
+            <div v-if="procedure.verified === null && !validProcedure">
+              Enviar a regularización
+            </div>
+            <div v-else>
+              Guardar
+            </div>
           </v-btn>
         </v-card-actions>
       </div>
@@ -95,48 +101,49 @@
 export default {
   name: 'ProcedureRequirements',
   props: {
-    requirements: {
+    procedureTypes: {
       type: Array,
       required: true,
-    },
+    }
   },
   data: function() {
     return {
       dialog: false,
       loading: false,
-      procedure: {},
-      procedureType: {
-        requirements: [],
+      procedure: {
+        procedure_type_id: null,
       },
-      procedureRequirements: [],
+      requirements: [],
     }
   },
   computed: {
     validProcedure() {
-      return this.procedureRequirements.every(o => o.validated)
+      return this.requirements.every(o => o.validated)
     },
+    procedureType() {
+      return this.procedureTypes.find(o => o.id == this.procedure.procedure_type_id)
+    }
   },
   methods: {
     showDialog(procedure) {
-      this.fetchProcedureType(procedure.procedure_type_id)
       this.procedure = {
         ...procedure
       }
+      this.fetchProcedureRequirements(procedure.id)
       this.dialog = true
     },
     switchRequirement(requirementId) {
-      const index = this.procedureRequirements.findIndex(o => o.id == requirementId)
-      this.procedureRequirements[index].validated = !this.procedureRequirements[index].validated
+      const index = this.requirements.findIndex(o => o.id == requirementId)
+      this.requirements[index].validated = !this.requirements[index].validated
     },
-    async fetchProcedureType(procedureTypeId) {
+    async fetchProcedureRequirements(procedureId) {
       try {
         this.loading = true
-        let response = await axios.get(`procedure_type/${procedureTypeId}`)
-        this.procedureType = response.data.payload.procedure_type
-        this.procedureRequirements = this.requirements.filter(o => response.data.payload.procedure_type.requirements.includes(o.id)).map(o => ({
-          ...o,
-          validated: false,
-        }))
+        let response = await axios.get(`procedure/${procedureId}/requirement`)
+        response.data.payload.procedure.requirements.forEach(requirement => {
+          requirement.editable = !requirement.validated
+        })
+        this.requirements = response.data.payload.procedure.requirements
       } catch(error) {
         console.error(error)
       } finally {
@@ -145,17 +152,13 @@ export default {
     },
     async submit() {
       try {
-        if (this.validProcedure) {
-          this.loading = true
-          const response = await axios.patch(`procedure/${this.procedure.id}/requirement`, {
-            requirements: this.procedureRequirements,
-          })
-          if (response.data.payload.procedure.validated) {
-            this.$toast.success(response.data.message)
-            this.$emit('updateList')
-            this.dialog = false
-          }
-        }
+        this.loading = true
+        const response = await axios.patch(`procedure/${this.procedure.id}/requirement`, {
+          requirements: this.requirements,
+        })
+        this.$toast.success(response.data.message)
+        this.$emit('updateList')
+        this.dialog = false
       } catch(error) {
         console.error(error)
       } finally {

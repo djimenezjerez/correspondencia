@@ -1,6 +1,10 @@
 import Vue from 'vue'
+import store from '@/store.js'
 
 Vue.prototype.$helpers = {
+  userOwnsProcedure(procedureId) {
+    return store.getters.user.id == procedureId
+  },
   fontSize(breakpoint) {
     switch (breakpoint) {
       case 'xs': return '8px'

@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\ProcedureType;
+use App\Models\Area;
 use Illuminate\Console\Command;
 
 class ResetCounters extends Command
@@ -19,7 +20,7 @@ class ResetCounters extends Command
      *
      * @var string
      */
-    protected $description = 'Reinicio de contadores de trámites';
+    protected $description = 'Reinicio de contadores de hojas de ruta';
 
     /**
      * Create a new command instance.
@@ -39,6 +40,9 @@ class ResetCounters extends Command
     public function handle()
     {
         ProcedureType::where('counter', '>', 0)->update([
+            'counter' => 0,
+        ]);
+        Area::where('counter', '>', 0)->update([
             'counter' => 0,
         ]);
     }

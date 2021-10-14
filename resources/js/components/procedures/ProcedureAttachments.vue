@@ -64,7 +64,7 @@
                           <v-btn
                             icon
                             :disabled="loading"
-                            v-if="procedure.owner && $store.getters.user.permissions.includes('ADJUNTAR ARCHIVO')"
+                            v-if="$helpers.userOwnsProcedure(procedure.user_id) && $store.getters.user.permissions.includes('ADJUNTAR ARCHIVO')"
                             @click="deleteAttachment(file)"
                           >
                             <v-icon color="error">
@@ -84,7 +84,7 @@
       <v-divider></v-divider>
       <div class="px-5 pb-5">
         <validation-observer ref="procedureFilesObserver" v-slot="{ invalid }">
-          <form v-on:submit.prevent="submit" v-if="procedure.owner && !procedure.archived && $store.getters.user.permissions.includes('ADJUNTAR ARCHIVO')">
+          <form v-on:submit.prevent="submit" v-if="$helpers.userOwnsProcedure(procedure.user_id) && !procedure.archived && $store.getters.user.permissions.includes('ADJUNTAR ARCHIVO')">
             <v-card-text>
               <v-row align="center">
                 <v-col cols="8">

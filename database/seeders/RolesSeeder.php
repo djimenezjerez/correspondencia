@@ -41,6 +41,8 @@ class RolesSeeder extends Seeder
                     'DERIVAR TRÁMITE',
                     'ARCHIVAR TRÁMITE',
                     'ADJUNTAR ARCHIVO',
+                    'LEER REQUISITOS DE TRÁMITE',
+                    'EDITAR REQUISITOS DETRÁMITE',
                 ],
             ], [
                 'name' => 'SECRETARÍA',

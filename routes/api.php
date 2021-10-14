@@ -7,7 +7,9 @@ use App\Http\Controllers\AreaController;
 use App\Http\Controllers\RequirementController;
 use App\Http\Controllers\ProcedureTypeController;
 use App\Http\Controllers\ProcedureController;
+use App\Http\Controllers\ProcedureRequirementController;
 use App\Http\Controllers\AttachmentController;
+use App\Http\Middleware\EnsureUserOwnsProcedure;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -67,26 +69,28 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::get('procedure', [ProcedureController::class, 'index'])->middleware('permission:LEER TRÁMITE');
     Route::get('procedure/{procedure}', [ProcedureController::class, 'show'])->middleware('permission:LEER TRÁMITE');
     Route::post('procedure', [ProcedureController::class, 'store'])->middleware('permission:CREAR TRÁMITE');
-    Route::patch('procedure/{procedure}', [ProcedureController::class, 'update']);
-    Route::delete('procedure/{procedure}', [ProcedureController::class, 'destroy'])->middleware('permission:ELIMINAR TRÁMITE');
+    Route::patch('procedure/{procedure}', [ProcedureController::class, 'update'])->middleware(EnsureUserOwnsProcedure::class);
+    Route::delete('procedure/{procedure}', [ProcedureController::class, 'destroy'])->middleware('permission:ELIMINAR TRÁMITE', EnsureUserOwnsProcedure::class);
 
     // Requisitos de trámite
-    Route::patch('procedure/{procedure}/requirement', [ProcedureController::class, 'requirements'])->middleware('role:VERIFICADOR');
+    Route::get('procedure/requirement/list', [ProcedureRequirementController::class, 'index'])->middleware('permission:LEER REQUISITOS DE TRÁMITE');
+    Route::get('procedure/{procedure}/requirement', [ProcedureRequirementController::class, 'show'])->middleware('permission:LEER REQUISITOS DE TRÁMITE');
+    Route::patch('procedure/{procedure}/requirement', [ProcedureRequirementController::class, 'update'])->middleware('permission:EDITAR REQUISITOS DETRÁMITE', EnsureUserOwnsProcedure::class);
 
     // Derivar trámite
-    Route::post('procedure/{procedure}/flow', [ProcedureController::class, 'flow'])->middleware('permission:DERIVAR TRÁMITE');
+    Route::post('procedure/{procedure}/flow', [ProcedureController::class, 'flow'])->middleware('permission:DERIVAR TRÁMITE', EnsureUserOwnsProcedure::class);
 
     // Impresión de PDF
     Route::post('procedure/{procedure}/print', [ProcedureController::class, 'print'])->middleware('permission:DERIVAR TRÁMITE');
 
     // Archivar trámite
-    Route::post('procedure/{procedure}/archive', [ProcedureController::class, 'archive'])->middleware('permission:ARCHIVAR TRÁMITE');
+    Route::post('procedure/{procedure}/archive', [ProcedureController::class, 'archive'])->middleware('permission:ARCHIVAR TRÁMITE', EnsureUserOwnsProcedure::class);
 
     // Archivos adjuntos a trámites
     Route::get('procedure/{procedure}/attachment', [AttachmentController::class, 'index'])->middleware('permission:LEER TRÁMITE');
     Route::get('procedure/{procedure}/attachment/{attachment}', [AttachmentController::class, 'show']);
-    Route::post('procedure/{procedure}/attachment', [AttachmentController::class, 'store'])->middleware('permission:ADJUNTAR ARCHIVO');
-    Route::delete('procedure/{procedure}/attachment/{attachment}', [AttachmentController::class, 'destroy']);
+    Route::post('procedure/{procedure}/attachment', [AttachmentController::class, 'store'])->middleware('permission:ADJUNTAR ARCHIVO', EnsureUserOwnsProcedure::class);
+    Route::delete('procedure/{procedure}/attachment/{attachment}', [AttachmentController::class, 'destroy'])->middleware('permission:ADJUNTAR ARCHIVO', EnsureUserOwnsProcedure::class);
 
     // Bandeja de trámites
     Route::get('procedure/tray/pending', [ProcedureController::class, 'pending']);
