@@ -28,18 +28,18 @@ class ProcedureFlow extends Model
         return $this->belongsTo(Procedure::class);
     }
 
-    public function from_area()
+    public function flowed_from_area()
     {
         return $this->belongsTo(Area::class, 'from_area');
     }
 
-    public function to_area()
+    public function flowed_to_area()
     {
         return $this->belongsTo(Area::class, 'to_area');
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'to_area');
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

@@ -175,5 +175,7 @@ return [
         'requirements.*' => 'requisito',
         'search' => 'texto de búsqueda',
         'search_by' => 'parámetro de búsqueda',
+        'start_date' => 'fecha inicial',
+        'end_date' => 'fecha final',
     ],
 ];

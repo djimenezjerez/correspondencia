@@ -132,14 +132,9 @@ export default {
             area_id: this.selectedArea
           })
           // Abrir PDF en nueva ventana
-          let pdfWindow = window.open("")
-          pdfWindow.document.write("<html<head><title>"+response.data.payload.file.name+"</title><style>body{margin: 0px;}iframe{border-width: 0px;}</style></head>")
-          pdfWindow.document.write("<body><embed width='100%' height='100%' src='data:application/pdf;base64, " + encodeURI(response.data.payload.file.content)+"#toolbar=0&navpanes=0&scrollbar=0'></embed></body></html>")
-          // Descargar PDF
-          // const downloadLink = document.createElement('a')
-          // downloadLink.href = `data:application/pdf;base64,${response.data.payload.file.content}`
-          // downloadLink.download = response.data.payload.file.name
-          // downloadLink.click()
+          let pdfWindow = window.open('')
+          pdfWindow.document.write('<html><head><title>' + response.data.payload.file.name + '</title><style>body{margin: 0px;}iframe{border-width: 0px;}</style></head>')
+          pdfWindow.document.write('<body><iframe width="100%" height="100%" src="data:application/pdf;base64,' + encodeURI(response.data.payload.file.content) + '"></iframe></body></html>')
         }
       } catch(error) {
         this.$refs.procedureFlowObserver.reset()

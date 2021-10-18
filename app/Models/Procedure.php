@@ -55,6 +55,11 @@ class Procedure extends Model
         return $this->hasMany(ProcedureFlow::class);
     }
 
+    public function latest_flow()
+    {
+        return $this->hasOne(ProcedureFlow::class)->latest();
+    }
+
     public function attachments()
     {
         return $this->morphMany(Attachment::class, 'attachable');

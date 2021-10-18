@@ -24,7 +24,10 @@ class ProcedureTrackingController extends Controller
         /** @var \App\Models\User */
         $user = Auth::user();
         $area_id = $user->area_id;
-        $owned_procedures = DB::table('procedures')->where('area_id', $area_id)->select('id');
+        $flowed = DB::table('procedure_flows')->selectRaw('procedure_id, count(*) as flows_count')->groupBy('procedure_id')->having('flows_count', '>', 1);
+        $owned_procedures = DB::table('procedures as p')->joinSub($flowed, 'pf', function($join) {
+            $join->on('pf.procedure_id', '=', 'p.id');
+        })->where('p.area_id', $area_id)->select('p.id');
         // Tramites que se encuentran actualmente en la sección
         $current = DB::table('procedures as p')->select('p.id', 'pf.from_area', 'pf.created_at as incoming_at', 'pf.user_id as incoming_user', DB::raw('null as to_area'), DB::raw('null as outgoing_at'), DB::raw('null as outgoing_user'), DB::raw('TRUE as owner'), 'p.archived')->leftJoin('procedure_flows as pf', function($query) {
             $query->on('pf.procedure_id','=','p.id')->whereRaw('pf.id IN (select MAX(a.id) from procedure_flows as a join procedures as b on a.procedure_id = b.id group by b.id)');
@@ -97,19 +100,19 @@ class ProcedureTrackingController extends Controller
     {
         $area = Area::find($procedure->procedure_flows()->first()->from_area);
         $created = [[
-            'to_area' => [
+            'flowed_to_area' => [
                 'name' => $area->name,
             ],
             'action' => 'TRÁMITE CREADO',
             'created_at' => $procedure->created_at,
         ]];
-        $timeline = $procedure->procedure_flows()->select('to_area', 'created_at')->selectRaw("'DERIVADO' as action")->with(['to_area' => function($q) {
+        $timeline = $procedure->procedure_flows()->select('to_area', 'created_at')->selectRaw("'DERIVADO' as action")->with(['flowed_to_area' => function($q) {
             return $q->select('id', 'name');
         }])->orderBy('created_at', 'DESC')->get()->toArray();
         $archived = [];
         if ($procedure->archived) {
             $archived = [[
-                'to_area' => [
+                'flowed_to_area' => [
                     'name' => $procedure->area->name,
                 ],
                 'action' => 'ARCHIVADO',

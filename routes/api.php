@@ -10,6 +10,7 @@ use App\Http\Controllers\ProcedureController;
 use App\Http\Controllers\ProcedureRequirementController;
 use App\Http\Controllers\ProcedureTrackingController;
 use App\Http\Controllers\AttachmentController;
+use App\Http\Controllers\ReportController;
 use App\Http\Middleware\EnsureUserOwnsProcedure;
 use Illuminate\Support\Facades\Route;
 
@@ -99,4 +100,7 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
 
     // Seguimiento de trámites
     Route::get('tracking', [ProcedureTrackingController::class, 'index']);
+
+    // Reportes
+    Route::get('report', [ReportController::class, 'index']);
 });

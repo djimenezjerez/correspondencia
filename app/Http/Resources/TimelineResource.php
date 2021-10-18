@@ -15,7 +15,7 @@ class TimelineResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'to_area' => $this['to_area']['name'],
+            'to_area' => $this['flowed_to_area']['name'],
             'action' => $this['action'],
             'date' => $this['created_at'],
         ];

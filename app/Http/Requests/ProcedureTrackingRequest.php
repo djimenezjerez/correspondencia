@@ -23,8 +23,10 @@ class ProcedureTrackingRequest extends FormRequest
      */
     public function rules()
     {
+        $search = ($this->search_by == 'created_at') ? 'required|date_format:Y-m-d' : 'required|string|min:2';
+
         return [
-            'search' => 'required|string|min:2',
+            'search' => $search,
             'search_by' => 'required|in:code,origin,detail,created_at',
         ];
     }
