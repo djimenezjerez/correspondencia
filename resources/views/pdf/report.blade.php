@@ -52,7 +52,7 @@
 		</tbody>
 		<table class="table" style="margin-top: 24px;">
 			<tbody>
-				<tr class="negrilla">
+				<tr class="negrilla fuente12">
 					<td width="6%" class="borde">Nº</td>
 					<td width="10%" class="borde">Hoja de Ruta</td>
 					<td width="10%" class="borde">Tipo de Trámite</td>

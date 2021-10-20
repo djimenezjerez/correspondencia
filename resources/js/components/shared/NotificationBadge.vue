@@ -78,7 +78,6 @@ export default {
         console.error(error)
       } finally {
         this.fetchPendingBadge()
-        bus.$emit('updateProcedureList')
         this.loading = false
       }
     },
@@ -91,6 +90,7 @@ export default {
       } catch(error) {
         console.error(error)
       } finally {
+        bus.$emit('updateProcedureList')
         this.loading = false
       }
     },
