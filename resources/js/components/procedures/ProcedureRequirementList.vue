@@ -51,13 +51,14 @@
               </template>
               <template v-slot:[`item.to_area`]="{ item }">
                 <v-btn
-                  dark
+                  :dark="$store.getters.user.id == item.user_id"
                   rounded
                   color="orange darken-1"
                   @click="$refs.dialogProcedureRequirements.showDialog(item)"
                   class="mx-0"
                   :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg || $vuetify.breakpoint.md"
                   :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+                  :disabled="$store.getters.user.id != item.user_id"
                 >
                   <div class="text-center text-responsive">
                     Requisitos
