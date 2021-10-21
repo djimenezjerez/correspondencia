@@ -181,7 +181,7 @@
                           v-on="on"
                           color="warning lighten-1"
                           @click="$refs.dialogProcedureArchive.showDialog(item)"
-                          dark
+                          :dark="$store.getters.user.id == item.user_id"
                           class="px-0 py-4 mx-0 my-1"
                           :small="$vuetify.breakpoint.xl || $vuetify.breakpoint.lg"
                           :x-small="$vuetify.breakpoint.md || $vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
